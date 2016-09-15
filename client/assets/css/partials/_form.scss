@@ -1,0 +1,347 @@
+div.form {
+    padding: 10px;
+    
+    ul {
+        list-style: none;
+        
+        li {
+            position: relative;
+
+            .r {
+                position: absolute;
+                right: 0;
+                float: none;
+                z-index: 2
+            }
+            /*display: flex;*/
+
+            &.extra {
+            display: none;
+
+                &.show {
+                    display: block;
+                }
+            }
+        }
+    }
+    
+    
+    label {
+        float: left;
+        display: block;
+        font-size: 12px;
+        
+        span.small {
+            display: block;
+            font-size: 10px;
+        }
+
+    }
+    
+    
+    span.label {
+        display: inline-block;
+        padding: 1% 0;
+        font-weight: bold;
+
+        span.small {
+            display: block;
+            font-size: 10px;
+        }
+    }
+    
+    span.label, label {
+        /*width: 28%;*/
+        width: 35%;
+        
+        @media (max-width: $breakpoint-small) {
+            //width: 100%;
+            float: none;
+            display: block;
+        }
+    }
+
+    
+    li.head {
+        padding: 1% 0;
+        font-weight: bold;
+    }
+    
+    input, textarea, select {
+        &:not(.ui-combobox-input) {
+            padding: 0.1%;
+        }
+        margin: 0 0 20px 5px;
+        
+        @media (max-width: $breakpoint-small) {
+            margin: 0 0 20px 0;
+        }
+    }
+    
+    
+    
+    textarea {
+        height: 200px;
+    }
+    
+    textarea, input[name=title], input[name=TITLE], input.full {
+        width: 70%;
+        
+        @media (max-width: $breakpoint-small) {
+            width: 100%;
+        }
+    }
+    
+    
+    button.submit {
+        width: 150px;
+        height: 30px;
+    }
+    
+    
+    select[multiple=multiple] {
+        width: 200px;
+        vertical-align: top;
+        
+        @media (max-width: $breakpoint-small) {
+            width: 60%;
+        }
+    }
+    
+    
+    .progress {
+        width: 150px;
+    }
+    
+    
+    label.ferror {
+        display: none !important;
+    }
+    
+    
+    span.ferror {
+        margin-left: 15px;
+        border: none;
+        background: $content-light-background;
+        border-radius: 5px;
+        padding: 0.5%;
+        position: relative;
+    }
+
+    span.ferror:before {
+        position: absolute;
+        border: .7em solid transparent;
+        left: -1.3em;
+        top: 50%;
+        margin-top: -.7em;
+        content: '';
+        border-right-color: $content-light-background;
+    }
+    
+    textarea + span.ferror {
+        margin-left: 29%;
+    }
+    
+    .floated {
+        width: 71.6%;
+        margin: 1% 0;
+        float: right;
+        
+        
+        @media (max-width: $breakpoint-small) {
+            width: 100%;
+            float: none;
+            
+            -webkit-box-ordinal-group: 2;
+            -moz-box-ordinal-group: 2;
+            -ms-flex-order: 1;
+            -webkit-order: 1;
+            order: 1;
+        }
+    }
+    
+    ul.visits li {
+        clear: none;
+    }
+    
+}
+
+
+.table .error input,
+.ferror,
+table.form .ferror,
+div.form .ferror {
+    //border: 1px solid red;
+    background: $content-inactive;
+}
+
+.fvalid,
+table.form .fvalid,
+div.form .fvalid {
+    //background: $content-active;
+}
+
+
+
+// Inline editable fields
+.editable {
+    padding: 0.7% 1%;
+    border-radius: 4px;
+
+    @media (max-width: $breakpoint-small) {
+        padding: 2% 1%;
+        display: inline-block;
+    }
+    
+    &:hover {
+        cursor: pointer;
+        background: $content-search-background url('/templates/images/edit.png') no-repeat right;
+        background: $content-search-background inline-image('edit.png') no-repeat right;
+        padding-right: 2.5%;
+        
+        @media (max-width: $breakpoint-small) {
+            padding-right: 7%;
+        }
+    }
+    
+    button {
+        margin: 3px;
+    }
+}
+
+
+.invalid {
+    box-shadow: 0 0 8px $content-inactive;
+}
+
+.valid {
+    box-shadow: 0 0 8px $content-active;
+}
+
+
+
+div.text_table {
+    /*width: 71%;*/
+    width: 64%;
+    margin: 0 0 1% 0;
+    float: right;
+
+    table {
+        width: auto;
+    }
+}
+
+
+div.div {
+    width: 70.7%;
+    float: right;
+}
+
+.props > li {
+    display: flex;
+}
+
+
+// Markdown
+div.text {
+    width: 68.2%;
+    margin: 1% 0;
+    float: right;
+    background: $content-light-background;
+    border-radius: 5px;
+    padding-right: 2.5%;
+    
+    @media (max-width: $breakpoint-small) {
+        width: 93%;
+        float: none;
+        
+        -webkit-box-ordinal-group: 2;
+        -moz-box-ordinal-group: 2;
+        -ms-flex-order: 1;
+        -webkit-order: 1;
+        order: 1;
+    }
+    
+    p {
+        padding: 1% !important;
+    }
+    
+    pre {
+        background: $content-sub-background;
+        padding: 1%;
+        border-radius: 5px;
+    }
+    
+    code {
+        font-size: 10px;
+        word-wrap: break-word;
+    }
+    
+    ul {
+        padding: 1% 2.5%;
+        
+        li {
+            list-style-type: circle;
+        }
+    }
+    
+    h1 {
+        text-decoration: underline;
+        font-size: 14px;
+        padding-bottom: 0.5%;
+    }
+    
+    h2 {
+        text-decoration: underline;
+        font-size: 12px;
+        padding-bottom: 0.5%;
+    }
+
+    &.seq blockquote {
+        &:before {
+            content: '>';
+            float: left;
+            margin: 1%;
+        }
+    }
+}
+
+
+.image img {
+    width: 100%;
+}
+
+
+table input[type=text] {
+    width: 100%;
+}
+
+
+@media (max-width: $breakpoint-small) {
+    
+    .reorder {
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -moz-box-orient: vertical;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
+    
+    select, input, textarea {
+        font-size: 16px !important;
+    }
+
+}
+
+
+.ui-combobox {
+    button.ui-button-icon-only {
+        height: 1.8em;
+    }
+}
+

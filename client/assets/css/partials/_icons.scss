@@ -1,0 +1,36 @@
+// Font awesome middle align
+.fa {
+    vertical-align: middle;
+}
+
+
+// Block display icons in header with padding
+a.icon {
+    display: inline-block;
+    padding: 5px;
+    text-decoration: none;
+}
+
+a.icon:hover {
+    cursor: pointer;
+    color: $header-hover-color;
+}
+
+
+.fa.icon {
+    font-size: 18px;
+    text-shadow: 0px 2px 3px rgba(150,150,150,0.5);
+    
+    &.green {
+        color: #03c03c;
+    }
+    &.blue {
+        color: blue;
+    }
+    &.red {
+        color: red;
+    }
+    &.grey {
+        color: grey;
+    }
+}

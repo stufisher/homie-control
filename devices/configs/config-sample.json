@@ -1,0 +1,11 @@
+{
+    "HOST": "localhost",
+    "PORT": 1883,
+    "KEEPALIVE": 10,
+    "USERNAME": "",
+    "PASSWORD": "",
+    "CA_CERTS": "",
+    "DEVICE_ID": "schedule",
+    "DEVICE_NAME": "Schedule Controller",
+    "TOPIC": "devices"
+}

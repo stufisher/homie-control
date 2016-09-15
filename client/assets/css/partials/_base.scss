@@ -1,0 +1,125 @@
+@import "compass";
+@import "modules/all";
+@import "compass/css3/transition";
+
+* {
+	padding: 0;
+	margin: 0;
+}
+
+html {
+    /*height: 100%;*/
+    width: 100%;
+}
+
+body {
+    /*background: $body-background;*/
+    font-family: $main-font;
+    font-size: $main-font-size;
+    line-height: $main-line-height;
+    /*height: 100%;*/
+    /*overflow: hidden;*/
+    
+    &.active {
+        background: $body-background;
+    }
+
+    /*max-width: 500px;*/
+    margin: auto;
+}
+
+a {
+    color: $link-color;
+    
+    &:hover {
+        color: $link-hover-color;
+    }
+}
+
+.wrap {
+    background: $sidebar-mobile-background;
+}
+
+.wrapper {
+    /*height: calc(100% - 68px);*/
+    /*background: linear-gradient(to bottom, #aaa,#ddd);*/
+    /*background: linear-gradient(to bottom, #fff,lighten(#ddd,5%));*/
+    background: linear-gradient(left top, #fff,lighten(#ddd,5%));
+    /*padding: 10px;*/
+}
+
+section {
+    /*@include clearfix;*/
+    background: linear-gradient(top, $content-background,darken($content-background, 10%));
+    overflow-y: auto;
+    position: relative;
+
+    h1 {
+        @include clearfix;
+        /*background: linear-gradient(top, #222222,#111111);*/
+        /*background: linear-gradient(rgb(1, 118, 190) 0%, rgb(8, 131, 199) 100%);*/
+        background: linear-gradient(top, rgb(8, 131, 199), darken(rgb(1, 118, 190),5%));
+
+        /*opacity: 0.8;*/
+        padding: 10px;
+        transition: color 0.5s ease-in-out;
+        /*color: #666;*/
+        color: #ddd;
+
+        &:hover {
+            color: #fff;
+        }
+
+    }
+}
+
+
+#modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 99999;
+    opacity:0;
+    transition: opacity 200ms ease-in;
+    pointer-events: none;
+    text-align: center;
+
+    &.active, &:target {
+        opacity:1;
+        pointer-events: auto;
+    }
+
+    > div {
+        max-height: calc(70% - 18px);
+        overflow-y: auto;
+        text-align: left;
+        border-radius: 3px;
+        display: inline-block;
+        position: relative;
+        margin: 10% auto;
+        padding: 15px;
+        background: linear-gradient(top, $content-background,darken($content-background, 20%));
+
+        h2 {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .buttons {
+            text-align: right;
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px solid #ccc;
+
+            .button {
+                margin-left: 3px;
+            }
+
+
+        }
+    }
+}

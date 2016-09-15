@@ -1,0 +1,281 @@
+// Header
+// ---------------------------------------------------------
+header {
+    background: darken($header-background,5%);
+    overflow: hidden;
+    /*border-bottom: 3px solid #fff;*/
+    border-bottom: 1px solid #aaa;
+
+    height: 38px;
+    padding: 5px;
+
+    a {
+        vertical-align: middle;
+    }
+
+    h1 {
+        text-align: center;
+        padding: 7px;
+        color: $header-color;
+        font-size: $page-header-size;
+        font-family: $page-header-font;
+        text-transform: uppercase;
+    }
+
+    a.menu {
+        float: left;
+        display: none;
+    }
+}
+
+
+
+
+
+// Header
+// ---------------------------------------------------------
+footer { 
+	/*text-align: right;*/
+    clear: both;
+    color: $footer-color;  
+    background: linear-gradient(to bottom, #0883c7,#0166a5);
+    color: #ddd;
+
+
+    a {
+        text-decoration: none;
+        color: $header-color;
+    }
+
+    ul {
+        text-align: center;
+        padding: 10px;
+
+        li {
+            display: inline-block;
+            padding: 2% 12%;
+            border-right: 1px solid;
+
+            &:last-child {
+                border-right: none;
+            }
+
+            .fa {
+                display: block;
+                margin: auto;
+                padding: 5px;
+            }
+        }
+    }
+}
+
+.wrap {
+    display: flex;
+    min-height: 100vh;
+    /*flex-direction: column;*/
+
+    @media (max-width: $breakpoint-small) {
+        overflow: hidden;
+    }
+}
+
+// Sidebar
+/*@media (max-width: $breakpoint-medium) {    */
+    .sidebar, .wrapper {
+        @include transition-property(all);
+        @include transition-duration(0.2s);
+        @include transition-timing-function(ease);
+
+        /*width: 100%;        */
+        /*margin-top: 56px;*/
+    }
+    
+    .wrapper {
+        flex: 1;
+        opacity: 1;
+        width: 100%;
+    }
+
+    .main {
+        margin: 10px;
+    }
+    
+    .sidebar {
+        .title {
+            /*-webkit-filter: sepia(100%) hue-rotate(158deg);*/
+            /*background-image: inline-image("logo_gs.png");*/
+            background-image: inline-image("logo_blue.png");
+            height: 80px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: all 0.3s ease;
+            margin: 40px;
+            opacity: 0.7;
+
+            &:hover {
+                opacity: 0.9;
+            }
+
+            @media(max-width: $breakpoint-medium) {
+                height: 50px;
+                margin: 30px;
+            }
+
+            @media(max-width: $breakpoint-vsmall) {
+                margin: 10px;   
+                background-position: left;
+            }
+        }
+
+        flex: 0 0 25%;
+
+        
+        ul, ul li, ul li ul, ul li ul li {
+            border: 0;
+            background: transparent;
+        }
+        
+        ul {
+            
+            li {
+                position: relative;
+                width: 100%;
+
+                .current:hover {
+                    background: lighten($sidebar-mobile-hover-background,10%);
+                }
+                
+                &:before {
+                    color: #fff;
+                    /*color: lighten($header-background,10%);*/
+                    content: '\f054';
+                    font-family: FontAwesome;
+                    position: absolute;
+                    right: 0;
+                    padding: 15px;
+                }
+
+            
+                a {
+                    transition: background 0.2s ease;
+                    display: block;
+                    text-decoration: none;
+                    padding: 15px;
+                    text-align: left;
+                    color: $sidebar-mobile-color;
+                }
+
+                a:hover {
+                    background: $sidebar-mobile-hover-background;
+                }
+
+                &.active:before {
+                    color: lighten($header-background,10%);
+                }
+
+                &.active a {
+                    font-weight: bold;
+                    color: #fff;
+                    background: $sidebar-mobile-hover-background;
+                }
+
+            }
+
+            &.minor {
+                margin-top: 10px;
+                margin-bottom: 30px;
+                margin-left: 8%;
+                font-size: 11px;
+
+                li a, li a span {
+                    padding: 14px;
+                    color: #aaa;
+                }
+
+                /*li i {
+                    color: lighten($header-background,10%);
+                }*/
+
+                li:before {
+                    content: '';
+                }
+
+                li.active a {
+                    span {
+                        color: #fff;
+                    }
+                    /*color: #fff;*/
+                    background: $sidebar-mobile-hover-background;
+                }
+            }
+    
+        }
+    }
+    
+
+    body.active {
+        .sidebar {
+            margin-left: 0;
+        }
+
+        .wrapper {
+            margin-right: -40%;
+            opacity: 0.5
+        }
+
+    }
+
+
+
+@media (max-width: $breakpoint-small) {
+    body {
+        a.menu {
+            display: block;
+            color: #ccc;
+        }
+
+        .sidebar {
+            flex: 0 0 40%;
+            margin-left: -40%;
+        }
+    }
+}
+
+@media (max-width: $breakpoint-vsmall) {
+    body {
+        .sidebar {
+            flex: 0 0 60%;
+            margin-left: -60%;
+        }
+
+        &.active {
+            .wrapper {
+                margin-right: -60%;
+            }
+        }
+    }
+}
+
+
+@media (min-width: $breakpoint-medium) {
+    /*.zone {
+        width: calc(25% - 4%);
+        padding-bottom: 20%;
+        margin: 2%;
+    }*/
+
+    .zones.heating {
+        float: right;
+        width: 34%;
+        margin: 7% 0%;
+    }
+
+    .zone.single {
+        margin: 12% 5%;
+        width: 42%;
+        padding-bottom: 32%;
+    }
+}
+    
+/*}*/

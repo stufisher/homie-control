@@ -1,0 +1,40 @@
+{
+  "name": "homie_control",
+  "authors": [
+    "stufisher <stu@q3f.org>"
+  ],
+  "description": "A high level application for the Homie IoT",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone.marionette": "marionette#^3.0.0",
+    "Flot": "flot#^0.8.3",
+    "requirejs": "^2.3.1",
+    "backbone.validation": "backbone-validation#^0.11.5",
+    "paho-mqtt-js": "^1.0.1",
+    "backgrid": "^0.3.7",
+    "backgrid-paginator": "^0.3.9",
+    "backbone.paginator": "^2.0.5",
+    "backbone": "^1.3.3",
+    "underscore": "^1.8.3",
+    "jquery": "^3.1.0",
+    "backbone.radio": "^2.0.0",
+    "jquery-color": "^2.1.2",
+    "jquery-editable": "^1.0.1",
+    "flot.tooltip.pib": "^0.6.7",
+    "backbone.syphon": "^0.6.3"
+  },
+  "resolutions": {
+    "backbone": "^1.3.3",
+    "jquery": "^3.1.0"
+  }
+}

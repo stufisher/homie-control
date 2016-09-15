@@ -1,0 +1,27 @@
+{
+    "name": "stufisher/homie-control",
+    "description": "HomieControl - A high level controller for Homie",
+    "keywords": ["microframework","rest","router", "psr7"],
+    "homepage": "http://github.com/slimphp/Slim-Skeleton",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stu Fisher",
+            "email": "st8@q3f.org",
+            "homepage": "http://github.com/stufisher"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "slim/slim": "^3.1",
+        "respect/validation": "^1.0",
+        "ezyang/htmlpurifier": "^4.8.0",
+        "bluerhinos/phpmqtt": "dev-master"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/App"
+        }
+    }
+}

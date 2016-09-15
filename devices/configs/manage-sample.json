@@ -1,0 +1,12 @@
+{
+    "HOST": "localhost",
+    "PORT": 1883,
+    "KEEPALIVE": 10,
+    "USERNAME": "",
+    "PASSWORD": "",
+    "CA_CERTS": "",
+    "DEVICE_ID": "control",
+    "DEVICE_NAME": "HA Control",
+    "TOPIC": "devices",
+    "DEVICES": ["schedule", "heating", "profile", "device"]
+}

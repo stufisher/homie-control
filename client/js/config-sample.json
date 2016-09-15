@@ -1,0 +1,16 @@
+{
+    "apiurl": "/api",
+    "appurl": "",
+
+    "mqtt": {
+        "host": "ws://192.168.1.2/ws/mosquitto/",
+        "username": null,
+        "password": null
+    },
+
+    "templates": [
+        "switches",
+        "irrigation",
+        "heating"
+    ]
+}

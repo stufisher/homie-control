@@ -1,0 +1,65 @@
+// Mixins
+
+
+// Flexible grid
+@mixin cols($n, $pad: 1%, $marg: 0, $count: 1) {
+    $p: 0;
+    $m: 0;
+    
+    @if length($pad) == 1 {
+        $p: $pad*2;
+    } @else if length($pad) == 2 {
+        $p: nth($pad, 2)*2;
+    } @else if length($pad) == 4 {
+        $p: nth($pad, 2) + nth($pad, 4);
+    }
+    
+
+    @if length($marg) == 1 {
+        $m: $marg*2;
+    } @else if length($marg) == 2 {
+        $m: nth($marg, 2)*2;
+    } @else if length($pad) == 4 {
+        $m: nth($marg, 2) + nth($marg, 4);
+    }
+    
+    
+    /*$col: (100%/$n) - $p - $m;*/
+    $col: (100%/$n*$count);
+
+    width: calc(#{$col} - #{$p} - #{$m});
+    margin: $marg;
+    padding: $pad;
+}
+
+
+// Calc
+@mixin calc($property, $expression) {
+    #{$property}: -moz-calc(#{$expression});
+    #{$property}: -o-calc(#{$expression});
+    #{$property}: -webkit-calc(#{$expression});
+    #{$property}: calc(#{$expression});
+}
+
+
+@mixin clearfix() {
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+    
+    &:after {
+        clear: both;
+    }
+         
+    *zoom: 1;
+}
+
+
+@mixin stripes() {
+    background-color: #000000;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, .1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .1) 50%, rgba(255, 255, 255, .1) 75%, transparent 75%, transparent),
+    linear-gradient(0, rgba(255,255,255,0) 00%, rgba(255,255,255,1) 40%);
+    background-size: 4px 4px, auto 100%;
+}

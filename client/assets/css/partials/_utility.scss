@@ -1,0 +1,106 @@
+// Clearfix
+.clearfix {
+    @include clearfix;
+}
+
+
+
+// Misc helpers
+.r {
+    float: right;
+}
+
+.l {
+    float: left;
+}
+
+
+.la {
+    text-align: left;
+}
+
+.ra {
+    text-align: right;
+}
+
+.active {
+    background: $content-active;
+}
+
+.clear {
+    clear: both;
+}
+
+.b {
+    font-weight: bold;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+
+
+@media (max-width: $breakpoint-vsmall) {
+    
+    h1 {
+        font-size: 12px;
+    }
+    
+}
+
+pre {
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.fa.active {
+    color: $content-active;
+    background: none;
+}
+
+
+
+
+.button {
+    display: inline-block;
+    border: 1px solid $sidebar-border;
+    /*padding: 3px 5px;*/
+    padding: 5px 7px;
+    text-decoration: none;
+    /*border-radius: 3px;*/
+    border-radius: 1px;
+    /*@include background(linear-gradient(top, $content-page-background, $content-dark-background));*/
+    background: lighten($content-page-background, 10%);
+    
+    &:hover {
+        /*@include background(linear-gradient(top, $content-dark-background, $content-page-background));*/
+        background: lighten($content-page-background,0%);
+    }
+
+    &.active {
+        /*@include background(linear-gradient(top, lighten($content-active,10%), $content-active));*/
+        color: $content-active;
+        &:hover {
+            /*@include background(linear-gradient(top, $content-active, lighten($content-active,10%)));*/
+        }
+    }
+
+    &.r {
+        margin-bottom: 5px;
+    }
+    
+    span {
+        font-size: 11px;
+    }
+    
+    &.button-notext {
+        span {
+            display: none;
+        }
+    }
+    
+    &.button-highlight {
+        @include background(linear-gradient(top, $content-highlight, $content-page-background));
+    }
+}
