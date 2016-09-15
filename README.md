@@ -39,7 +39,8 @@ The application consists of three components:
 
 ### Python devices
 In order to allow scheduling, profile execution, logging, etc, a series of homie-python devices are provided. These need to be running all the time for this functionality.
-To run a device
+To run a device:
+
 1. Copy devices/configs/config-sample.json to <device-name>.json (i.e. heating.json for heating.py)
 2. Configure mqtt details within config file
 3. Run with ```python heating.py```
