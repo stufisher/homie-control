@@ -22,8 +22,10 @@ class Logger(HomieDevice):
 
     _comparators = {
         '==': o.eq,
-        '>=': o.gt,
-        '<=': o.lt,
+        '>=': o.ge,
+        '>': o.gt,
+        '<=': o.le,
+        '<': o.lt,
         '!=': o.ne,
     }
 
