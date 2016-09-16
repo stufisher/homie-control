@@ -73,10 +73,9 @@ class Logger(HomieDevice):
                         FROM propertytrigger 
                         WHERE propertyid = %s""", p['propertyid'])
                     for t in triggers:
-                        if profile:
-                            logger.info('Testing val: {val} tval: {tval} comp: {comp}'.format(val=val, tval=t['value'], comp=t['comparator']))
-                            if self.test(val, float(t['value']), t['comparator']):
-                                self.run_profile(t['propertyprofileid'])
+                        logger.info('Testing val: {val} tval: {tval} comp: {comp}'.format(val=val, tval=t['value'], comp=t['comparator']))
+                        if self.test(val, float(t['value']), t['comparator']):
+                            self.run_profile(t['propertyprofileid'])
 
 
 def main():
