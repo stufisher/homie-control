@@ -17,7 +17,7 @@ define(['backbone'], function(Backbone) {
 
             comparator: {
                 required: true,
-                pattern: 'wwsdash',
+                oneOf: ['==', '>=', '>', '<=', '<', '!=']
             },
 
             propertyprofileid: {
