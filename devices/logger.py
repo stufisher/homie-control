@@ -92,7 +92,7 @@ class Logger(HomieDevice):
                                 logger.info('Changing schedule {sid} to {state}'.format(sid=t['scheduleid'], state=t['schedulestatus']))
                                 self._db.pq("""UPDATE schedule SET active=%s WHERE scheduleid=%s""", [t['schedulestatus'], t['scheduleid']])
 
-                            if t['email'] is not None:
+                            if t['email']:
                                 em = self._db.pq("""SELECT value FROM options WHERE name='trigger_email_to'""")
                                 if len(em):
                                     logger.info('Emailing {em} with update'.format(em=em[0]['value']))
