@@ -30,9 +30,9 @@ class MySQL:
         for r in self._cur:
             rows.append(r)
         
-        for r in rows:
-            for k,v in r.iteritems():
-                r[k] = str(v)
+        # for r in rows:
+        #     for k,v in r.iteritems():
+        #         r[k] = str(v)
 
 
         return rows if rows else []
