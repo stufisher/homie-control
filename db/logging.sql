@@ -209,6 +209,8 @@ CREATE TABLE `propertytrigger` (
   `propertyprofileid` int(11) DEFAULT NULL,
   `scheduleid` int(11) DEFAULT NULL,
   `schedulestatus` int(11) DEFAULT NULL,
+  `email` tinyint(1) DEFAULT NULL,
+  `delay` int(11) NOT NULL DEFAULT '0',
   `active` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
