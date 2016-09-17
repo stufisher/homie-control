@@ -40,7 +40,7 @@ require.config({
     backbone: "vendor/backbone/backbone",
     jquery: "vendor/jquery/dist/jquery",
     "jquery-color": "vendor/jquery-color/jquery.color",
-    "jquery-editable": "vendor/jquery-editable/js/jquery.editable",
+    "jeditable": "vendor/jeditable/jquery.jeditable",
     underscore: "vendor/underscore/underscore",
     "backbone.radio": "vendor/backbone.radio/build/backbone.radio",
     "flot.tooltip.pib": "vendor/flot.tooltip.pib/js/jquery.flot.tooltip",

@@ -1,5 +1,5 @@
 define(['backbone.marionette','jquery', 
-    'jquery-editable',
+    'jeditable',
     // 'jquery-ui', 'jquery.editable.datepicker', 'jquery-ui.timepicker'
     ], 
     function(Marionette, $) {
