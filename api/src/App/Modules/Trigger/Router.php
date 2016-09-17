@@ -38,6 +38,9 @@ class Router extends BaseRouter {
 			'connected' => v::intVal(),
 			'requirelast' => v::intVal(),
 			'requiresunset' => v::intVal(),
+
+			'email' => v::intVal(),
+			'delay' => v::intVal(),
 		];
 	}
 
