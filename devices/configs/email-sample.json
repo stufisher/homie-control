@@ -1,0 +1,7 @@
+{
+    "smtp_server":  "smtp.yourserver.com",
+    "username": "user1234",
+    "password": "password",
+    "from": "user1234@yourserver.com",
+    "fromname": "Homie Control"
+}
