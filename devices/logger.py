@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 from modules.homiedevice import HomieDevice
 from modules.mysql import db
+from modules.sendmail import Email
 
 class ListenAll(homie.Homie):
     def _subscribe(self):
@@ -19,6 +20,8 @@ class ListenAll(homie.Homie):
 
 
 class Logger(HomieDevice):
+
+    _waiting = {}
 
     _comparators = {
         '==': o.eq,
@@ -41,7 +44,8 @@ class Logger(HomieDevice):
             return
 
 
-        properties = self._db.pq("""SELECT count(pt.propertytriggerid) as triggers, p.propertyid, p.devicestring, p.nodestring, p.propertystring 
+        properties = self._db.pq("""SELECT count(pt.propertytriggerid) as triggers, p.propertyid, p.devicestring, p.nodestring, p.propertystring,
+            CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as address
             FROM property p
             LEFT OUTER JOIN propertytrigger pt ON pt.propertyid = p.propertyid AND pt.active = 1
             WHERE p.propertytypeid IS NOT NULL
@@ -69,15 +73,46 @@ class Logger(HomieDevice):
                     [val, p['propertyid']])
 
 
-                if int(p['triggers']) > 0:
+                if p['triggers'] > 0:
                     logger.info('Topic: {topic} has triggers'.format(topic=ptop))
-                    triggers = self._db.pq("""SELECT value, comparator, propertyprofileid 
+                    triggers = self._db.pq("""SELECT value, comparator, propertyprofileid, scheduleid, schedulestatus, email, delay
                         FROM propertytrigger 
                         WHERE propertyid = %s""", p['propertyid'])
                     for t in triggers:
                         logger.info('Testing val: {val} tval: {tval} comp: {comp}'.format(val=val, tval=t['value'], comp=t['comparator']))
                         if self.test(val, float(t['value']), t['comparator']):
-                            self.run_profile(t['propertyprofileid'])
+                            if t['propertyprofileid'] is not None:
+                                if t['delay'] > 0:
+                                    self._waiting[t['propertyprofileid']] = t['delay']+time.time()
+                                else:
+                                    logger.info('Running profile {pid}'.format(pid=t['propertyprofileid']))
+                                    self.run_profile(t['propertyprofileid'])
+
+                            if t['scheduleid'] is not None:
+                                logger.info('Changing schedule {sid} to {state}'.format(sid=t['scheduleid'], state=t['schedulestatus']))
+                                self._db.pq("""UPDATE schedule SET active=%s WHERE scheduleid=%s""", [t['schedulestatus'], t['scheduleid']])
+
+                            if t['email'] is not None:
+                                em = self._db.pq("""SELECT value FROM options WHERE name='trigger_email_to'""")
+                                if len(em):
+                                    logger.info('Emailing {em} with update'.format(em=em[0]['value']))
+
+                                    m = Email(em[0]['value'])
+                                    m.set_message('PropertyTrigger', [p['address'], val])
+                                    m.send()
+
+    def loopHandler(self):
+        toremove = []
+        now = time.time()
+        for pid, delayuntil in self._waiting.iteritems():
+            if now > delayuntil:
+                self.run_profile(pid)
+                toremove.append(pid)
+
+        for pid in toremove:
+            if pid in self._waiting:
+                del self._waiting[pid]
+
 
 
 def main():
@@ -89,6 +124,7 @@ def main():
     Homie.setup()
 
     while True:
+        log.loopHandler()
         time.sleep(5)
 
 

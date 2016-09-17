@@ -36,12 +36,12 @@ define(['backbone'], function(Backbone) {
             },
 
             email: {
-                required: false
+                required: false,
                 pattern: 'number'
             },
 
             delay: {
-                required: false
+                required: false,
                 pattern: 'number'
             },
 
