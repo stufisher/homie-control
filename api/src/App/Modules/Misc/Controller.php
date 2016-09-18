@@ -15,7 +15,7 @@ class Controller extends BaseController {
 
     protected function _patch_options() {
         foreach (['latitude', 'longitude', 'timezone', 
-                'heating_reading_property', 'heating_control_property', 'profile_exec_property'] as $k) {
+                'heating_reading_property', 'heating_control_property', 'profile_exec_property', 'trigger_email_to'] as $k) {
             if ($this->args->has($k)) {
                 $v = $this->args->value($k);
                 $fl = ':1';
