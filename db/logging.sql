@@ -87,8 +87,8 @@ INSERT INTO `options` (`optionid`, `name`, `value`) VALUES
 (5, 'timezone', 'Europe/Paris'),
 (6, 'heating_reading_property', '16'),
 (7, 'heating_control_property', '23'),
-(8, 'profile_exec_property', '82');
-(9, 'trigger_email_to', 'you@server.com')
+(8, 'profile_exec_property', '82'),
+(9, 'trigger_email_to', 'you@server.com');
 
 -- --------------------------------------------------------
 
