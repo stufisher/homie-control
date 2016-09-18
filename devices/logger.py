@@ -45,7 +45,7 @@ class Logger(HomieDevice):
 
 
         properties = self._db.pq("""SELECT count(pt.propertytriggerid) as triggers, p.propertyid, p.devicestring, p.nodestring, p.propertystring,
-            CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as address
+            CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as address, p.friendlyname
             FROM property p
             LEFT OUTER JOIN propertytrigger pt ON pt.propertyid = p.propertyid AND pt.active = 1
             WHERE p.propertytypeid IS NOT NULL
@@ -98,7 +98,7 @@ class Logger(HomieDevice):
                                     logger.info('Emailing {em} with update'.format(em=em[0]['value']))
 
                                     m = Email(em[0]['value'])
-                                    m.set_message('PropertyTrigger', [p['address'], val])
+                                    m.set_message('PropertyTrigger', [p['friendlyname'], p['address'], val])
                                     m.send()
 
     def loopHandler(self):

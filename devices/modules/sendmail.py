@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 
 
 class EmailTemplates:
-	PropertyTrigger = 'Property {0} changed to value {1}'
+	PropertyTrigger = 'Property {0} [{1}] changed to value {2}'
 	PropertyTriggerSubject = 'Property Changed'
 
 	def get(self, template):
@@ -54,5 +54,5 @@ class Email:
 
 if __name__ == '__main__':
 	m = Email('you@yourserver.com')
-	m.set_message('PropertyTrigger', ['dev/node/property', '1.0'])
+	m.set_message('PropertyTrigger', ['a property', 'dev/node/property', '1.0'])
 	m.send()
