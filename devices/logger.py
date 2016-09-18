@@ -77,7 +77,7 @@ class Logger(HomieDevice):
                     logger.info('Topic: {topic} has triggers'.format(topic=ptop))
                     triggers = self._db.pq("""SELECT value, comparator, propertyprofileid, scheduleid, schedulestatus, email, delay
                         FROM propertytrigger 
-                        WHERE propertyid = %s""", p['propertyid'])
+                        WHERE propertyid = %s AND active=1""", p['propertyid'])
                     for t in triggers:
                         logger.info('Testing val: {val} tval: {tval} comp: {comp}'.format(val=val, tval=t['value'], comp=t['comparator']))
                         if self.test(val, float(t['value']), t['comparator']):
