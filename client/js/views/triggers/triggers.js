@@ -77,7 +77,7 @@ define(['backbone.marionette', 'views/table', 'utils/table',
             this.dtriggers.fetch()
 
             this.ready = []
-            this.properties = new Properties(null, { subscribe: false })
+            this.properties = new Properties(null, { subscribe: false, state: { pageSize: 9999 } })
             this.ready.push(this.properties.fetch())
 
             this.profiles = new Profiles()
