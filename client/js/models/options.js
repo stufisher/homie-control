@@ -34,6 +34,11 @@ define(['backbone'], function(Backbone) {
                 required: false,
                 pattern: 'number',
             },
+
+            trigger_email_to: {
+                required: false,
+                pattern: 'email'
+            },
         }
 
     })

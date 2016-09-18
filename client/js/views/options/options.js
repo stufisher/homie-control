@@ -107,6 +107,7 @@ define(['backbone.marionette',
             edit.create('latitude', 'text');
             edit.create('longitude', 'text');
             edit.create('timezone', 'text');
+            edit.create('trigger_email_to', 'text');
             edit.create('heating_reading_property', 'select', { data: this.getProperties.bind(this) });
             edit.create('heating_control_property', 'select', { data: this.getProperties.bind(this) });
             edit.create('profile_exec_property', 'select', { data: this.getProperties.bind(this) });
