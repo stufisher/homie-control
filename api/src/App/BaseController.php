@@ -38,11 +38,12 @@ class BaseController {
         $this->_request = $request;
         $this->_response = $response;
 
-        if (method_exists($this, $method))
+        if (method_exists($this, $method)) {
             return call_user_func([$this, $method], $request, $response, $args);
-        else
+        } else {
             print $method.' doesnt exist on controller '.get_class($this);
             die();
+        }
     }
 
     /**
