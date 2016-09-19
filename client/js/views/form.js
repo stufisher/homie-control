@@ -82,7 +82,7 @@ define(['backbone.marionette', 'backbone',
         setupValidation: function() {
             console.log('setup val')
             this.createModel()
-            Backbone.Validation.unbind(this)
+            if (this.model.associatedViews) Backbone.Validation.unbind(this)
             Backbone.Validation.bind(this, {
                 selector: 'name',
                 valid: function(view, attr) {
