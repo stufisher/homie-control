@@ -24,8 +24,8 @@ class Router extends BaseRouter {
             'propertytypeid' => v::intVal(),
 
             'devicestring' => v::alnum()->noWhitespace(),
-            'nodestring' => v::alnum()->noWhitespace(),
-            'propertystring' => v::alnum()->noWhitespace(),
+            'nodestring' => v::alnum('$')->noWhitespace(),
+            'propertystring' => v::alnum('$')->noWhitespace(),
 
             'friendlyname' => v::alnum(),
             'option' => v::alnum('_'),
