@@ -115,7 +115,6 @@ define(['backbone.marionette', 'backbone',
             if (this.prepareModel) this.prepareModel.call(this)
             this.model.validate()
             var valid = this.model.isValid(true);
-            app.log('submitted', valid, this.model)
             
             if (valid) {
                 var self = this
