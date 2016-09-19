@@ -21,7 +21,6 @@ class Controller extends BaseController {
 		$this->required('propertytypeid');
 		$this->required('devicestring');
 		$this->required('nodestring');
-		$this->required('propertystring');
 		$this->required('friendlyname');
 
 	    $this->db->pq("INSERT INTO property (devicestring, nodestring, propertystring, propertytypeid, friendlyname) 
