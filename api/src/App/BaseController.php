@@ -2,7 +2,6 @@
 
 namespace App;
 
-
 class BaseController {
 
     protected $_app;
@@ -53,7 +52,8 @@ class BaseController {
      * @return null
      */
     protected function error($message, $code=400) {
-        return $this->_response->withJSON($message)->withStatus($code);
+        // $this->_response->withJSON($message)->withStatus($code);
+        throw new \AppException($message, $code);
     }
 
 
