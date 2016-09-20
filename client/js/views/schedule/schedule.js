@@ -103,10 +103,10 @@ define(['backbone.marionette',
             }
 
             if (e.offsetX > this.$el.width()) {
-                this.trigger('component:stretch', this.model, { x: e.pageX, y: e.pageY })
+                this.trigger('component:stretch', this, this.model, { x: e.pageX, y: e.pageY })
             }
             else
-                this.trigger('component:move', this.model, { x: e.pageX, y: e.pageY })
+                this.trigger('component:move', this, this.model, { x: e.pageX, y: e.pageY })
         },
 
 
