@@ -41,14 +41,14 @@ class Schedule(HomieDevice):
             if s['propertyid'] == heating_device:
                 continue
 
-            if s['requiredevice'] == '1' and devs == 0:
+            if s['requiredevice'] == 1 and devs == 0:
                 continue
 
 
-            if s['active'] == '1' and s['enabled'] == '1':
-                newstate = 0 if s['invert'] == '1' else 1
+            if s['active'] == 1 and s['enabled'] == 1:
+                newstate = 0 if s['invert'] == 1 else 1
             else:
-                newstate = 1 if s['invert'] == '1' else 0
+                newstate = 1 if s['invert'] == 1 else 0
 
             # print s['devicestring'],s['nodestring'],s['propertystring'], s['active'], s['invert'] == '1', newstate
 
