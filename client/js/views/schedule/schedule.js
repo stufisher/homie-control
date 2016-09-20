@@ -80,6 +80,8 @@ define(['backbone.marionette',
             e.preventDefault()
             if (e.originalEvent.touches && e.originalEvent.touches.length) e = e.originalEvent.touches[0];
 
+            if (this.$el.hasClass('title')) return
+            if (this.$el.closest('.head').length) return
             if (e.offsetX > this.$el.width()) this.$el.css('cursor', 'e-resize')
                 else this.$el.css('cursor', 'move')
         },
