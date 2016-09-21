@@ -70,6 +70,7 @@ function(Backbone, Marionette,
 
 
         title: function(options) {
+            $('title').html('Homie Control - '+options.title)
             this.main.title(options)
         },
 
