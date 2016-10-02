@@ -68,14 +68,16 @@ function(
 
 
         // Properties
-        properties: function() {
+        properties: function(s, page) {
             // app.loading()
-            var ps = new Properties()
+            page = page ? parseInt(page) : 1
+
+            var ps = new Properties(null, { state: { currentPage: page }, queryParams: { s: s } })
             ps.setPageSize(app.mobile() ? 5 : 15)
             ps.fetch({
                 success: function() {
                     app.title({ title: 'Properties' })
-                    app.content.show(new PropertiesView({ collection: ps }))
+                    app.content.show(new PropertiesView({ collection: ps, params: { s: s } }))
                 },
 
                 error: function() {

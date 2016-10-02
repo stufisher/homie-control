@@ -5,7 +5,7 @@ function(Marionette, controller) {
         appRoutes: {
             'console': 'console',
 
-            'property': 'properties',
+            'property(/s/:s)(/page/:page)': 'properties',
             'property/add': 'add_property',
             'device': 'devices',
             'group': 'property_group',

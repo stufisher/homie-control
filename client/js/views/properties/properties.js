@@ -149,6 +149,7 @@ define(['backbone.marionette', 'views/table', 'utils/table',
                 columns: columns, 
                 tableClass: 'properties', 
                 filter: 's', loading: true, 
+                search: this.getOption('params') && this.getOption('params').s,
                 backgrid: { emptyText: 'No properties found', } 
             })
 
