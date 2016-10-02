@@ -99,6 +99,7 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
                          { name: 'ipaddress', label: 'IP', cell: 'string', editable: false },
                          { name: 'firmware', label: 'Firmware', cell: 'string', editable: false },
                          { name: 'version', label: 'Version', cell: 'string', editable: false },
+                         { label: '', cell: TableUtils.TemplateCell, editable: false, template: '<a href="/property/s/<%=devicestring%>"><i class="fa fa-search"></i></a>' },
                         ]
 
             this.table2 = new TableView({ collection: this.devices, 
