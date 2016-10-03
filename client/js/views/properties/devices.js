@@ -54,9 +54,13 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
         },
 
         getDevices: function() {
-            _.each(['name','online','fw/name','fw/version','signal','uptime/value','localip'], function(v) {
-                app.mqtt.subscribe('+/+/$'+v)
-            }, this)
+            if (app.mqtt.isConnected()) {
+                _.each(['name','online','fw/name','fw/version','signal','uptime/value','localip'], function(v) {
+                    app.mqtt.subscribe('+/+/$'+v)
+                }, this)
+            } else {
+                setTimeout(this.getDevices.bind(this), 2000)
+            }
         },
 
         updateList: function(topic, payload) {
