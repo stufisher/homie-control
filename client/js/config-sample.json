@@ -11,6 +11,7 @@
     "templates": [
         "switches",
         "irrigation",
-        "heating"
+        "heating",
+        "propagator"
     ]
 }
