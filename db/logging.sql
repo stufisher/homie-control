@@ -243,6 +243,7 @@ INSERT INTO `propertytype` (`propertytypeid`, `name`, `grouping`) VALUES
 (9, 'humidityset', 2),
 (10, 'shutter', 3),
 (11, 'executer', 0);
+(12, 'light', 4);
 
 -- --------------------------------------------------------
 
