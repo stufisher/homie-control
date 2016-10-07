@@ -14,7 +14,10 @@ define(['backbone'], function(Backbone) {
         },
 
         maybeSubscribe: function() {
-            if (this._subscribe) this.subscribe()
+            if (this._subscribe) {
+                this.subscribe()
+                this.listenTo(app, 'mqtt:connect', this.subscribe, this)
+            }
         },
 
         updateValue: function(topic, payload) {
