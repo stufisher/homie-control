@@ -87,6 +87,7 @@ define(['backbone.marionette',
 		// MQTT
 		mqttOnConnect: function() {
 		  	console.log('Connected to broker')
+		  	app.trigger('mqtt:connect')
 		},
 
 		mqttOnMessage: function(message) {
