@@ -30,6 +30,7 @@ class Router extends BaseRouter {
 			'endt' => v::regex('/\d+:\d+/'),
 			'day' => v::intVal(),
 			'enabled' => v::intVal(),
+			'invert' => v::intVal(),
 		];
 	}
 
