@@ -38,6 +38,6 @@ class Controller extends BaseController {
     protected function _delete_device() {
         $this->required('deviceid');
         $this->db->pq("DELETE FROM device WHERE deviceid=:1", [$this->args->value('deviceid')]);
-        $this->output();
+        $this->output(new \stdClass);
     }
 }

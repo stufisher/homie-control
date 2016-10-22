@@ -43,7 +43,7 @@ class Controller extends BaseController {
 	        if ($this->mqtt->connect()) {
 	            $this->mqtt->publish('devices/'.$prop['devicestring'].'/'.$prop['nodestring'].'/'.$prop['propertystring'].'/set', $this->args->value('value'), 0, 1);
 	            $this->mqtt->close();
-	            $this->output();
+	            $this->output(new \stdClass);
 	        }
 
 	    } else {

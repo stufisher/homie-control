@@ -44,7 +44,7 @@ class Controller extends BaseController {
     protected function _delete_ptrigger() {
         $this->required('propertytriggerid');
         $this->db->pq("DELETE FROM propertytrigger WHERE propertytriggerid=:1", [$this->args->value('propertytriggerid')]);
-        $this->output();
+        $this->output(new \stdClass);
     }
 
 
@@ -86,7 +86,7 @@ class Controller extends BaseController {
     protected function _delete_strigger() {
         $this->required('suntriggerid');
         $this->db->pq("DELETE FROM suntrigger WHERE suntriggerid=:1", [$this->args->value('suntriggerid')]);
-        $this->output();
+        $this->output(new \stdClass);
     }
 
 
@@ -130,6 +130,6 @@ class Controller extends BaseController {
     protected function _delete_dtrigger() {
         $this->required('devicetriggerid');
         $this->db->pq("DELETE FROM devicetrigger WHERE devicetriggerid=:1", [$this->args->value('devicetriggerid')]);
-        $this->output();
+        $this->output(new \stdClass);
     }
 }

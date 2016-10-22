@@ -75,7 +75,7 @@ class Controller extends BaseController {
         
         $this->db->pq("DELETE FROM pages WHERE pageid=:1", [$this->args->value('pageid')]);
 
-        $this->output();
+        $this->output(new \stdClass);
     }
 
 

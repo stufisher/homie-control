@@ -47,7 +47,7 @@ class Controller extends BaseController {
                 $topic = $this->settings['homie']['base_topic'].'/'.$dev['devicestring'].'/'.$dev['nodestring'].'/'.$dev['propertystring'];
                 $this->mqtt->publish($topic.'/set', $this->args->value('propertyprofileid'));
                 $this->mqtt->close();
-                $this->output();
+                $this->output(new \stdClass);
             }
 
         } else {
@@ -66,7 +66,7 @@ class Controller extends BaseController {
         $this->required('propertyprofileid');
 
         $this->db->pq("DELETE FROM propertyprofile WHERE propertyprofileid=:1", [$this->args->value('propertyprofileid')]);
-        $this->output();
+        $this->output(new \stdClass);
     }
 
 
@@ -105,7 +105,7 @@ class Controller extends BaseController {
 
         $this->db->pq("DELETE FROM propertyprofilecomponent WHERE propertyprofilecomponentid=:1", [$this->args->value('propertyprofilecomponentid')]);
 
-        $this->output();
+        $this->output(new \stdClass);
     }
 
 }

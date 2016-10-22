@@ -39,7 +39,7 @@ class Controller extends BaseController {
         
         $this->db->pq("DELETE FROM propertygroupcomponent WHERE propertygroupcomponentid=:1", [$this->args->value('propertygroupcomponentid')]);
 
-        $this->output();
+        $this->output(new \stdClass);
     }
 
 
@@ -84,7 +84,7 @@ class Controller extends BaseController {
     protected function _delete_pg() {
         $this->required('propertygroupid');
         $this->db->pq("DELETE FROM propertygroup WHERE propertygroupid=:1", [$this->args->value('propertygroupid')]);
-        $this->output();
+        $this->output(new \stdClass);
     }
 
 
@@ -124,7 +124,7 @@ class Controller extends BaseController {
         
         $this->db->pq("DELETE FROM propertysubgroupcomponent WHERE propertysubgroupcomponentid=:1", [$this->args->value('propertysubgroupcomponentid')]);
 
-        $this->output();
+        $this->output(new \stdClass);
     }
 
 
@@ -169,7 +169,7 @@ class Controller extends BaseController {
     protected function _delete_psg() {
         $this->required('propertysubgroupid');
         $this->db->pq("DELETE FROM propertysubgroup WHERE propertysubgroupid=:1", [$this->args->value('propertysubgroupid')]);
-        $this->output();
+        $this->output(new \stdClass);
     }
 
 

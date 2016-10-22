@@ -52,7 +52,7 @@ class Controller extends BaseController {
         $this->required('scheduleid');
 
         $this->db->pq("DELETE FROM schedule WHERE scheduleid = :1", [$this->args->value('scheduleid')]);
-        $this->output();
+        $this->output(new \stdClass);
     }
 
 
@@ -101,7 +101,7 @@ class Controller extends BaseController {
         $this->required('schedulecomponentid');
 
         $this->db->pq("DELETE FROM schedulecomponent WHERE schedulecomponentid = :1", [$this->args->value('schedulecomponentid')]);
-        $this->output();
+        $this->output(new \stdClass);
     }
 
 }
