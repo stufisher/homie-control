@@ -108,25 +108,25 @@ class Heating(HomieDevice):
         #     WHERE typeid=7 AND value=1 AND timestamp + INTERVAL 30 MINUTE > CURRENT_TIMESTAMP
         #     ORDER BY timestamp DESC""")
 
-        logger.info('Override: {over}'.format(over=self._over))
+        # logger.info('Override: {over}'.format(over=self._over))
         # Not scheduled, no motion, and not in override, return
         if not len(sch) and not self._over:
             if self._status:
                 self.set_status(False)
 
-            logger.info('Not scheduled and not in override, sleeping')
+            # logger.info('Not scheduled and not in override, sleeping')
             # time.sleep(10)
             return
 
 
         # Schedule / or motion and enabled, work out whether we should be heating
-        logger.info('Current: {current} Set: {set}'.format(current=current, set=self._setpoint))
         if current > self._setpoint:
             newstate = False
         else:
             newstate = True
 
         if newstate != self._status:
+            logger.info('Current: {current} Set: {set}'.format(current=current, set=self._setpoint))
             self.set_status(newstate)
 
 
