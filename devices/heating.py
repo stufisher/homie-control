@@ -82,7 +82,7 @@ class Heating(HomieDevice):
             # time.sleep(5)
             return
         current = float(device[0]['value'])
-        logger.info('Current Temperature Reading: {temp}'.format(temp=current))
+        #logger.info('Current Temperature Reading: {temp}'.format(temp=current))
 
 
         # Are we scheduled to be on? (do we need a device?)
