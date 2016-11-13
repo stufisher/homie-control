@@ -97,7 +97,7 @@ class Heating(HomieDevice):
         sch = []
         for s in stmp:
             if int(s['requiredevice']):
-                if sizeof(devs):
+                if len(devs):
                     sch.append(s)
             else:
                 sch.append(s)
