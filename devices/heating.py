@@ -92,7 +92,7 @@ class Heating(HomieDevice):
             INNER JOIN options o ON o.name = 'heating_control_property' AND o.value = s.propertyid
             WHERE DAYOFWEEK(CURRENT_TIMESTAMP) = sc.day AND TIME(CURRENT_TIMESTAMP) >= sc.start AND TIME(CURRENT_TIMESTAMP) < sc.end""")
 
-        devs = self._db.pq("""SELECT count(deviceid) as count FROM device WHERE connected=1 AND active=1""")
+        devs = self._db.pq("""SELECT deviceid FROM device WHERE connected=1 AND active=1""")
 
         sch = []
         for s in stmp:
