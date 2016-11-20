@@ -184,9 +184,17 @@ define(['backbone.marionette', 'views/modal', 'jquery','jquery-color'], function
 
     easeText: function(options) {
         // console.log(options)
-        var newValue = options.model.get('value')
-        var oldValue = options.model.previous('value')
-        if (typeof(oldValue) != typeof(1.0)) oldValue = 0
+        try {
+            var newValue = parseFloat(options.model.get('value'))
+        } catch(err) {
+            var newValue = 0
+        }
+
+        try {
+            var oldValue = parseFloat(options.model.previous('value'))
+        } catch(err) {
+            var oldValue = 0
+        }
         // if (typeof(newValue) != typeof(1.0)) newValue = 0
 
         var numParts = newValue.toString().split('.');
