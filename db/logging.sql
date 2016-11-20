@@ -244,6 +244,12 @@ INSERT INTO `propertytype` (`propertytypeid`, `name`, `grouping`) VALUES
 (10, 'shutter', 3),
 (11, 'executer', 0);
 (12, 'light', 4);
+(13, 'count', 5);
+(14, 'rate', 6);
+(15, 'power', 7);
+(16, 'voltage', 8);
+(17, 'current', 9);
+
 
 -- --------------------------------------------------------
 
