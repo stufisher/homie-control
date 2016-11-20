@@ -43,7 +43,7 @@ define(['backbone.marionette',
             },
 
             selection: {
-                mode: 'xy',
+                mode: 'x',
             },
             legend: {
                 position: 'nw'
@@ -82,10 +82,10 @@ define(['backbone.marionette',
                 axis.min = ranges.xaxis.from
                 axis.max = ranges.xaxis.to
             })
-            _.each(opts.yaxes, function(axis) {
-                axis.min = ranges.yaxis.from
-                axis.max = ranges.yaxis.to
-            })
+            // _.each(opts.yaxes, function(axis) {
+            //     axis.min = ranges.yaxis.from
+            //     axis.max = ranges.yaxis.to
+            // })
             
             this.plot.setupGrid()
             this.plot.draw()
