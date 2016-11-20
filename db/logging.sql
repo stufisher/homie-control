@@ -113,7 +113,7 @@ CREATE TABLE `pages` (
 
 CREATE TABLE `property` (
   `propertyid` int(11) NOT NULL,
-  `devicestring` varchar(8) NOT NULL,
+  `devicestring` varchar(12) NOT NULL,
   `nodestring` varchar(30) NOT NULL,
   `propertystring` varchar(30) DEFAULT NULL,
   `propertytypeid` int(11) DEFAULT NULL,
