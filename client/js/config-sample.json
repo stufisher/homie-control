@@ -12,6 +12,7 @@
         "switches",
         "irrigation",
         "heating",
-        "propagator"
+        "propagator",
+        "energy"
     ]
 }
