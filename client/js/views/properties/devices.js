@@ -55,7 +55,7 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
 
         getDevices: function() {
             if (app.mqtt.isConnected()) {
-                _.each(['name','online','fw/name','fw/version','signal','uptime/value','localip'], function(v) {
+                _.each(['name','online','fw/name','fw/version','stats/signal','stats/uptime','localip'], function(v) {
                     app.mqtt.subscribe('+/+/$'+v)
                 }, this)
             } else {
@@ -76,9 +76,9 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
 
             var params = { 'fw\/name': 'firmware', 
                 'fw\/version': 'version', 
-                signal: 'signal', 
+                'stats\/signal': 'signal', 
                 online: 'online', 
-                'uptime\/value': 'uptime',
+                'stats\/uptime': 'uptime',
                 localip: 'ipaddress' }
             _.each(params, function(v, k) {
                 var re = new RegExp('^\\w+\\/\\w+\\/\\$'+k+'$')
