@@ -244,10 +244,10 @@ define(['backbone.marionette',
 
             this.ready = []
 
-            this.propertygroups = new PropertyGroups()
+            this.propertygroups = new PropertyGroups(null, { state: { pageSize: 9999 } })
             this.ready.push(this.propertygroups.fetch())
 
-            this.propertysubgroups = new PropertySubgroups()
+            this.propertysubgroups = new PropertySubgroups(null, { state: { pageSize: 9999 } })
             this.ready.push(this.propertysubgroups.fetch())
 
             $.when.apply($, this.ready).done(this.doOnRender.bind(this))
