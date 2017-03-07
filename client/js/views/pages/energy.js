@@ -30,7 +30,7 @@ define(['backbone.marionette',
 
 			var units = {
 				voltage: 'V',
-				current: 'I',
+				current: 'A',
 				power: 'W',
 				rate: '/s',
 			}
