@@ -13,6 +13,7 @@
         "irrigation",
         "heating",
         "propagator",
-        "energy"
+        "energy",
+        "input"
     ]
 }
