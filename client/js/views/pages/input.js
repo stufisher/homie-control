@@ -39,8 +39,7 @@ define(['backbone.marionette',
 
 		toggle: function(e) {
 			e.preventDefault()
-			var on = this.model.get('propertytype') == '1'
-			this.model.set('value', this.model.get('value') == on ? '0' : on, { silent: true })
+			this.model.set('value', this.model.get('value') == 1 ? 0 : 1, { silent: true })
 			
 			var self = this
 			this.model.save(this.model.changedAttributes(), { patch: true })
