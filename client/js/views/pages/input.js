@@ -33,21 +33,57 @@ define(['backbone.marionette',
 		},
 
 		updateState: function() {
-			if (this.model.get('value') != '0' && this.model.get('value') != '0.0') this.$el.addClass('active')
+			if (parseInt(this.model.get('value'))) this.$el.addClass('active')
 			else this.$el.removeClass('active')		
 		},
 
 		toggle: function(e) {
 			e.preventDefault()
-			this.model.set('value', this.model.get('value') == 1 ? 0 : 1, { silent: true })
+			this.model.set('value', parseInt(this.model.get('value')) == 1 ? 0 : 1, { silent: true })
 			
 			var self = this
 			this.model.save(this.model.changedAttributes(), { patch: true })
 		},
 	})
 
+	var CView = IView.extend({
+		getTemplate: function() {
+			return _.template('<i class="fa '+(this.model.get('icon') ? this.model.get('icon') : 'fa-volume-off')+' fa-2x fa-fw"></i> <%=propertysubgroup%>')
+		},
+	})
+
+	var RView = Marionette.View.extend({
+		tagName: 'a',
+		className: function() {
+			return 'button'
+		},
+
+		getTemplate: function() {
+			return _.template('<i class="fa '+(this.model.get('icon') ? this.model.get('icon') : 'fa-keyboard-o')+' fa-2x fa-fw"></i> <%=friendlyname%>')
+		},
+
+		onRender: function() {
+			this.$el.attr('href', '#')
+		},
+
+		events: {
+			click: 'send',
+		},
+
+		send: function(e) {
+			e.preventDefault()
+			this.model.save({ value: 1 }, { patch: true })
+		},
+	})
+
 	var ICollectionView = Marionette.CollectionView.extend({
-		childView: IView,
+		// childView: IView,
+		childView: function(p) {
+			console.log('col view', p.get('propertysubgroup'), p)
+			if (p.get('propertysubgroup').startsWith('Input')) return IView
+			else if (p.get('propertysubgroup').startsWith('Remote')) return RView
+			else return CView
+		}
 	})
 
 
@@ -55,7 +91,6 @@ define(['backbone.marionette',
 		template: _.template('<div class="sws">'),
 		regions: {
 			rsws: '.sws',
-			rsps: '.sps',
 		},
 
 		initialize: function() {
