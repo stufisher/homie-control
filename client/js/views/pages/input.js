@@ -72,7 +72,7 @@ define(['backbone.marionette',
 
 		send: function(e) {
 			e.preventDefault()
-			this.model.save({ value: 1 }, { patch: true })
+			this.model.save({ value: 1, retained: 0 }, { patch: true })
 		},
 	})
 
