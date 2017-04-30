@@ -31,6 +31,8 @@ class Router extends BaseRouter {
             'option' => v::alnum('_'),
 
             'type' => v::alnum(),
+
+            'retained' => v::intVal(),
         ];
     }
 

@@ -41,7 +41,12 @@ class Controller extends BaseController {
 	        $prop = $prop[0];
 
 	        if ($this->mqtt->connect()) {
-	            $this->mqtt->publish($this->settings['homie']['base_topic'].'/'.$prop['devicestring'].'/'.$prop['nodestring'].'/'.$prop['propertystring'].'/set', $this->args->value('value'), 0, 1);
+	        	$retained = 1;
+	        	if ($this->args->has('retained')) {
+	        		if ($this->args->value('retained') == 0) $retained = 0;
+	        	}
+
+	            $this->mqtt->publish($this->settings['homie']['base_topic'].'/'.$prop['devicestring'].'/'.$prop['nodestring'].'/'.$prop['propertystring'].'/set', $this->args->value('value'), 0, $retained);
 	            $this->mqtt->close();
 	            $this->output(new \stdClass);
 	        }
