@@ -17,16 +17,10 @@ define(['backbone.marionette',
 
         ui: {
             temp: '.temp',
-            motion: '.motion',
         },
 
         modelEvents: {
             'sync change': 'updateTemp'
-        },
-
-        initialize: function(options) {
-            this.motion = new Property()
-            this.listenTo(this.motion, 'sync change', this.updateMotion, this)
         },
 
         onRender: function() {
@@ -39,10 +33,6 @@ define(['backbone.marionette',
                 model: this.model,
                 el: this.ui.temp,
             })
-        },
-
-        updateMotion: function() {
-            this.motion.get('value') ? this.ui.motion.addClass('active') : this.ui.motion.removeClass('active')
         },
 
     })
@@ -66,7 +56,6 @@ define(['backbone.marionette',
             pump: '.pump',
             en: '.enable',
             auto: '.auto',
-            motion: '.motion',
             name: '.name',
         },
 
@@ -133,11 +122,6 @@ define(['backbone.marionette',
                     this.temp = m
                     this.updateTemp(m)
                 }
-
-                if (m.get('propertytype') == 'motion') {
-                    this.listenTo(m, 'sync change', this.updateMotion, this)
-                    this.updateMotion(m)
-                }
                 if (m.get('propertytype') == 'switch') {
                     this.listenTo(m, 'sync change', this.updatePump, this)
                     this.updatePump(m)
@@ -159,11 +143,6 @@ define(['backbone.marionette',
                 }
 
             }, this)
-        },
-
-        updateMotion: function(model) {
-            console.log('update motion', arguments)
-            model.get('value') ? this.ui.motion.addClass('active') : this.ui.motion.removeClass('active')
         },
 
         updatePump: function(model) {
