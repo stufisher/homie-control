@@ -18,7 +18,6 @@ class Controller extends BaseController {
 
 	// Get Properties
 	protected function _add_property() {
-		$this->required('propertytypeid');
 		$this->required('devicestring');
 		$this->required('nodestring');
 		$this->required('friendlyname');
