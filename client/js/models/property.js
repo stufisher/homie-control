@@ -64,7 +64,7 @@ define(['backbone'], function(Backbone) {
             },
 
             propertytypeid: {
-                required: true,
+                required: false,
                 pattern: 'number'
             },
 
