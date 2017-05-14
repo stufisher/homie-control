@@ -162,7 +162,7 @@ define(['backbone.marionette', 'views/table', 'utils/table',
                          { name: 'devicename', label: 'Device Name', cell: 'string', editable: false },
                          { name: 'propertytypeid', label: 'Type', cell: TableUtils.SelectInputCell, editable: true, options: this.types },
                          { name: 'friendlyname', label: 'Friendly Name', cell: InputCell, editable: false },
-                         { label: '', cell: AddCell, editable: false }]
+                         { label: '', cell: AddCell, editable: false, properties: this.collection }]
 
             this.table2 = new TableView({ 
                 mobileHidden: [1,2,3],
