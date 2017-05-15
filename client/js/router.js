@@ -16,6 +16,7 @@ function(Marionette, controller) {
             'ndevice': 'ndevices',
             'trigger': 'trigger',
             'history': 'history',
+            'repeater': 'repeater',
 
             'pages/:slug': 'pages',
 

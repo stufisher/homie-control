@@ -21,6 +21,8 @@ define([
         'views/triggers/triggers',
 
         'views/history/history',
+
+        'views/repeater/repeater',
         ],
 function(
     Console,
@@ -30,7 +32,8 @@ function(
     ProfileView,
     Devices, DevicesView,
     TriggerView,
-    HistoryView
+    HistoryView,
+    RepeaterView
     ) {
 
     var controller = {
@@ -149,6 +152,14 @@ function(
             app.title({ title: 'History' })
             app.content.show(new HistoryView())
         },
+
+
+        // Repeater
+        repeater: function() {
+            app.title({ title: 'Repeater' })
+            app.content.show(new RepeaterView())
+        },
+
 
 
         // Dynamic Pages
