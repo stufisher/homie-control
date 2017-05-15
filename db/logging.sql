@@ -296,6 +296,21 @@ CREATE TABLE `suntrigger` (
   `active` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `repeatermap`
+--
+
+CREATE TABLE `repeatermap` (
+  `repeatermapid` int(11) NOT NULL,
+  `repeaterpropertyid` int(11) NOT NULL,
+  `propertyid` int(11) DEFAULT NULL,
+  `propertygroupid` int(11) DEFAULT NULL,
+  `propertysubgroupid` int(11) DEFAULT NULL,
+  `round` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 --
 -- Indexes for dumped tables
 --
@@ -425,6 +440,16 @@ ALTER TABLE `suntrigger`
   ADD KEY `propertyprofileid` (`propertyprofileid`);
 
 --
+-- Indexes for table `repeatermap`
+--
+ALTER TABLE `repeatermap`
+  ADD PRIMARY KEY (`repeatermapid`),
+  ADD KEY `displaypropertyid` (`repeaterpropertyid`),
+  ADD KEY `propertyid` (`propertyid`),
+  ADD KEY `propertygroupid` (`propertygroupid`),
+  ADD KEY `propertysubgroupid` (`propertysubgroupid`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -514,6 +539,11 @@ ALTER TABLE `schedulecomponent`
 ALTER TABLE `suntrigger`
   MODIFY `suntriggerid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
+-- AUTO_INCREMENT for table `repeatermap`
+--
+ALTER TABLE `repeatermap`
+  MODIFY `repeatermapid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+--
 -- Constraints for dumped tables
 --
 
@@ -589,6 +619,15 @@ ALTER TABLE `schedulecomponent`
 --
 ALTER TABLE `suntrigger`
   ADD CONSTRAINT `suntrigger_ibfk_2` FOREIGN KEY (`propertyprofileid`) REFERENCES `propertyprofile` (`propertyprofileid`);
+
+--
+-- Constraints for table `repeatermap`
+--
+ALTER TABLE `repeatermap`
+  ADD CONSTRAINT `repeatermap_ibfk_1` FOREIGN KEY (`repeaterpropertyid`) REFERENCES `property` (`propertyid`),
+  ADD CONSTRAINT `repeatermap_ibfk_2` FOREIGN KEY (`propertyid`) REFERENCES `property` (`propertyid`),
+  ADD CONSTRAINT `repeatermap_ibfk_3` FOREIGN KEY (`propertygroupid`) REFERENCES `propertygroup` (`propertygroupid`),
+  ADD CONSTRAINT `repeatermap_ibfk_4` FOREIGN KEY (`propertysubgroupid`) REFERENCES `propertysubgroup` (`propertysubgroupid`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
