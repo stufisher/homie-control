@@ -57,8 +57,8 @@ This device executes a 'profile' of properties
 This device checks the network for devices connecting and disconnected and triggers property changes as needed. It also monitors the time and sends triggers for sunet and sunrise
 #### heating.py
 This device enables a switch to be toggled based on a temperature property reading and a schedule.
-#### display.py
-A very specific device for relaying property changes from homie-devices to an OLED. Will be generalised and database managed in future
+#### repeater.py
+A generic device that will subscribe to a property on one device and pass it to another, properties can be configured via the UI > Repeater page. Can also be used to send statics (group name, sub group name) to a device property
 
 #### manage.py
 Is a special device that wraps the other devices into a single process
