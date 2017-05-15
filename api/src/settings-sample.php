@@ -30,6 +30,7 @@ return [
             'Trigger',
             'Group',
             'Property',
+            'Repeater',
         ],
     ],
 ];
