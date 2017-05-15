@@ -84,4 +84,26 @@ class BaseController {
     }
 
 
+
+    /**
+     * Calculate start end for pagination
+     * @param  array    argument
+     * @param  per_page default value
+     * @return null
+     */
+    protected function _get_start_end(&$args, $per_page=15) {
+        $start = 0;
+        $pp = $this->args->has('per_page') ? $this->args->value('per_page') : $per_page;
+        $end = $pp;
+        
+        if ($this->args->has('page')) {
+            $pg = $this->args->value('page') - 1;
+            $start = $pg*$pp;
+        }
+        
+        array_push($args, $start);
+        array_push($args, $end);
+    }
+
+
 }
