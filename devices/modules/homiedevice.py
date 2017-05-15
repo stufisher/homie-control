@@ -33,7 +33,7 @@ class HomieDevice:
 
 
     def set(self, property, payload, retain=True):
-        self._homie.mqtt.publish('devices/{device}/{node}/{property}/set'.format(
+        self._homie.mqtt.publish(self._homie.baseTopic+'/{device}/{node}/{property}/set'.format(
             device=property['devicestring'],
             node=property['nodestring'],
             property=property['propertystring']

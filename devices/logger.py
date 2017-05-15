@@ -53,9 +53,9 @@ class Logger(HomieDevice):
 
         for p in properties:
             if p['propertystring']:
-                ptop = 'devices/{d}/{n}/{p}'.format(d=p['devicestring'], n=p['nodestring'], p=p['propertystring'])
+                ptop = self._homie.baseTopic+'/{d}/{n}/{p}'.format(d=p['devicestring'], n=p['nodestring'], p=p['propertystring'])
             else:
-                ptop = 'devices/{d}/{n}'.format(d=p['devicestring'], n=p['nodestring'])
+                ptop = self._homie.baseTopic+'/{d}/{n}'.format(d=p['devicestring'], n=p['nodestring'])
 
             # logger.info('Topic: {topic}'.format(topic=ptop))
 
@@ -63,7 +63,11 @@ class Logger(HomieDevice):
                 if msg.payload == 'true' or msg.payload == 'false':
                     val = 1 if msg.payload == 'true' else 0
                 else:
-                    val = float(msg.payload)
+                    try:
+                        val = float(msg.payload)
+                    except:
+                        print 'Value none numeric, not logging'
+                        continue
 
                 logger.info('Topic: {topic} Value: {val}'.format(topic=ptop, val=val))
 
