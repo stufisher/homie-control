@@ -26,18 +26,18 @@ class Controller extends BaseController {
         $tot = $this->db->pq("SELECT count(dm.repeaterpropertyid) as tot
             FROM repeatermap dm
             INNER JOIN property dp ON dp.propertyid = dm.repeaterpropertyid
-            WHERE 1=1 $where");
+            WHERE 1=1 $where", $args);
         $tot = $tot[0]['tot'];
 
         $this->_get_start_end($args);
 
-        $rows = $this->db->pq("SELECT dm.repeatermapid, p.friendlyname as property, dp.friendlyname as repeaterproperty, dm.propertyid, dm.repeaterpropertyid, dm.round, CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as propertyaddress, CONCAT(dp.devicestring, '/', dp.nodestring, '/', dp.propertystring) as repeateraddress, dm.propertygroupid, dm.propertysubgroupid
+        $rows = $this->db->paginate("SELECT dm.repeatermapid, p.friendlyname as property, dp.friendlyname as repeaterproperty, dm.propertyid, dm.repeaterpropertyid, dm.round, CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as propertyaddress, CONCAT(dp.devicestring, '/', dp.nodestring, '/', dp.propertystring) as repeateraddress, dm.propertygroupid, dm.propertysubgroupid
             FROM repeatermap dm
             INNER JOIN property dp ON dp.propertyid = dm.repeaterpropertyid
             LEFT OUTER JOIN property p ON p.propertyid = dm.propertyid
             LEFT OUTER JOIN propertygroup pg ON pg.propertygroupid = dm.propertygroupid
             LEFT OUTER JOIN propertysubgroup psg ON psg.propertysubgroupid = dm.propertysubgroupid
-            WHERE 1=1 $where");
+            WHERE 1=1 $where", $args);
 
         if ($this->args->has('repeatermapid')) {
             if(!sizeof($props)) $this->error('No such repeater property');
