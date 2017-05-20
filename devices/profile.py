@@ -4,7 +4,8 @@
 import time
 import homie
 import logging
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 from modules.homiedevice import HomieDevice
@@ -16,12 +17,14 @@ class Profile(HomieDevice):
 
     def setup(self):
         self._profile = self._homie.Node("profile", "profile")
+        self._profile.advertise("id").settable(self.profileHandler)
         self._homie.subscribe(self._profile, "id", self.profileHandler)
 
 
     def profileHandler(self, mqttc, obj, msg):
         if self._first:
             self._first = False
+            logger.info("First run, skipping profile execution")
             return
 
         payload = msg.payload.decode("UTF-8").lower()
@@ -36,7 +39,7 @@ class Profile(HomieDevice):
         for c in components:
             self.set(c, c['value'])
 
-        self._homie.setNodeProperty(self._profile, "id", payload)
+        self._profile.setProperty("id").send(payload)
 
 
 def main():
