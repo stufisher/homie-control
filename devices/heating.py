@@ -20,6 +20,10 @@ class Heating(HomieDevice):
     def setup(self):
         self._node = self._homie.Node("heating", "heating")
 
+        self._node.advertise("enabled").settable(self.enableHandler)
+        self._node.advertise("override").settable(self.overrideHandler)
+        self._node.advertise("temperatureset").settable(self.temperatureSPHandler)
+
         self._homie.subscribe(self._node, "enabled", self.enableHandler)
         self._homie.subscribe(self._node, "override", self.overrideHandler)
         self._homie.subscribe(self._node, "temperatureset", self.temperatureSPHandler)
@@ -30,27 +34,27 @@ class Heating(HomieDevice):
         logger.info("Enable: "+ payload)
         if payload == '1':
             self._enabled = True
-            self._homie.setNodeProperty(self._node, "enabled", "1", True)
+            self._node.setProperty("enabled").send("1")
         else:
             self._enabled = False
-            self._homie.setNodeProperty(self._node, "enabled", "0", True)
+            self._node.setProperty("enabled").send("0")
 
     def overrideHandler(self, mqttc, obj, msg):
         payload = msg.payload.decode("UTF-8").lower()
         logger.info("Override: "+ payload)
         if payload == '1':
             self._over = True
-            self._homie.setNodeProperty(self._node, "override", "1", True)
+            self._node.setProperty("override").send("1")
         else:
             self._over = False
-            self._homie.setNodeProperty(self._node, "override", "0", True)
+            self._node.setProperty("override").send("0")
 
     def temperatureSPHandler(self, mqttc, obj, msg):
         payload = msg.payload.decode("UTF-8").lower()
         logger.info("Temperature Set Point: "+ payload)
         try:
             self._setpoint = float(payload)
-            self._homie.setNodeProperty(self._node, "temperatureset", payload, True)
+            self._node.setProperty("temperatureset").send(payload)
         except:
             logger.error("Setpoint was not a valid float")
 
