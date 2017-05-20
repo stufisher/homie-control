@@ -11,15 +11,12 @@ logger = logging.getLogger(__name__)
 from modules.homiedevice import HomieDevice
 from modules.mysql import db
 
-class ListenAll(homie.Homie):
 
+class Repeater(HomieDevice):
+
+    _repeater_online = False
     topic_map = {}
-    displayid = ''
-
-    def __init__(self, config, db):
-        self._db = db
-        super(ListenAll, self).__init__(config)
-
+    repeaterid = ''
 
     def _subscribe(self):
         tmp = self._db.pq("""SELECT dm.round, dp.devicestring, CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as propertyaddress, CONCAT(dp.devicestring, '/', dp.nodestring, '/', dp.propertystring) as repeateraddress
@@ -30,23 +27,19 @@ class ListenAll(homie.Homie):
         logger.info('subscribing!')
         self.topic_map = {}
         for t in tmp:
+            self._homie.subscribeTopic(str(self._homie.baseTopic+"/"+t['propertyaddress']), self.mqtt_handler)
             self.topic_map[t['propertyaddress']] = t
-            self.mqtt.subscribe(self.baseTopic+"/"+t['propertyaddress'])
 
-        self.displayid = t['devicestring']
+        self.repeaterid = t['devicestring']
         self.subscribe_all_forced = True
 
 
-class Display(HomieDevice):
-
-    _display_online = False
-
     def setup(self):
-        self._homie.mqtt.on_message = self.mqttHandler
+        self._subscribe()
+        self._homie.subscribeTopic(str('{b}/{d}/$online'.format(b=self._homie.baseTopic, d=self.repeaterid)), self._repeater_online)
 
     def init(self):
         self.send_statics()
-        self._homie.mqtt.subscribe('{b}/{d}/$online'.format(b=self._homie.baseTopic, d=self._homie.displayid))
 
     def send_statics(self):
         statics = self._db.pq("""SELECT pg.name as groupname, psg.name as subgroupname, dp.devicestring, dp.nodestring, dp.propertystring
@@ -62,25 +55,19 @@ class Display(HomieDevice):
             time.sleep(0.5)
 
 
+    def _repeater_online(self, mqttc, obj, msg):
+        if msg.payload != self._repeater_online:
+            self._repeater_online = msg.payload
 
-    def mqttHandler(self, client, userdata, msg, *args, **kwargs):
-        parts = msg.topic.split('/')
-        if parts[0] != self._homie.baseTopic:
-            return
-
-        if msg.topic == '{b}/{d}/$online'.format(b=self._homie.baseTopic, d=self._homie.displayid):
-            if msg.payload != self._display_online:
-                self._display_online = msg.payload
-
-                if msg.payload == 'true':
-                    logger.info('Display now online, sending updates')
-                    self.send_statics()
-                    self._homie._subscribe()
-                else: 
-                    logger.info('Display offline')
+            if msg.payload == 'true':
+                logger.info('Repeater now online, sending updates')
+                self.send_statics()
+            else: 
+                logger.info('Repeater offline')
 
 
-        for t,nt in self._homie.topic_map.iteritems():
+    def mqtt_handler(self, mqttc, obj, msg):
+        for t,nt in self.topic_map.iteritems():
             if self._homie.baseTopic+"/"+t == msg.topic:
                 if nt['round']:
                     msg.payload = int(float(msg.payload))
@@ -91,13 +78,13 @@ class Display(HomieDevice):
 
 def main():
     d = db()
-    Homie = ListenAll("configs/display.json", d)
-    display = Display(d, Homie)
+    Homie = homie.Homie("configs/repeater.json")
+    repeater = Repeater(d, Homie)
 
-    Homie.setFirmware("display-controller", "1.0.0")
+    Homie.setFirmware("repeater-controller", "1.0.0")
     Homie.setup()
 
-    display.init()
+    repeater.init()
     while True:
         time.sleep(5)
 
