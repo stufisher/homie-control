@@ -46,17 +46,20 @@ To run a device:
 3. Run with ```python heating.py```
 
 #### logger.py
-This device will log any properties that are registered in the database. This device must be run standalone and cannot (currently) be wrappered by manage.py
+This device will log any properties that are registered in the database.
 
 #### schedule.py
-This device periodically checks if a property is scheduled in the database and updates as needbe
+This device periodically checks if a property is scheduled in the database and updates as need be
 
 #### profile.py
 This device executes a 'profile' of properties
+
 #### device.py
 This device checks the network for devices connecting and disconnected and triggers property changes as needed. It also monitors the time and sends triggers for sunet and sunrise
+
 #### heating.py
 This device enables a switch to be toggled based on a temperature property reading and a schedule.
+
 #### repeater.py
 A generic device that will subscribe to a property on one device and pass it to another, properties can be configured via the UI > Repeater page. Can also be used to send statics (group name, sub group name) to a device property
 
