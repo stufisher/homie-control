@@ -12,12 +12,6 @@ from modules.homiedevice import HomieDevice
 from modules.mysql import db
 from modules.sendmail import Email
 
-class ListenAll(homie.Homie):
-    def _subscribe(self):
-        print 'subscribing!'
-        self.mqtt.subscribe(self.baseTopic+"/#", int(self.qos))
-        self.subscribe_all_forced = True
-
 
 class Logger(HomieDevice):
 
@@ -33,14 +27,14 @@ class Logger(HomieDevice):
     }
 
     def setup(self):
-        self._homie.mqtt.on_message = self.mqttHandler
+        self._homie.subscribeTopic(str(self._homie.baseTopic+"/#"), self.mqttHandler)
 
     def test(self, x, y, comp):
         return self._comparators[comp](x, y)
 
-    def mqttHandler(self, client, userdata, msg, *args, **kwargs):
+    def mqttHandler(self, mqttc, obj, msg):
         parts = msg.topic.split('/')
-        if parts[0] != 'devices':
+        if parts[0] != self._homie.baseTopic:
             return
 
 
@@ -121,7 +115,7 @@ class Logger(HomieDevice):
 
 def main():
     d = db()
-    Homie = ListenAll("configs/logger.json")
+    Homie = homie.Homie("configs/logger.json")
     log = Logger(d, Homie)
 
     Homie.setFirmware("logger", "1.0.0")
