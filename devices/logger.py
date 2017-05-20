@@ -60,7 +60,7 @@ class Logger(HomieDevice):
                     try:
                         val = float(msg.payload)
                     except:
-                        print 'Value none numeric, not logging'
+                        logger.info('Value none numeric, not logging [{topic}, {payload}]'.format(topic=msg.topic, payload=msg.payload))
                         continue
 
                 logger.info('Topic: {topic} Value: {val}'.format(topic=ptop, val=val))
