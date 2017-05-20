@@ -14,7 +14,7 @@ from modules.mysql import db
 
 class Manager:
 
-    module_list = ['schedule', 'heating', 'profile', 'device', 'rf433']
+    module_list = ['schedule', 'heating', 'profile', 'device', 'rf433', 'repeater', 'logger']
 
     _modules = []
 
