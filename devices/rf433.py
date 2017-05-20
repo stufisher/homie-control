@@ -32,17 +32,28 @@ class Rf433(HomieDevice):
         self._shutters = self._homie.Node("shutters", "shutter")
         self._lights = self._homie.Node("lights", "switch")
 
+        self._shutters.advertise("shutter1").settable(self.shutterHandler)
         self._homie.subscribe(self._shutters, "shutter1", self.shutterHandler)
+        self._shutters.advertise("shutter2").settable(self.shutterHandler)
         self._homie.subscribe(self._shutters, "shutter2", self.shutterHandler)
 
+        self._lights.advertise("light1").settable(self.lightHandler)
         self._homie.subscribe(self._lights, "light1", self.lightHandler)
+        self._lights.advertise("light2").settable(self.lightHandler)
         self._homie.subscribe(self._lights, "light2", self.lightHandler)
+        self._lights.advertise("light3").settable(self.lightHandler)
         self._homie.subscribe(self._lights, "light3", self.lightHandler)
+        self._lights.advertise("light4").settable(self.lightHandler)
         self._homie.subscribe(self._lights, "light4", self.lightHandler)
+        self._lights.advertise("light5").settable(self.lightHandler)
         self._homie.subscribe(self._lights, "light5", self.lightHandler)
+        self._lights.advertise("light6").settable(self.lightHandler)
         self._homie.subscribe(self._lights, "light6", self.lightHandler)
+        self._lights.advertise("light7").settable(self.lightHandler)
         self._homie.subscribe(self._lights, "light7", self.lightHandler)
+        self._lights.advertise("light8").settable(self.lightHandler)
         self._homie.subscribe(self._lights, "light8", self.lightHandler)
+        self._lights.advertise("light9").settable(self.lightHandler)
         self._homie.subscribe(self._lights, "light9", self.lightHandler)
 
     def lightHandler(self, mqttc, obj, msg):
@@ -61,7 +72,7 @@ class Rf433(HomieDevice):
             value = 0
 
         self.set_state(0, self._lightt[lid][0], self._lightt[lid][1], value)
-        self._homie.setNodeProperty(self._lights, light, payload)
+        self._lights.setProperty(light).send(payload)
 
     def shutterHandler(self, mqttc, obj, msg):
         payload = msg.payload.decode("UTF-8").lower()
@@ -74,7 +85,7 @@ class Rf433(HomieDevice):
 
         logger.info('Shutter {l} val: {v}'.format(l=sid, v=payload))
         self.set_state(1, sid, state=int(payload))
-        self._homie.setNodeProperty(self._shutters, shutter, payload)
+        self._shutters.setProperty(shutter).send(payload)
 
 
     def set_state(self, type, group, device=None, state=None):
