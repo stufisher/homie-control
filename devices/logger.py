@@ -63,7 +63,7 @@ class Logger(HomieDevice):
                         logger.info('Value none numeric, not logging [{topic}, {payload}]'.format(topic=msg.topic, payload=msg.payload))
                         continue
 
-                logger.info('Topic: {topic} Value: {val}'.format(topic=ptop, val=val))
+                # logger.info('Topic: {topic} Value: {val}'.format(topic=ptop, val=val))
 
                 self._db.pq("""INSERT INTO history (propertyid, value) VALUES (%s, %s)""", 
                     [p['propertyid'], val])
