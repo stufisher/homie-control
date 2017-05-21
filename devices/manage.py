@@ -3,6 +3,7 @@
 
 from importlib import import_module
 import time
+import os
 import homie
 
 import logging
@@ -43,7 +44,8 @@ class Manager:
             time.sleep(1)
 
 def main():
-    Homie = homie.Homie("configs/manage.json")
+    path = os.path.dirname(os.path.realpath(__file__))
+    Homie = homie.Homie("{path}/configs/manage.json".format(path=path))
 
     m = Manager(None, Homie)
     m.run()

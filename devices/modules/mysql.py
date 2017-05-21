@@ -3,6 +3,7 @@
 
 import pymysql
 import json
+import os
 
 
 class MySQL:
@@ -24,7 +25,13 @@ class MySQL:
 
 
     def pq(self, query, args=[]):
+        # try:
         res = self._cur.execute(query, args)
+        # except pymysql.err.OperationalError as e:
+        #     if e[0] == 2013:
+        #         pass
+        #     else:
+        #         raise 
         
         rows = []
         for r in self._cur:
@@ -41,7 +48,9 @@ class MySQL:
     def id(self):
         return self._cur.connection.insert_id()
 
-with open('configs/mysql.json') as raw:
+path = os.path.dirname(os.path.realpath(__file__))
+
+with open('{path}/../configs/mysql.json'.format(path=path)) as raw:
     config = json.load(raw)
 
 def db():
