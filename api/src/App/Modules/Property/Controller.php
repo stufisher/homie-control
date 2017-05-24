@@ -127,6 +127,11 @@ class Controller extends BaseController {
 
 	    $order = 'pg.propertygroupid,p.friendlyname';
 
+	    if ($this->args->has('sort_by')) {
+            $cols = array('friendlyname' => 'p.friendlyname', 'devicestring' => 'p.devicestring', 'nodestring' => 'p.nodestring', 'propertystring' => 'p.propertystring', 'propertytypeid' => 'pt.name');
+            $dir = $this->args->has('order') ? ($this->args->value('order') == 'asc' ? 'ASC' : 'DESC') : 'ASC';
+            if (array_key_exists($this->args->value('sort_by'), $cols)) $order = $cols[$this->args->value('sort_by')].' '.$dir;
+        }
 	    // GROUP_CONCAT(o.name) as options, 
 	    // LEFT OUTER JOIN options o ON o.value = p.propertyid AND o.name LIKE '%_property'
 	    // 
