@@ -44,7 +44,8 @@ require.config({
     underscore: "vendor/underscore/underscore",
     "backbone.radio": "vendor/backbone.radio/build/backbone.radio",
     "flot.tooltip.pib": "vendor/flot.tooltip.pib/js/jquery.flot.tooltip",
-    "backbone.syphon": "vendor/backbone.syphon/lib/backbone.syphon"
+    "backbone.syphon": "vendor/backbone.syphon/lib/backbone.syphon",
+    "moment": "vendor/moment/moment",
   },
   packages: [
 
