@@ -125,6 +125,8 @@ class Controller extends BaseController {
 	    array_push($args, $start);
 	    array_push($args, $end);
 
+	    $order = 'pg.propertygroupid,p.friendlyname';
+
 	    // GROUP_CONCAT(o.name) as options, 
 	    // LEFT OUTER JOIN options o ON o.value = p.propertyid AND o.name LIKE '%_property'
 	    // 
@@ -137,7 +139,7 @@ class Controller extends BaseController {
 	        LEFT OUTER JOIN propertysubgroup psg ON psgc.propertysubgroupid = psg.propertysubgroupid
 	        WHERE 1=1 $where
 	        GROUP BY p.propertyid
-	        ORDER BY pg.propertygroupid,p.friendlyname", $args);
+	        ORDER BY $order", $args);
 
 	    if ($this->args->has('propertyid')) {
 	        if(!sizeof($props)) $this->error('No such property');
@@ -149,32 +151,35 @@ class Controller extends BaseController {
 
 	// Get History
 	protected function _get_history() {
-	    $where = "l.timestamp > (now() - interval 1 day)";
+		$offsetu = $this->args->value('offset', 0) + 1;
+		$offsetl = $offsetu - 1;
+
+	    $where = "(l.timestamp < (now() - interval $offsetl day)) AND (l.timestamp > (now() - interval $offsetu day))";
 	    $group = ", HOUR(l.timestamp), MINUTE(l.timestamp)";
 	    $val = "AVG(l.value)";
 
 	    if ($this->args->has('type')) {
 	    	$t = $this->args->value('type');
 	        if ($t == '48') {
-	            $where = "l.timestamp > (now() - interval 2 day)";
+	            $where = "(l.timestamp < (now() - interval $offsetl*2 day)) AND (l.timestamp > (now() - interval $offsetu*2 day))";
 	            $group = ", DAY(l.timestamp), HOUR(l.timestamp)";
 	            $val = "AVG(l.value)";
 	        }
 
 	        if ($t == 'week') {
-	            $where = "l.timestamp > (now() - interval 7 day)";
+	            $where = "(l.timestamp < (now() - interval $offsetl*7 day)) AND (l.timestamp > (now() - interval $offsetu*7 day))";
 	            $group = ", DAY(l.timestamp), HOUR(l.timestamp)";
 	            $val = "AVG(l.value)";
 	        }
 
 	        if ($t == 'monthd') {
-	            $where = "l.timestamp > (now() - interval 1 month) AND HOUR(timestamp) >= 8 AND HOUR(timestamp) < 20";
+	            $where = "(l.timestamp < (now() - interval $offsetl*1 month)) AND (l.timestamp > (now() - interval $offsetu*1 month) AND HOUR(timestamp) >= 8 AND HOUR(timestamp) < 20)";
 	            $group = ", DAY(l.timestamp)";
 	            $val = "AVG(l.value)";
 	        }
 
 	        if ($t == 'monthn') {
-	            $where = "l.timestamp > (now() - interval 1 month) AND (HOUR(timestamp) < 8 OR HOUR(timestamp) >= 20)";
+	            $where = "(l.timestamp < (now() - interval $offsetl*1 month)) AND (l.timestamp > (now() - interval $offsetu*1 month) AND (HOUR(timestamp) < 8 OR HOUR(timestamp) >= 20))";
 	            $group = ", DAY(l.timestamp)";
 	            $val = "AVG(l.value)";
 	        }
