@@ -21,6 +21,7 @@ class ArgList {
             'page'     => v::intVal(),
             'per_page' => v::intVal(),
             'sort_by'  => v::alnum(),
+            'order'    => v::alnum(),
             's'        => v::alnum(),
         ];
     }
