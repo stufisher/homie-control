@@ -186,16 +186,6 @@
 
 .plot {
     height: 400px;
-
-    &.loading {
-        position: relative;
-        text-align: center;
-        vertical-align: middle;
-
-        i {
-            margin-top: 40%;
-        }
-    }
 }
 
 .plotwrap {
