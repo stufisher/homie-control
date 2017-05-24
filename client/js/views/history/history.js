@@ -238,8 +238,8 @@ define(['backbone.marionette',
                     var from = moment(f.get('data')[0][0])
                     var to = moment(_.last(f.get('data'))[0])
 
-                    this.ui.from.text(from.format('ddd MMM Do YYYY hh:mm'))
-                    this.ui.to.text(to.format('ddd MMM Do YYYY hh:mm'))
+                    this.ui.from.text(from.format('ddd MMM Do YYYY HH:mm'))
+                    this.ui.to.text(to.format('ddd MMM Do YYYY HH:mm'))
                 }
             }
         },
