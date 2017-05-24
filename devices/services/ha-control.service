@@ -1,9 +1,10 @@
 [Unit]
 Description=HA Control Service
-After=multi-user.target mosquitto.service
+After=mosquitto.service mysql.service
+Wants=mosquitto.service mysql.service
 
 [Service]
-Type=idle
+Type=simple
 Restart=always
 ExecStart=/usr/bin/python /path/to/homie-control/devices/manage.py
 
