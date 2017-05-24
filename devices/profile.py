@@ -18,7 +18,6 @@ class Profile(HomieDevice):
     def setup(self):
         self._profile = self._homie.Node("profile", "profile")
         self._profile.advertise("id").settable(self.profileHandler)
-        self._homie.subscribe(self._profile, "id", self.profileHandler)
 
 
     def profileHandler(self, mqttc, obj, msg):

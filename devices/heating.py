@@ -23,11 +23,7 @@ class Heating(HomieDevice):
         self._node.advertise("enabled").settable(self.enableHandler)
         self._node.advertise("override").settable(self.overrideHandler)
         self._node.advertise("temperatureset").settable(self.temperatureSPHandler)
-
-        self._homie.subscribe(self._node, "enabled", self.enableHandler)
-        self._homie.subscribe(self._node, "override", self.overrideHandler)
-        self._homie.subscribe(self._node, "temperatureset", self.temperatureSPHandler)
-
+        
 
     def enableHandler(self, mqttc, obj, msg):
         payload = msg.payload.decode("UTF-8").lower()
