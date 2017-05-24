@@ -113,6 +113,10 @@ define(['backbone.marionette',
             this.hist = new HistoryModel()
             this.listenTo(this.hist, 'sync', this.plot, this)
 
+            this.listenTo(this.hist, 'request', this.displaySpinner);
+            this.listenTo(this.hist, 'sync', this.removeSpinner);
+            this.listenTo(this.hist, 'error', this.removeSpinner);
+
             this.filterview = new FilterView({
                 collection: this.hist,
                 name: 'type',
@@ -125,6 +129,14 @@ define(['backbone.marionette',
                 ],
                 url: false,
             })
+        },
+
+        displaySpinner: function() {
+            this.ui.plot.addClass('loading')
+        },
+
+        removeSpinner: function() {
+            this.ui.plot.removeClass('loading')
         },
 
         onRender: function() {
