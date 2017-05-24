@@ -31,6 +31,22 @@ define(['backbone.marionette',
             // plothover: 'plotHover',
             'touchstart .plotwrap': 'touchStart',
             'change @ui.gr': 'selectGroup',
+            'click .plus': 'decOffset',
+            'click .minus': 'incOffset',
+        },
+
+
+        decOffset: function(e) {
+            e.preventDefault()
+            this.offset -= 1
+            if (this.offset < 0) this.offset = 0
+            this.hist.fetch()
+        },
+
+        incOffset: function(e) {
+            e.preventDefault()
+            this.offset += 1
+            this.hist.fetch()
         },
 
 
@@ -105,6 +121,10 @@ define(['backbone.marionette',
             this.hist.fetch()
         },
 
+        getOffset: function() {
+            return this.offset
+        },
+
         initialize: function(options) {
             this.groups = new PropertyGroups()
             this.groups.queryParams.history = 1
@@ -112,10 +132,13 @@ define(['backbone.marionette',
             this.lastClick = null
             this.hist = new HistoryModel()
             this.listenTo(this.hist, 'sync', this.plot, this)
+            this.hist.queryParams.offset = this.getOffset.bind(this)
 
             this.listenTo(this.hist, 'request', this.displaySpinner);
             this.listenTo(this.hist, 'sync', this.removeSpinner);
             this.listenTo(this.hist, 'error', this.removeSpinner);
+
+            this.offset = 0
 
             this.filterview = new FilterView({
                 collection: this.hist,
