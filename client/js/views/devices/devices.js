@@ -36,15 +36,12 @@ define(['backbone.marionette', 'views/table', 'utils/table',
         initialize: function(options) {
             OptionsCell.__super__.initialize.call(this,options)
             this.listenTo(this.model, 'change:active', this.select, this)
-            this.listenTo(this.model, 'change:connected', this.select, this)
         },
 
         select: function() {
             var i = this.$el.find('a.enable')
             this.model.get('active') ? i.addClass('active') : i.removeClass('active')
 
-            var i = this.$el.find('i.connected')
-            this.model.get('connected') ? i.addClass('active') : i.removeClass('active')
         },
 
 
@@ -53,7 +50,7 @@ define(['backbone.marionette', 'views/table', 'utils/table',
             if (this.model.get('new')) {
                 this.$el.html('<a href="#" class="button save"><i class="fa fa-check"></i></a> <a href="#" class="button del"><i class="fa fa-times"></i></a>')
             } else {
-                this.$el.html('<i class="fa fa-plug connected"></i></a> <a href="#" class="button enable"><i class="fa fa-power-off"></i></a> <a href="#" class="button del"><i class="fa fa-times"></i></a>')
+                this.$el.html('<a href="#" class="button enable"><i class="fa fa-power-off"></i></a> <a href="#" class="button del"><i class="fa fa-times"></i></a>')
             }
             this.select()
 
@@ -62,6 +59,31 @@ define(['backbone.marionette', 'views/table', 'utils/table',
         }
 
     })
+
+
+    var StatusCell = Backgrid.Cell.extend({
+        initialize: function(options) {
+            StatusCell.__super__.initialize.call(this,options)
+            this.listenTo(this.model, 'change:connected', this.select, this)
+        },
+
+        select: function() {
+            var i = this.$el.find('i.connected')
+            this.model.get('connected') ? i.addClass('active') : i.removeClass('active')
+            this.model.get('connected') ? i.prop('title', 'Device Connected') :i.prop('title', 'Device Disconnected')
+        },
+
+
+        render: function() {
+            this.$el.empty()
+            this.$el.html('<i class="fa fa-plug connected"></i></a>')
+            this.select()
+
+            this.delegateEvents()
+            return this
+        }
+
+    })    
 
 
     return Marionette.View.extend({
@@ -97,6 +119,7 @@ define(['backbone.marionette', 'views/table', 'utils/table',
                     { name: 'name', label: 'Name', cell: TableUtils.ValidatedCell },
                     { name: 'macaddress', label: 'MAC Address', cell: TableUtils.ValidatedCell },
                     { name: 'ipaddress', label: 'IP Address', cell: 'string', editable: false },
+                    { label: '', cell: StatusCell, editable: false },
                     { label: '', cell: OptionsCell, editable: false },
                 ],
                 loading: true,
