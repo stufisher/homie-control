@@ -30,13 +30,24 @@
             }
         }
 
-        thead th, thead th a {
+        thead th {
             font-family: $table-head-font;
             text-align: center;
             background: $table-header-background;
             color: $table-header-color;
             text-transform: uppercase;
             
+            button {
+                border: 0;
+                width: 100%;
+                height: 100%;
+                font-size: 12px;
+                font-family: $table-head-font;
+                background: $table-header-background;
+                color: $table-header-color;
+                text-transform: uppercase;
+            }
+
             &.editable {
                 border-radius: 0;
                 padding-right: 0;
