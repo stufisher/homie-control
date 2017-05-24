@@ -3,11 +3,12 @@ define(['backbone.marionette',
     'collections/propertygroups',
     'views/filter',
     'utils',
+    'moment',
     'tpl!templates/history/hist.html',
     'jquery', 'Flot', 'Flot-time', 'Flot-selection', 'Flot-resize', 'flot.tooltip.pib',
 	], function(Marionette, 
         HistoryModel, PropertyGroups,
-        FilterView, utils,
+        FilterView, utils, moment,
         template, $) {
 
 	return Marionette.View.extend({
@@ -16,6 +17,8 @@ define(['backbone.marionette',
         ui: {
             plot: '.plot',
             gr: 'select[name=propertygroupid]',
+            from: '.from',
+            to: '.to',
         },
 
         regions: {
@@ -193,6 +196,17 @@ define(['backbone.marionette',
             console.log('opts', opts)
 
             this.plot = $.plot(this.ui.plot, data, opts)
+
+            if (this.hist.length) {
+                var f = this.hist.at(0)
+                if (f.get('data').length) {
+                    var from = moment(f.get('data')[0][0])
+                    var to = moment(_.last(f.get('data'))[0])
+
+                    this.ui.from.text(from.format('ddd MMM Do YYYY hh:mm'))
+                    this.ui.to.text(to.format('ddd MMM Do YYYY hh:mm'))
+                }
+            }
         },
 
         showToolTip: function(label, xval, yval, item) {
