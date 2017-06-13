@@ -26,7 +26,7 @@ class Email:
 		self.templates = EmailTemplates()
 
 		path = os.path.dirname(os.path.realpath(__file__))
-		conf = '{path}/configs/email.json'.format(path=path)
+		conf = '{path}/../configs/email.json'.format(path=path)
 		print conf, os.path.exists(conf)
 		if os.path.exists(conf):
 			file = open(conf)
