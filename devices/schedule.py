@@ -23,7 +23,7 @@ class Schedule(HomieDevice):
         if not len(heating_device):
             heating_device = None
         else:
-            heating_device = heating_device[0]['value']
+            heating_device = int(heating_device[0]['value'])
 
         schedules = self._db.pq("""SELECT propertyid, devicestring, nodestring, propertystring, enabled, max(active) as active, invert, requiredevice FROM (
             SELECT p.propertyid, p.devicestring, p.nodestring, p.propertystring, s.enabled, 
