@@ -62,7 +62,8 @@ CREATE TABLE `history` (
   `historyid` int(11) NOT NULL,
   `propertyid` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `value` double NOT NULL
+  `value` double NOT NULL,
+  `archive` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
