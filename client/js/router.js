@@ -8,6 +8,7 @@ function(Marionette, controller) {
             'property(/s/:s)(/page/:page)': 'properties',
             'property/add': 'add_property',
             'device': 'devices',
+            'device/scan': 'scan_devices',
             'group': 'property_group',
 
             'schedule': 'schedule',

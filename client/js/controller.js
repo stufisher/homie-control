@@ -4,6 +4,7 @@ define([
         'collections/properties',
         'views/properties/properties',
         'views/properties/devices',
+        'views/properties/scandevices',
         'views/properties/propertyadd',
         'views/properties/propertygroups',
 
@@ -26,7 +27,7 @@ define([
         ],
 function(
     Console,
-    Properties, PropertiesView, PropertyDeviceView, PropertyAddView, PropertyGroupsView,
+    Properties, PropertiesView, PropertyDeviceView, ScanDeviceView, PropertyAddView, PropertyGroupsView,
     Options, OptionsView, ConfigEditor,
     ScheduleView,
     ProfileView,
@@ -93,6 +94,11 @@ function(
         devices: function() {
             app.title({ title: 'Devices' })
             app.content.show(new PropertyDeviceView())
+        },
+
+        scan_devices: function() {
+            app.title({ title: 'Scan for Devices' })
+            app.content.show(new ScanDeviceView())
         },
 
 
