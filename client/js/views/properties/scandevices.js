@@ -91,14 +91,19 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
             'wrap': '.wrp'
         },
 
+        ui: {
+            ref: 'a.refresh',
+        },
+
         events: {
-            'click a.refresh': 'refreshDevices',
+            'click @ui.ref': 'refreshDevices',
         },
 
 
         refreshDevices: function(e) {
             e.preventDefault()
             this.devices.fetch()
+            this.ui.ref.find('i').addClass('fa-spin')
         },
 
 
@@ -133,9 +138,11 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
 
 
         queryDevices: function() {
+            this.ui.ref.find('i').removeClass('fa-spin')
+
             if (!this.devices.length) return
             this.queryId = 0
-            this.queryDevice()
+            setTimeout(this.queryDevice.bind(this), 2000)
         },
 
 
