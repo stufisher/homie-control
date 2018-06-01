@@ -94,8 +94,10 @@ class Controller extends BaseController {
         if (!sizeof($if)) $this->error('No scan interface defined');
         $if = $if[0]['value'];
 
+        $pass = str_replace($this->baseid, '', $options['ssid']);
+
         $res = [];
-        exec($this->nmcli.' dev wifi connect '.escapeshellarg($options['ssid']).' ifname '.escapeshellarg($if), $res);
+        exec($this->nmcli.' dev wifi connect '.escapeshellarg($options['ssid']).' password '.escapeshellarg($pass).' ifname '.escapeshellarg($if), $res);
     }
 
     private function _delete_connection($options) {
