@@ -62,6 +62,8 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
             var message = new Paho.MQTT.Message('true')
             message.destinationName = 'devices/'+this.model.get('devicestring')+'/$implementation/reset'
             app.mqtt.send(message)
+            this.$el.html('<span>Sent reset</span>')
+            setTimeout(this.render.bind(this), 5000)
         },
 
         render: function() {

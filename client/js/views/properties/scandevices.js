@@ -70,6 +70,7 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
                 },
 
                 error: function(resp) {
+                    self.$el.append(' <span>Could not configure device</span>')
                     self.$el.find('i').removeClass('fa-spin')
                 }
             })
