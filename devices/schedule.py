@@ -25,7 +25,7 @@ class Schedule(HomieDevice):
         else:
             heating_device = int(heating_device[0]['value'])
 
-        schedules = self._db.pq("""SELECT propertyid, devicestring, nodestring, propertystring, enabled, max(active) as active, invert, requiredevice FROM (
+        schedules = self._db.pq("""SELECT propertyid, devicestring, nodestring, propertystring, max(enabled) as enabled, max(active) as active, invert, requiredevice FROM (
             SELECT p.propertyid, p.devicestring, p.nodestring, p.propertystring, s.enabled, 
                 IF(sc.schedulecomponentid IS NOT NULL
                     AND DAYOFYEAR(CURRENT_TIMESTAMP) >= DAYOFYEAR(s.start)
