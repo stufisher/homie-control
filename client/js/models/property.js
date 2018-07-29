@@ -20,10 +20,14 @@ define(['backbone'], function(Backbone) {
             }
         },
 
-        updateValue: function(topic, payload) {
+        updateValue: function(topic, payload, binary) {
             // console.log('mqtt in model', topic, payload, topic == this.get('address'))
             if (topic == this.get('address')) {
-                this.set('value', isNaN(payload) ? payload : parseFloat(payload))
+                if (binary) {
+                    this.set({ value: payload, binary: true })
+                } else {
+                    this.set('value', isNaN(payload) ? payload : parseFloat(payload))
+                }
             } 
 
         },

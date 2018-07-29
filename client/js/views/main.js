@@ -91,11 +91,16 @@ define(['backbone.marionette',
 		},
 
 		mqttOnMessage: function(message) {
-		  	app.trigger('mqtt:message', message.destinationName, message.payloadString)
+			// console.log(message)
+			try {
+		  		app.trigger('mqtt:message', message.destinationName, message.payloadString, false)
+		  	} catch {
+		  		app.trigger('mqtt:message', message.destinationName, message.payloadBytes, true)
+		  	}
 		},
 
 		mqttOnDisconnect: function() {
-		  	console.log('Disconnected from broken, retry in 2s')
+		  	console.log('Disconnected from broker, retry in 2s')
 		  	setTimeout(this.mqttConnect.bind(this), 2000)
 		},
 
