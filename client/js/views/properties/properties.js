@@ -48,6 +48,14 @@ define(['backbone.marionette', 'views/table', 'utils/table',
         idAttribute: 'address',
     })
 
+
+    var ValueCell = Backgrid.StringCell.extend({
+        render: function() {
+            this.$el.text(this.model.get('binary') ? '{binary}' : this.model.get('value'))
+            return this
+        },
+    })
+
     
     return Marionette.View.extend({
         className: 'content',
@@ -136,12 +144,14 @@ define(['backbone.marionette', 'views/table', 'utils/table',
         },
 
         doOnRender: function() {
-            var columns = [{ name: 'friendlyname', label: 'Name', cell: TableUtils.ValidatedCell, editable: true },
-                         { name: 'devicestring', label: 'Device', cell: TableUtils.ValidatedCell, editable: true },
-                         { name: 'nodestring', label: 'Node', cell: TableUtils.ValidatedCell, editable: true },
-                         { name: 'propertystring', label: 'Property', cell: TableUtils.ValidatedCell, editable: true },
-                         { name: 'propertytypeid', label: 'Type', cell: TableUtils.SelectInputCell, editable: true, options: this.types },
-                         { name: 'value', label: 'Last Value', cell: 'string', editable: false },]
+            var columns = [
+                { name: 'friendlyname', label: 'Name', cell: TableUtils.ValidatedCell, editable: true },
+                { name: 'devicestring', label: 'Device', cell: TableUtils.ValidatedCell, editable: true },
+                { name: 'nodestring', label: 'Node', cell: TableUtils.ValidatedCell, editable: true },
+                { name: 'propertystring', label: 'Property', cell: TableUtils.ValidatedCell, editable: true },
+                { name: 'propertytypeid', label: 'Type', cell: TableUtils.SelectInputCell, editable: true, options: this.types },
+                { label: 'Last Value', cell: ValueCell, editable: false }
+            ]
 
             this.table = new TableView({ 
                 mobileHidden: [1,2,3],
@@ -158,7 +168,7 @@ define(['backbone.marionette', 'views/table', 'utils/table',
 
 
             var columns = [{ name: 'address', label: 'Address', cell: 'string', editable: false },
-                         { name: 'value', label: 'Last Value', cell: 'string', editable: false },
+                         { name: 'value', label: 'Last Value', cell: ValueCell, editable: false },
                          { name: 'devicename', label: 'Device Name', cell: 'string', editable: false },
                          { name: 'propertytypeid', label: 'Type', cell: TableUtils.SelectInputCell, editable: true, options: this.types },
                          { name: 'friendlyname', label: 'Friendly Name', cell: InputCell, editable: false },
