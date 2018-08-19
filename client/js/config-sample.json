@@ -15,6 +15,7 @@
         "propagator",
         "energy",
         "input",
-        "ac"
+        "ac",
+        "airplay"
     ]
 }
