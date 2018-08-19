@@ -97,7 +97,7 @@ define(['backbone.marionette',
         },
 
         doOnRender:function() {
-            _.each(['heating_reading_property', 'heating_control_property', 'profile_exec_property'], function(k,i) {
+            _.each(['heating_reading_property', 'heating_control_property', 'profile_exec_property', 'archiver_source_property'], function(k,i) {
                 var p = this.properties.findWhere({ propertyid: parseInt(this.model.get(k)) })
                 // if (p) this.model.set(k+'_name', )
                 if (p) this.$el.find('.'+k).html(p.get('friendlyname'))
@@ -111,6 +111,9 @@ define(['backbone.marionette',
             edit.create('heating_reading_property', 'select', { data: this.getProperties.bind(this) });
             edit.create('heating_control_property', 'select', { data: this.getProperties.bind(this) });
             edit.create('profile_exec_property', 'select', { data: this.getProperties.bind(this) });
+            edit.create('scan_interface', 'text');
+            edit.create('archiver_source_property', 'select', { data: this.getProperties.bind(this) });
+            edit.create('archiver_root', 'text');
         },
         
     })

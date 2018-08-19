@@ -39,6 +39,20 @@ define(['backbone'], function(Backbone) {
                 required: false,
                 pattern: 'email'
             },
+
+            scan_interface: {
+                required: false,
+                pattern: 'word',
+            },
+
+            archiver_source_property: {
+                required: false,
+                pattern: 'number',
+            },
+
+            archiver_root: {
+                required: false,
+            },
         }
 
     })
