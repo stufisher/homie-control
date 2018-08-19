@@ -56,7 +56,7 @@ define(['backbone.marionette',
 
 	var FrameView = Marionette.View.extend({
 		className: 'frame',
-		template: _.template('<img class="frame stream" alt="<%-friendlyname%>" />'),
+		template: _.template('<img alt="<%-friendlyname%>" />'),
 
 		ui: {
 			frame: 'img'
@@ -74,6 +74,7 @@ define(['backbone.marionette',
 
 
 	var FrameCollectionView = Marionette.CollectionView.extend({
+		className: 'frames',
 		childView: FrameView
 	})
 
@@ -83,7 +84,10 @@ define(['backbone.marionette',
 		template: template,
 
 		regions: {
-			live: '.live',
+			live: {
+				replaceElement: true,
+				el: '.live',
+			},
 			notifications: '.notifications',
 			archive: '.archive',
 		},
