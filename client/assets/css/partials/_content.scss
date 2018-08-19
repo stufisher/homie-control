@@ -461,6 +461,9 @@
 
         progress {
             width: 90%;
+            @media(max-width: $breakpoint-vsmall) {
+                width: 80%;
+            }
             &::-webkit-progress-value {
                 -webkit-transition: width .5s;
             }
