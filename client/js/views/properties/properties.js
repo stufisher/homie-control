@@ -30,6 +30,7 @@ define(['backbone.marionette', 'views/table', 'utils/table',
             e.preventDefault()
             var self = this
             var model = new Property(this.model.toJSON())
+            model.set({ value: null }, { silent: true })
             model.save({}, {
                 success: function() {
                     self.model.collection.remove(self.model)
