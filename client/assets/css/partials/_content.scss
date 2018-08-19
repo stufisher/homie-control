@@ -473,7 +473,7 @@
         a {
             margin: 5px;
             border: none;
-            border-radius: 20%;
+            border-radius: 13%;
             padding: 10px;
         }
     }
@@ -499,6 +499,13 @@
               box-shadow: 0 5px 5px -5px #333 inset;
             }
         }
+    }
+}
+
+
+.camera {
+    .frame {
+        text-align: center;
     }
 }
 
