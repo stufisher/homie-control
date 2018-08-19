@@ -24,6 +24,9 @@ class Router extends BaseRouter {
 			'heating_reading_property' => v::intVal(), 
 			'heating_control_property' => v::intVal(), 
 			'profile_exec_property' => v::intVal(),
+			'scan_interface' => v::alnum(),
+			'archiver_source_property' => v::intVal(),
+			'archiver_root' => v::alnum('/_')->noWhitespace(),
 
 			'pageid' => v::intVal(),
 			'slug' => v::alnum('_')->noWhitespace(),
