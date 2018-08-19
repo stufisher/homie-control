@@ -41,8 +41,9 @@ class Logger(HomieDevice):
         properties = self._db.pq("""SELECT count(pt.propertytriggerid) as triggers, p.propertyid, p.devicestring, p.nodestring, p.propertystring,
             CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as address, p.friendlyname
             FROM property p
+            INNER JOIN propertytype ty ON ty.propertytypeid = p.propertytypeid
             LEFT OUTER JOIN propertytrigger pt ON pt.propertyid = p.propertyid AND pt.active = 1
-            WHERE p.propertytypeid IS NOT NULL
+            WHERE p.propertytypeid IS NOT NULL AND ty.name != 'binary'
             GROUP BY p.propertyid""")
 
         for p in properties:
