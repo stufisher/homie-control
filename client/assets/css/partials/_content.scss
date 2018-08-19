@@ -506,10 +506,14 @@
 .camera {
     .frame {
         text-align: center;
+
+        img {
+            max-width: 100%;
+        }
     }
 }
 
-.cover img, img.frame {
+.cover img, .frame img {
     @media(max-width: $breakpoint-vsmall) {
         width: 100%;
     }   
