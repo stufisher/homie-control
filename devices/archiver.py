@@ -48,6 +48,7 @@ class Archiver(HomieDevice):
     def _update_framecount(self):
         fc = len(glob.glob("{root}/*.jpg".format(root=self._root)))
         self._archive.setProperty("frames").send(str(fc))
+        self._load_frame(fc-1)
 
 
     def _save_frame(self, mqttc, obj, msg):
@@ -68,6 +69,10 @@ class Archiver(HomieDevice):
         logger.debug("Frameid {fr}".format(fr=imageid))
 
         imint = int(imageid)
+        self._load_frame(imint)
+
+
+    def _load_frame(self, imint):
         frames = glob.glob("{root}/*.jpg".format(root=self._root))
         frames.sort(key=os.path.getmtime)
         if imint < len(frames) and imint > 0:
@@ -77,7 +82,7 @@ class Archiver(HomieDevice):
                 logger.info("Loading archived frame: {fn} - {file}".format(fn=imint, file=file))
                 self._archive.setProperty("frame").send(bytearray(frame.read()))
 
-            self._archive.setProperty("frameno").send(imageid)
+            self._archive.setProperty("frameno").send(str(imint))
 
 
 def main():
