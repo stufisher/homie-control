@@ -459,11 +459,17 @@
     .progress {
         text-align: center;
 
+        span {
+            display: inline-block;
+            width: 45px;
+            text-align: center;
+        }
+
         progress {
             -webkit-appearance: none;
             appearance: none;
             height: 12px;
-            width: 90%;
+            width: calc(100% - 10px - 90px);
             margin: 0 5px;
 
             &::-webkit-progress-bar {
@@ -473,12 +479,9 @@
             }
 
             &::-webkit-progress-value {
+                -webkit-transition: width 1.5s;
                 box-shadow: 0 5px 5px -5px #999 inset;
                 background-color: $header-background;
-            }
-
-            @media(max-width: $breakpoint-vsmall) {
-                width: 70%;
             }
         }
     }
