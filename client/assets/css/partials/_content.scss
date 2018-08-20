@@ -460,12 +460,25 @@
         text-align: center;
 
         progress {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 12px;
             width: 90%;
-            @media(max-width: $breakpoint-vsmall) {
-                width: 80%;
+            margin: 0 5px;
+
+            &::-webkit-progress-bar {
+                background: none;
+                background-color: whiteSmoke;
+                box-shadow: 0 5px 5px -5px #333 inset;
             }
+
             &::-webkit-progress-value {
-                -webkit-transition: width .5s;
+                box-shadow: 0 5px 5px -5px #999 inset;
+                background-color: $header-background;
+            }
+
+            @media(max-width: $breakpoint-vsmall) {
+                width: 75%;
             }
         }
     }
