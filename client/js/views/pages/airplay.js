@@ -228,7 +228,7 @@ define(['backbone.marionette',
 					this._cover_mime = p
 				}
 
-				if (p.get('propertystring') == 'image') {
+				if (p.get('propertystring') == 'image' || p.get('propertystring') == 'thumb') {
 					this._cover = p
 					this.listenTo(this._cover, 'change:value', this.drawCover)
 					this.drawCover()
