@@ -35,6 +35,8 @@ class Router extends BaseRouter {
             'retained' => v::intVal(),
             
             'offset' => v::intVal(),
+
+            'minimal' => v::intVal(),
         ];
     }
 

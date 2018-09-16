@@ -134,8 +134,14 @@ class Controller extends BaseController {
         }
 	    // GROUP_CONCAT(o.name) as options, 
 	    // LEFT OUTER JOIN options o ON o.value = p.propertyid AND o.name LIKE '%_property'
-	    // 
-	    $props = $this->db->paginate("SELECT p.propertyid, CONCAT(:$dev, '/', p.devicestring, '/', p.nodestring, IF(p.propertystring IS NOT NULL, CONCAT('/', p.propertystring), '')) as address, p.devicestring, p.nodestring, p.propertystring, p.value, pg.propertygroupid, pg.name as propertygroup, psg.propertysubgroupid, psg.name as propertysubgroup, pt.name as propertytype, p.propertytypeid, p.friendlyname, p.icon
+	    
+        $cols = "p.propertyid, CONCAT(:$dev, '/', p.devicestring, '/', p.nodestring, IF(p.propertystring IS NOT NULL, CONCAT('/', p.propertystring), '')) as address, p.devicestring, p.nodestring, p.propertystring, p.value, pg.propertygroupid, pg.name as propertygroup, psg.propertysubgroupid, psg.name as propertysubgroup, pt.name as propertytype, p.propertytypeid, p.friendlyname, p.icon";
+
+        if ($this->args->has('minimal')) {
+        	$cols = "CONCAT(:$dev, '/', p.devicestring, '/', p.nodestring, IF(p.propertystring IS NOT NULL, CONCAT('/', p.propertystring), '')) as address, p.value, p.friendlyname, psg.name as propertysubgroup, pt.name as propertytype";
+        }
+
+	    $props = $this->db->paginate("SELECT $cols
 	        FROM property p
 	        LEFT OUTER JOIN propertytype pt ON p.propertytypeid = pt.propertytypeid
 	        LEFT OUTER JOIN propertygroupcomponent pgc ON pgc.propertyid = p.propertyid
