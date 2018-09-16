@@ -19,16 +19,20 @@ class Repeater(HomieDevice):
     repeaterid = ''
 
     def _subscribe(self):
-        tmp = self._db.pq("""SELECT dm.round, dp.devicestring, CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as propertyaddress, CONCAT(dp.devicestring, '/', dp.nodestring, '/', dp.propertystring) as repeateraddress
+        tmp = self._db.pq("""SELECT dm.round, dp.devicestring, CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as propertyaddress, CONCAT(dp.devicestring, '/', dp.nodestring, '/', dp.propertystring) as repeateraddress, pt.name as type
             FROM repeatermap dm
             INNER JOIN property p ON p.propertyid = dm.propertyid
+            INNER JOIN propertytype pt ON p.propertytypeid = pt.propertytypeid
             INNER JOIN property dp ON dp.propertyid = dm.repeaterpropertyid""")
 
         logger.info('subscribing!')
         self.topic_map = {}
         for t in tmp:
+            if not (t['propertyaddress'] in self.topic_map):
+                self.topic_map[t['propertyaddress']] = []
+
             self._homie.subscribeTopic(str(self._homie.baseTopic+"/"+t['propertyaddress']), self.mqtt_handler)
-            self.topic_map[t['propertyaddress']] = t
+            self.topic_map[t['propertyaddress']].append(t)
 
         self.repeaterid = t['devicestring']
         self.subscribe_all_forced = True
@@ -67,13 +71,19 @@ class Repeater(HomieDevice):
 
 
     def mqtt_handler(self, mqttc, obj, msg):
-        for t,nt in self.topic_map.iteritems():
+        for t,nta in self.topic_map.iteritems():
             if self._homie.baseTopic+"/"+t == msg.topic:
-                if nt['round']:
-                    msg.payload = int(float(msg.payload))
-                self._homie.mqtt.publish('{b}/{nt}/set'.format(b=self._homie.baseTopic, nt=nt['repeateraddress']),
-                 payload=str(msg.payload))
-                time.sleep(0.2)
+                # logger.info('Topic {t} Type: {ty}'.format(t=msg.topic, ty=type(msg.payload)))
+                for nt in nta:
+                    if nt['round']:
+                        msg.payload = int(float(msg.payload))
+
+                    if nt['type'] == 'binary':
+                        msg.payload = bytearray(msg.payload)
+                        
+                    self._homie.mqtt.publish('{b}/{nt}/set'.format(b=self._homie.baseTopic, nt=nt['repeateraddress']),
+                     payload=msg.payload)
+                # time.sleep(0.2)
 
 
 def main():
@@ -86,7 +96,7 @@ def main():
 
     repeater.init()
     while True:
-        time.sleep(5)
+        time.sleep(1)
 
 
 
