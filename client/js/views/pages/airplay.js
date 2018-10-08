@@ -255,25 +255,13 @@ define(['backbone.marionette',
 
 
 		drawCover: function() {
-			var img = this.arrayBufferToBase64(this._cover.get('value'))
 			var mime = this._cover_mime || 'image/jpeg'
-			if (img) {
-				this.ui.cover.attr('src', 'data:'+mime+';base64,'+img)
+			if (this._cover.get('value')) {
+				this.ui.cover.attr('src', 'data:'+mime+';base64,'+this._cover.get('value'))
 			} else {
 				this.ui.cover.attr('src', app.appurl+'/assets/images/no-cover.png')
 			}
 			
-		},
-
-
-		arrayBufferToBase64:function(buffer) {
-		    var binary = ''
-		    var bytes = new Uint8Array(buffer)
-		    var len = bytes.byteLength
-		    for (var i = 0; i < len; i++) {
-		        binary += String.fromCharCode( bytes[ i ] )
-		    }
-		    return window.btoa(binary)
 		},
 
 	})

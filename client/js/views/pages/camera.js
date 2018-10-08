@@ -14,17 +14,6 @@ define(['backbone.marionette',
 	template) {
 
 
-	arrayBufferToBase64 = function(buffer) {
-	    var binary = ''
-	    var bytes = new Uint8Array(buffer)
-	    var len = bytes.byteLength
-	    for (var i = 0; i < len; i++) {
-	        binary += String.fromCharCode(bytes[i])
-	    }
-	    return window.btoa(binary)
-	}
-
-
 	var MetaItemView = Marionette.View.extend({
 		tagName: 'li',
 		template: _.template('<span class="title"><%=friendlyname%></span><span class="value"></span>'),
@@ -67,8 +56,7 @@ define(['backbone.marionette',
 		},
 
 		drawFrame: function() {
-			var img = arrayBufferToBase64(this.model.get('value'))
-			this.ui.frame.attr('src', 'data:image/jpeg;base64,'+img)
+			this.ui.frame.attr('src', 'data:image/jpeg;base64,'+this.model.get('value'))
 		},
 	})
 

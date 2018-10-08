@@ -7,6 +7,7 @@ import logging
 import datetime
 import glob
 import os
+import base64
 # logging.basicConfig(level=logging.INFO)
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -80,7 +81,7 @@ class Archiver(HomieDevice):
 
             with open(file) as frame:
                 logger.info("Loading archived frame: {fn} - {file}".format(fn=imint, file=file))
-                self._archive.setProperty("frame").send(bytearray(frame.read()))
+                self._archive.setProperty("frame").send(base64.b64encode(frame.read()))
 
             self._archive.setProperty("frameno").send(str(imint))
 
