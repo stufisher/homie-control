@@ -93,7 +93,7 @@ define(['backbone.marionette',
 		mqttOnMessage: function(message) {
 			// console.log(message)
 			try {
-		  		app.trigger('mqtt:message', message.destinationName, message.payloadString, false)
+		  		app.trigger('mqtt:message', message.destinationName, message.payloadString, message.payloadString.length > 100 ? true : false)
 		  	} catch {
 		  		app.trigger('mqtt:message', message.destinationName, message.payloadBytes, true)
 		  	}
