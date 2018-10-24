@@ -16,6 +16,7 @@
         "energy",
         "input",
         "ac",
-        "airplay"
+        "airplay",
+        "weather"
     ]
 }
