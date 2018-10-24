@@ -537,3 +537,21 @@
         width: 100%;
     }   
 }
+
+
+ul.weather {
+    font-size: 180%;
+    color: #000;
+
+    li:first-child {
+        font-size: 240%;
+    }
+
+    li {
+        padding: 2px 0px;
+    }
+
+    .wi {
+        color: #aaa;
+    }
+}
