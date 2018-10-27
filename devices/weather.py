@@ -19,6 +19,7 @@ class Weather(HomieDevice):
 
     _timezone = None
 
+    _cache = {}
     _config = {}
     _last_update = 0
     _update_interval = 5
@@ -139,8 +140,15 @@ class Weather(HomieDevice):
                     n = getattr(self, nl['name'])
 
                     for p,t in nl['properties'].iteritems():
-                        val = self.get(r.json(), t)
-                        n.setProperty(p).send(str(self.translate(p, val)))
+                        val = self.translate(p, self.get(r.json(), t))
+                        pid = '{nd}/{p}'.format(nd=n.nodeId, p=p)
+
+                        if not (pid in self._cache):
+                            self._cache[pid] = ""
+
+                        if self._cache[pid] != val:
+                            n.setProperty(p).send(str(val))
+                            self._cache[pid] = val
 
             self._last_update = now
 
