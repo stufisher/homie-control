@@ -47,12 +47,16 @@ define(['backbone.marionette',
         },
 
         translate: function(key, value) {
-            if (key == 'humidity') {
+            if (key == 'humidity' || key == 'pop') {
                 return (value * 100).toFixed(0)
             }
 
             if (key == 'wind' || key == 'gust') {
                 return value ? value.toFixed(1) : value
+            }
+
+            if (key.indexOf('temp') > -1) {
+                return value.toFixed(0)
             }
 
             return value
@@ -108,7 +112,7 @@ define(['backbone.marionette',
             if (k == 'icon') {
                 el.addClass('wi-forecast-io-'+model.get('value'))
             } else if (k == 'moonphase') {
-                el.addClass('wi-moon-'+(model.get('value')*28).toFixed(0))
+                el.addClass('wi-moon-'+(parseFloat(model.get('value'))*28).toFixed(0))
 
             } else if (k == 'winddir') {
                 el.addClass('from-'+model.get('value')+'-deg')
@@ -117,13 +121,18 @@ define(['backbone.marionette',
         },
 
         translate: function(key, value) {
-            if (key == 'humidity') {
+            if (key == 'humidity' || key == 'pop') {
                 return (value * 100).toFixed(0)
             }
             
             if (key == 'windspeed' || key == 'gustspeed') {
                 return value ? value.toFixed(1) : value
             }
+
+            if (key.indexOf('temp') > -1 || key == 'feelslike') {
+                return value.toFixed(0)
+            }
+
             return value
         },
 
