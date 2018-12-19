@@ -5,6 +5,7 @@ import time
 import homie
 import logging
 import requests
+logging.getLogger("requests").setLevel(logging.WARNING)
 import datetime
 import pytz
 logging.basicConfig(level=logging.INFO)
@@ -28,7 +29,7 @@ class Weather(HomieDevice):
 
     _property_map = [
         {            
-            'url': '/forecast/{key}/{lat},{long}?units=si',
+            'url': '/forecast/{key}/{lat},{long}?units=ca',
             'nodes': [{
                 'name': '_current',
                 'properties': {
@@ -42,6 +43,7 @@ class Weather(HomieDevice):
                     'pop': ['currently', 'precipProbability'],
                     'visibility': ['currently', 'visibility'],
                     'cloudcover': ['currently', 'cloudCover'],
+                    'uvindex': ['currently', 'uvIndex'],
                 },
             },
             {
@@ -50,6 +52,33 @@ class Weather(HomieDevice):
                     'sunrise': ['daily', 'data', 0, 'sunriseTime'],
                     'sunset': ['daily', 'data', 0, 'sunsetTime'],
                     'moonphase': ['daily', 'data', 0, 'moonPhase'],
+                }
+            },
+            {
+                'name': '_hourly',
+                'length': 24,
+                'properties': {
+                    'textsummary': ['hourly', 'summary'],
+                    'timestamps': ['hourly', 'data', '[]', 'time'],
+                    'temperature': ['hourly', 'data', '[]', 'temperature'],
+                    'summary': ['hourly', 'data', '[]', 'summary'],
+                    'pop': ['hourly', 'data', '[]', 'precipProbability'],
+                    'gust': ['hourly', 'data', '[]', 'windGust'],
+                }
+            },
+            {
+                'name': '_daily',
+                'length': 3,
+                'properties': {
+                    'temphigh': ['daily', 'data', '[]', 'temperatureHigh'],
+                    'templow': ['daily', 'data', '[]', 'temperatureLow'],
+                    'icon': ['daily', 'data', '[]', 'icon'],
+                    'pop': ['daily', 'data', '[]', 'precipProbability'],
+                    'pint': ['daily', 'data', '[]', 'precipIntensity'],
+                    'wind': ['daily', 'data', '[]', 'windSpeed'],
+                    'winddir': ['daily', 'data', '[]', 'windBearing'],
+                    'gust': ['daily', 'data', '[]', 'windGust'],
+                    
                 }
             },
             {
@@ -101,10 +130,22 @@ class Weather(HomieDevice):
         self._current.advertise("pop")
         self._current.advertise("visibility")
         self._current.advertise("cloudcover")
+        self._current.advertise("uvindex")
+
+
+        self._hourly = self._homie.Node("hourly", "forecast")
+        self._hourly.advertise("textsummary")
+        self._hourly.advertise("timestamps")
+        self._hourly.advertise("temperature")
+        self._hourly.advertise("summary")
+        self._hourly.advertise("pop")
+        self._hourly.advertise("gust")
+
         
+        self._daily = self._homie.Node("daily", "forecast")
         self._today = self._homie.Node("today", "forecast")
         self._tomorrow = self._homie.Node("tomorrow", "forecast")
-        for k in ['_today', '_tomorrow']:
+        for k in ['_daily', '_today', '_tomorrow']:
             n = getattr(self, k)
             n.advertise("templow")
             n.advertise("temphigh")
@@ -115,16 +156,20 @@ class Weather(HomieDevice):
             n.advertise("winddir")
             n.advertise("gust")
 
+
         self._astronomy = self._homie.Node("astronomy", "astronomy")
         self._astronomy.advertise("sunset")
         self._astronomy.advertise("sunrise")
         self._astronomy.advertise("moonphase")
 
 
+        self._external = self._homie.Node("ip", "external")
+        self._external.advertise("external")
+
 
     def loopHandler(self):
         now = time.time()
-        if now - self._last_update > 5 * 60:
+        if now - self._last_update > self._update_interval * 60:
 
             for pm in self._property_map:
                 logger.debug('Requesting {url}'.format(url=pm['url']))
@@ -140,7 +185,11 @@ class Weather(HomieDevice):
                     n = getattr(self, nl['name'])
 
                     for p,t in nl['properties'].iteritems():
-                        val = self.translate(p, self.get(r.json(), t))
+                        ln = None
+                        if 'length' in nl:
+                            ln = nl['length']
+
+                        val = self.get(r.json(), t, p, ln)
                         pid = '{nd}/{p}'.format(nd=n.nodeId, p=p)
 
                         if not (pid in self._cache):
@@ -150,19 +199,40 @@ class Weather(HomieDevice):
                             n.setProperty(p).send(str(val))
                             self._cache[pid] = val
 
+
+            r = requests.get('https://api.ipify.org/?format=json')
+            ipj = r.json()
+            if 'ip' in ipj:
+                if not ('ip' in self._cache):
+                    self._cache['ip'] = ""
+
+                if ipj['ip'] != self._cache['ip']:
+                    self._external.setProperty('external').send(ipj['ip'])
+                    self._cache['ip'] = ipj['ip']
+
+
             self._last_update = now
 
 
-    def get(self, json, tree):
+    def get(self, json, tree, key, ln=None):
         res = json
-        for item in tree:
-            res = res[item]
+        for iid,item in enumerate(tree):
+            if item == '[]':
+                lst = []
+                for lid,l in enumerate(res):
+                    if ln == None or (ln and lid < ln):
+                        lst.append(str(self.get(l, tree[iid+1:], key)))
 
-        return res
+                return ",".join(lst)
+                
+            else:
+                res = res[item]
+
+        return self.translate(key, res)
 
 
     def translate(self, key, value):
-        if key in ['sunset', 'sunrise']:
+        if key in ['sunset', 'sunrise', 'timestamps']:
             utc = datetime.datetime.utcfromtimestamp(value).replace(tzinfo=pytz.utc)
             local = utc.astimezone(pytz.timezone(self._timezone))
             return local.strftime('%H:%M')
