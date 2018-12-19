@@ -45,6 +45,12 @@ define(['backbone', 'models/config'], function(Backbone, Config) {
                 type: 'propertysubgroup',
             },
 
+            hourly: {
+                title: 'Hourly Weather Conditions',
+                description: 'Containing properties for hourly conditions',
+                type: 'propertysubgroup',
+            },
+
             astronomy: {
                 title: 'Astronomy Subgroup',
                 description: 'Containing astronomy related properties (sunset, rise, moonphase)',
@@ -61,6 +67,11 @@ define(['backbone', 'models/config'], function(Backbone, Config) {
 
         validation: {
             current: {
+                require: true,
+                pattern: 'number',
+            },
+            
+            hourly: {
                 require: true,
                 pattern: 'number',
             },

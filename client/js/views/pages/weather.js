@@ -5,6 +5,7 @@ define(['backbone.marionette',
 
     'tpl!templates/pages/weather.html',
 	'tpl!templates/pages/weather_forecast.html',
+    'Flot', 'Flot-stack'
 	], function(Marionette, 
         Properties, GaugeView, utils,
         template, forecasttemplate) {
@@ -91,16 +92,19 @@ define(['backbone.marionette',
 
         ui: {
             fsun: '.fsun',
+            rchart: '.rchart',
         },
 
 
         initialize: function(options) {
             this.config = options.config
             this.current = new Properties(null, { queryParams: { propertysubgroupid: this.config.get('current') }})
+            this.hourly = new Properties(null, { queryParams: { propertysubgroupid: this.config.get('hourly') }})
             this.astronomy = new Properties(null, { queryParams: { propertysubgroupid: this.config.get('astronomy') }})
 
             this.ready = []
             this.ready.push(this.current.fetch())
+            this.ready.push(this.hourly.fetch())
             this.ready.push(this.astronomy.fetch())
         },
 
@@ -137,10 +141,109 @@ define(['backbone.marionette',
         },
 
 
+        redrawChart: function() {
+            var summaries = this.hourly.findWhere({ propertystring: 'summary' })
+            var vals = summaries.get('value')
+            if (!vals) return
+
+            var len = 0
+            var ticks = [
+                { propertystring: 'timestamps', unit: '', round: false, val: [] },
+                { propertystring: 'temperature', unit: '\xB0', round: true, val: [] },
+                { propertystring: 'gust', unit: 'kh', round: true, val: [] },
+            ]
+
+            _.each(ticks, function(t) {
+                var model = this.hourly.findWhere({ propertystring: t.propertystring })
+                if (model) {
+                    var val = model.get('value')
+                    if (val) {
+                        t.val = _.map(val.split(','), function(v,i) { return [i,(t.round ? Math.round(v) : v )+t.unit] })    
+                        len = val.split(',').length
+                    }
+                }    
+            }, this)
+
+
+            var options = {
+                series: {
+                    bars: {
+                        lineWidth: 0,
+                        horizontal: true,
+                        show: true,
+                    },
+                    stack: true,
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: this.getTooltip.bind(this),
+                },
+                legend: {
+                    show: false
+                },
+                grid: {
+                    borderWidth: 0,
+                    hoverable: true,
+                },
+                yaxis: {
+                    ticks: [],
+                },
+                xaxis: {
+                    tickLength: 0,
+                },
+                xaxes: [
+                    { ticks: ticks[0].val, position: 'top' }, 
+                    { ticks: ticks[1].val, max: len, position: 'bottom', font: { size: 14, color: '#aaa' } },
+                    { ticks: ticks[2].val, max: len, position: 'bottom', font: { size: 12, color: '#bbb' } }
+                ]
+            }
+
+            var cols = {
+                'Light Rain': '#80a5d6',
+                'Light Rain and Breezy': '#80a5d6',
+                'Rain': '#4a80c7',
+                'Foggy': '#ccc',
+                'Overcast': '#878f9a',
+                'Mostly Cloudy': '#b6bfcb',
+                'Partly Cloudy': '#d5dae2',
+                'Clear': '#eeeef5',
+            }
+
+            var data = []
+            var lastsummary = vals.split(',')[0];
+            var count = 0;
+            _.each(vals.split(','), function(v) {
+                if (v != lastsummary) {
+                    data.push({ label: lastsummary, data: [[count, 0]], color: cols[lastsummary] })
+                    count = 0;
+                }
+
+                count++;
+                lastsummary = v
+            })
+            data.push({ label: lastsummary, data: [[count, 0]], color: cols[lastsummary] })
+
+            data.push({ data: [0,len], xaxis: 2 })
+            data.push({ data: [0,len], xaxis: 3 })
+
+            $.plot(this.ui.rchart, data, options)
+        },
+
+
+        getTooltip: function(lab, x, y, item) {
+            return item.series.label
+        },
+
+
         addListeners: function() {
             this.current.each(function(m) {
                 this.listenTo(m, 'sync change', this.updateValue, this)
                 this.updateValue(m, m.get('value'))
+            }, this)
+
+            this.hourly.each(function(m) {
+                this.listenTo(m, 'sync change', this.redrawChart, this)
+                this.redrawChart()
             }, this)
 
             this.astronomy.each(function(m) {
@@ -151,6 +254,7 @@ define(['backbone.marionette',
 
 
         onRender: function() {
+            this.ui.rchart.height(110)
             $.when.apply($, this.ready).done(this.addListeners.bind(this))
 
             this.fview = new ForecastsView({ collection: this.config.get('forecasts') })
