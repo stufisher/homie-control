@@ -89,11 +89,11 @@ INSERT INTO `options` (`optionid`, `name`, `value`) VALUES
 (6, 'heating_reading_property', '16'),
 (7, 'heating_control_property', '23'),
 (8, 'profile_exec_property', '82'),
-(9, 'trigger_email_to', 'you@server.com');
-(10, 'scan_interface', 'wlan1');
-(11, 'archiver_source_property', '12');
-(12, 'archiver_root', '/path/to/frames');
-(13, 'weather_lang', 'en');
+(9, 'trigger_email_to', 'you@server.com'),
+(10, 'scan_interface', 'wlan1'),
+(11, 'archiver_source_property', '12'),
+(12, 'archiver_root', '/path/to/frames'),
+(13, 'weather_lang', 'en'),
 (14, 'weather_key', 'myapikey');
 
 -- --------------------------------------------------------
@@ -248,17 +248,17 @@ INSERT INTO `propertytype` (`propertytypeid`, `name`, `grouping`) VALUES
 (8, 'humidity', 2),
 (9, 'humidityset', 2),
 (10, 'shutter', 3),
-(11, 'executer', 0);
-(12, 'light', 4);
-(13, 'count', 5);
-(14, 'rate', 6);
-(15, 'power', 7);
-(16, 'voltage', 8);
-(17, 'current', 9);
-(18, 'pressure', 10);
-(19, 'binary', 11);
-(20, 'integer', 12);
-(21, 'float', 13);
+(11, 'executer', 0),
+(12, 'light', 4),
+(13, 'count', 5),
+(14, 'rate', 6),
+(15, 'power', 7),
+(16, 'voltage', 8),
+(17, 'current', 9),
+(18, 'pressure', 10),
+(19, 'binary', 11),
+(20, 'integer', 12),
+(21, 'float', 13),
 (22, 'string', 14);
 
 
