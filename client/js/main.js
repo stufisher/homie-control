@@ -19,6 +19,9 @@ require.config({
       'Flot-time': {
           deps: ['Flot']
       },
+      'Flot-stack': {
+          deps: ['Flot']
+      },
 
       'jquery-color': {
           deps: ['jquery']
@@ -30,6 +33,7 @@ require.config({
     "Flot-time": "vendor/Flot/jquery.flot.time",
     "Flot-selection": "vendor/Flot/jquery.flot.selection",
     "Flot-resize": "vendor/Flot/jquery.flot.resize",
+    "Flot-stack": "vendor/Flot/jquery.flot.stack",
     "backbone.marionette": "vendor/backbone.marionette/lib/backbone.marionette",
     "backbone.validation": "vendor/backbone.validation/dist/backbone-validation",
     "paho-mqtt-js": "vendor/paho-mqtt-js/mqttws31",
