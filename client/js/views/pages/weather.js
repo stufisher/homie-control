@@ -164,6 +164,14 @@ define(['backbone.marionette',
                 }    
             }, this)
 
+            var width = this.ui.rchart.width()
+            var interval = _.max([1, Math.round(len * 40 / width)])
+            _.each(ticks, function(t) {
+                t.val = t.val.filter(function(t,i) {
+                    return i % interval == 0
+                })
+            }, this)
+
 
             var options = {
                 series: {
@@ -254,7 +262,6 @@ define(['backbone.marionette',
 
 
         onRender: function() {
-            this.ui.rchart.height(110)
             $.when.apply($, this.ready).done(this.addListeners.bind(this))
 
             this.fview = new ForecastsView({ collection: this.config.get('forecasts') })
