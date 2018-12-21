@@ -53,7 +53,7 @@ define(['backbone.marionette',
             }
 
             if (key == 'wind' || key == 'gust') {
-                return value ? value.toFixed(1) : value
+                return value ? value.toFixed(0) : value
             }
 
             if (key.indexOf('temp') > -1) {
@@ -130,7 +130,7 @@ define(['backbone.marionette',
             }
             
             if (key == 'windspeed' || key == 'gustspeed') {
-                return value ? value.toFixed(1) : value
+                return value ? value.toFixed(0) : value
             }
 
             if (key.indexOf('temp') > -1 || key == 'feelslike') {
