@@ -68,7 +68,7 @@ class Weather(HomieDevice):
             },
             {
                 'name': '_daily',
-                'length': 3,
+                'length': 5,
                 'properties': {
                     'temphigh': ['daily', 'data', '[]', 'temperatureHigh'],
                     'templow': ['daily', 'data', '[]', 'temperatureLow'],
@@ -79,33 +79,6 @@ class Weather(HomieDevice):
                     'winddir': ['daily', 'data', '[]', 'windBearing'],
                     'gust': ['daily', 'data', '[]', 'windGust'],
                     
-                }
-            },
-            {
-                'name': '_today',
-                'properties': {
-                    'temphigh': ['daily', 'data', 0, 'temperatureHigh'],
-                    'templow': ['daily', 'data', 0, 'temperatureLow'],
-                    'icon': ['daily', 'data', 0, 'icon'],
-                    'pop': ['daily', 'data', 0, 'precipProbability'],
-                    'pint': ['daily', 'data', 0, 'precipIntensity'],
-                    'wind': ['daily', 'data', 0, 'windSpeed'],
-                    'winddir': ['daily', 'data', 0, 'windBearing'],
-                    'gust': ['daily', 'data', 0, 'windGust'],
-                    
-                }
-            },
-            {
-                'name': '_tomorrow',
-                'properties': {
-                    'temphigh': ['daily', 'data', 1, 'temperatureHigh'],
-                    'templow': ['daily', 'data', 1, 'temperatureLow'],
-                    'icon': ['daily', 'data', 1, 'icon'],
-                    'pop': ['daily', 'data', 1, 'precipProbability'],
-                    'pint': ['daily', 'data', 1, 'precipIntensity'],
-                    'wind': ['daily', 'data', 1, 'windSpeed'],
-                    'winddir': ['daily', 'data', 1, 'windBearing'],
-                    'gust': ['daily', 'data', 1, 'windGust'],
                 }
             }]
         },
@@ -145,7 +118,7 @@ class Weather(HomieDevice):
         self._daily = self._homie.Node("daily", "forecast")
         self._today = self._homie.Node("today", "forecast")
         self._tomorrow = self._homie.Node("tomorrow", "forecast")
-        for k in ['_daily', '_today', '_tomorrow']:
+        for k in ['_daily']:
             n = getattr(self, k)
             n.advertise("templow")
             n.advertise("temphigh")
@@ -179,6 +152,10 @@ class Weather(HomieDevice):
                         lat=self._config['latitude'],
                         long=self._config['longitude']))
 
+                if r.status_code != 200:
+                    logger.warning('Request returned: {code}'.format(code=r.status_code))
+                    continue
+
                 self._timezone = r.json()['timezone']
 
                 for nl in pm['nodes']:
@@ -201,14 +178,18 @@ class Weather(HomieDevice):
 
 
             r = requests.get('https://api.ipify.org/?format=json')
-            ipj = r.json()
-            if 'ip' in ipj:
-                if not ('ip' in self._cache):
-                    self._cache['ip'] = ""
+            if r.status_code == 200:
+                ipj = r.json()
+                if 'ip' in ipj:
+                    if not ('ip' in self._cache):
+                        self._cache['ip'] = ""
 
-                if ipj['ip'] != self._cache['ip']:
-                    self._external.setProperty('external').send(ipj['ip'])
-                    self._cache['ip'] = ipj['ip']
+                    if ipj['ip'] != self._cache['ip']:
+                        self._external.setProperty('external').send(ipj['ip'])
+                        self._cache['ip'] = ipj['ip']
+
+            else:
+                logger.warning('Request returned: {code}'.format(code=r.status_code))
 
 
             self._last_update = now
@@ -227,6 +208,9 @@ class Weather(HomieDevice):
                 
             else:
                 res = res[item]
+
+        if isinstance(res, basestring):
+            res = res.replace(u'\u2013', '-')
 
         return self.translate(key, res)
 
