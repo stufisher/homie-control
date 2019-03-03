@@ -447,6 +447,11 @@
         &.active {
             color: $content-active;
         }
+
+        meter {
+            margin: 5px;
+            float: right;
+        }
     }
 }
 
@@ -580,5 +585,58 @@ div.forecasts {
                 top: 20%;
             }
         }
+    }
+}
+
+
+.direction {
+    font-size: 1.5em;
+    font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Ultra Light", "Helvetica Neue", sans-serif;
+
+    .name {
+        font-size: 1.5em;
+        font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Ultra Light", "Helvetica Neue", sans-serif;
+    }
+
+    .due {
+        float: right;
+    }
+
+    .delay {
+        color: $content-inactive;
+    }
+}
+
+
+.daily {
+    display: grid;
+    padding: 10px 0 20px 0;
+    font-size: 120%;
+    color: #bbb;
+
+    div {
+        text-align: center;
+        margin: 3px;
+        font-size: 1.1em;
+    }
+
+    .day {
+        font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Ultra Light", "Helvetica Neue", sans-serif;
+        font-size: 1.5em;
+        color: #000;
+    }
+
+    .icon {
+        font-size: 2em;
+    }
+
+    .bar {
+        margin: auto;
+        border-radius: 15px;
+        width: 15px;
+        background: #d3d4d4;
+        box-shadow: 1px 1px 1px #6f6f6f;
+        margin-top: 3px;
+        margin-bottom: 3px;
     }
 }
