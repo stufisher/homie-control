@@ -4,83 +4,97 @@ define(['backbone.marionette',
     'utils',
 
     'tpl!templates/pages/weather.html',
-	'tpl!templates/pages/weather_forecast.html',
+    'moment',
     'Flot', 'Flot-stack'
 	], function(Marionette, 
         Properties, GaugeView, utils,
-        template, forecasttemplate) {
+        template, moment) {
 
 
-    var ForecastView = Marionette.View.extend({
-        template: forecasttemplate,
-        className: 'zone',
-
-        ui: {
-            name: '.name',
-        },
+    var DailyView = Marionette.View.extend({
+        className: 'daily',
+        template: _.template(''),
 
         initialize: function(options) {
-            this.properties = new Properties(null, { queryParams: { propertysubgroupid: this.model.get('propertysubgroupid') } })
-            this.ready = this.properties.fetch()
-            console.log('fore', this.model)
+            this.properties = options.properties
+
+            this.ready = []
+            this.ready.push(this.properties.fetch())
         },
+
+        addListeners: function() {
+            this.properties.each(function(m) {
+                this.listenTo(m, 'sync change', this.redrawDaily, this)
+            }, this)
+
+            this.redrawDaily()
+        },
+
 
         onRender: function() {
-            $.when(this.ready).done(this.addListeners.bind(this))
+            $.when.apply($, this.ready).done(this.addListeners.bind(this))
         },
 
-        updateName: function() {
-            this.ui.name.html(this.properties.at(0).get('propertysubgroup'))
+        redrawDaily: function() {
+            this.$el.empty()
+
+            var len = this.properties.at(0).get('value')
+            if (len) len = len.split('.').length
+
+            var daily = _.map(_.range(len-1), function(i) { return { } })
+            _.each(_.range(len-1), function(i) {
+                daily[i]['day'] = moment().add(i, 'days').format('ddd')
+            }, this)
+
+            this.properties.each(function(p) {
+                var val = p.get('value')
+                var k = p.get('propertystring')
+                if (typeof(val) == typeof('')) {
+                    var vals = val.split(',')    
+                    _.each(vals, function(v, i) {
+                        daily[i][k] = this.translate(k, v)
+                    }, this)
+                }
+            }, this)
+
+            var min = _.min(_.map(_.pluck(daily, 'templow'), function(t) { return parseFloat(t) }))
+            var max = _.max(_.map(_.pluck(daily, 'temphigh'), function(t) { return parseFloat(t) }))
+            
+            _.each(daily, function(d, i) {
+                this.$el.append('<div class="day" style="grid-row: 1; grid-column: '+(i+1)+'">'+d.day+'</div>')
+                this.$el.append('<div class="icon" style="grid-row: 2; grid-column: '+(i+1)+'"><i class="wi wi-forecast-io-'+d.icon+'"></i></div>')
+                this.$el.append('<div class="temp" style="grid-row: 3; grid-column: '+(i+1)+'">'+this.drawBar({ model: d, min: min, max: max })+'</div>')
+                this.$el.append('<div class="pop" style="grid-row: 4; grid-column: '+(i+1)+'"><i class="wi wi-umbrella"></i> '+d.pop+'%</div>')
+                this.$el.append('<div class="wind" style="grid-row: 5; grid-column: '+(i+1)+'"><i class="wi wi-strong-wind"></i> '+d.wind+' ('+d.gust+') <i class="wi wi wi-wind from-'+d.winddir+'-deg"></i></div>')
+            }, this)
         },
 
-        updateValue: function(model) {
-            var k = model.get('propertystring')
-            var el = this.$el.find('.'+k)
 
-            if (k == 'icon') {
-                el.addClass('wi-forecast-io-'+model.get('value'))
-
-            } else if (k == 'winddir') {
-                el.addClass('from-'+model.get('value')+'-deg')
-                
-
-            } else el.text(this.translate(k, model.get('value')))
+        drawBar: function(options) {
+            var padperdeg = 15
+            var maxpad = (options.max - options.model.temphigh) * padperdeg
+            var minpad = (options.model.templow - options.min) * padperdeg
+            var range = (options.model.temphigh - options.model.templow) * padperdeg
+            return '<div class="temps"><div class="high" style="padding-top: '+maxpad+'px">'+options.model.temphigh+'&deg;</div><div class="bar" style="height: '+range+'px"></div><div class="low" style="padding-bottom: '+minpad+'px">'+options.model.templow+'&deg;</div></div>'
         },
 
         translate: function(key, value) {
-            if (key == 'humidity' || key == 'pop') {
-                return (value * 100).toFixed(0)
+            if (key == 'pop') {
+                return (parseFloat(value) * 100).toFixed(0)
             }
-
+            
             if (key == 'wind' || key == 'gust') {
-                return value ? value.toFixed(0) : value
+                return value ? parseFloat(value).toFixed(0) : value
             }
 
-            if (key.indexOf('temp') > -1) {
-                return value.toFixed(0)
+            if (key.indexOf('templow') > -1 || key == 'temphigh') {
+                return parseFloat(value).toFixed(0)
             }
 
             return value
         },
 
-
-        addListeners: function() {
-            this.properties.each(function(m) {
-                this.listenTo(m, 'sync change', this.updateValue, this)
-                this.updateValue(m, m.get('value'))
-            }, this)
-
-            this.updateName()
-        },
-
     })
-
-
-
-    var ForecastsView = Marionette.CollectionView.extend({
-        childView: ForecastView,
-    })
-
 
 
 	return Marionette.View.extend({
@@ -88,6 +102,7 @@ define(['backbone.marionette',
 
         regions: {
             rforecasts: '.forecasts',
+            rdaily: '.rdaily',
         },
 
         ui: {
@@ -251,8 +266,8 @@ define(['backbone.marionette',
 
             this.hourly.each(function(m) {
                 this.listenTo(m, 'sync change', this.redrawChart, this)
-                this.redrawChart()
             }, this)
+            this.redrawChart()
 
             this.astronomy.each(function(m) {
                 this.listenTo(m, 'sync change', this.updateValue, this)
@@ -263,9 +278,7 @@ define(['backbone.marionette',
 
         onRender: function() {
             $.when.apply($, this.ready).done(this.addListeners.bind(this))
-
-            this.fview = new ForecastsView({ collection: this.config.get('forecasts') })
-            this.getRegion('rforecasts').show(this.fview)
+            this.getRegion('rdaily').show(new DailyView({ translate: this.translate, properties: new Properties(null, { queryParams: { propertysubgroupid: this.config.get('daily') }}) }))
         },
 
 	})
