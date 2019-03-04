@@ -222,6 +222,7 @@ define(['backbone.marionette',
             }
 
             var cols = {
+                'Possible Light Rain': '#80a5d6',
                 'Light Rain': '#80a5d6',
                 'Light Rain and Breezy': '#80a5d6',
                 'Rain': '#4a80c7',
