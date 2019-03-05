@@ -39,10 +39,10 @@ define(['backbone.marionette',
             this.$el.empty()
 
             var len = this.properties.at(0).get('value')
-            if (len) len = len.split('.').length
+            if (len) len = len.split(',').length
 
-            var daily = _.map(_.range(len-1), function(i) { return { } })
-            _.each(_.range(len-1), function(i) {
+            var daily = _.map(_.range(len), function(i) { return { } })
+            _.each(_.range(len), function(i) {
                 daily[i]['day'] = moment().add(i, 'days').format('ddd')
             }, this)
 
