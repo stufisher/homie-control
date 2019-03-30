@@ -146,11 +146,14 @@ class Weather(HomieDevice):
 
             for pm in self._property_map:
                 logger.debug('Requesting {url}'.format(url=pm['url']))
-                r = requests.get(self._root_url+pm['url'].format(
+                try:
+                    r = requests.get(self._root_url+pm['url'].format(
                         key=self._config['weather_key'],
                         lang=self._config['weather_lang'],
                         lat=self._config['latitude'],
                         long=self._config['longitude']))
+                except requests.ConnectionError as e:
+                    logger.warning('Connection Error: {message}'.format(message=e))
 
                 if r.status_code != 200:
                     logger.warning('Request returned: {code}'.format(code=r.status_code))
