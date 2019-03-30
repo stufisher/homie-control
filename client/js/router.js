@@ -3,8 +3,6 @@ function(Marionette, controller) {
 
     var Router = Marionette.AppRouter.extend({
         appRoutes: {
-            'console': 'console',
-
             'property(/s/:s)(/page/:page)': 'properties',
             'property/add': 'add_property',
             'device': 'devices',

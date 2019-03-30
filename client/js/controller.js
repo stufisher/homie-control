@@ -24,6 +24,8 @@ define([
         'views/history/history',
 
         'views/repeater/repeater',
+
+        'views/console',
         ],
 function(
     Console,
@@ -34,7 +36,8 @@ function(
     Devices, DevicesView,
     TriggerView,
     HistoryView,
-    RepeaterView
+    RepeaterView,
+    ConsoleView
     ) {
 
     var controller = {
@@ -167,6 +170,13 @@ function(
         },
 
 
+        // Console
+        console: function(sub) {
+            app.title({ title: 'Console' })
+            app.content.show(new ConsoleView({ subscription: sub }))
+        },
+
+
 
         // Dynamic Pages
         pages: function(slug) {
@@ -200,6 +210,11 @@ function(
     app.on('options:show', function() {
         app.navigate('options')
         controller.options()
+    })
+
+    app.on('console:show', function(sub) {
+        app.navigate('console')
+        controller.console(sub)
     })
         
     return controller
