@@ -174,6 +174,12 @@
         border-radius: 2px;
         background: linear-gradient(to bottom, #ddd, #ccc);
         overflow: scroll;
+
+        p {
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
     }
 }
 
@@ -639,5 +645,26 @@ div.forecasts {
         box-shadow: 1px 1px 1px #6f6f6f;
         margin-top: 3px;
         margin-bottom: 3px;
+    }
+}
+
+
+.form-singleline {
+    display: flex;
+    padding: 5px;
+
+    input[type=text] {
+        flex: 3;
+        padding: 3px;
+    }
+
+    input[type=checkbox] {
+        margin: 5px;
+    }
+
+    span, button {
+        flex: 1;
+        padding: 3px;
+        text-align: center;
     }
 }
