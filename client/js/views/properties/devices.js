@@ -74,6 +74,24 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
     })
 
 
+    ConsoleCell = Backgrid.Cell.extend({
+        events: {
+            'click a.con': 'showConsole',
+        },
+
+        showConsole: function(e) {
+            e.preventDefault()
+            app.trigger('console:show', this.model.get('address').replace('/$name', ''))
+        },
+
+
+        render: function() {
+            this.$el.html('<a href="#" class="con"><i class="fa fa-terminal"></i></a>')
+            return this
+        }
+    })
+
+
     var AddrProperty = Property.extend({
         idAttribute: 'address',
     })
@@ -135,6 +153,7 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
                          { name: 'ipaddress', label: 'IP', cell: 'string', editable: false },
                          { name: 'firmware', label: 'Firmware', cell: 'string', editable: false },
                          { name: 'version', label: 'Version', cell: 'string', editable: false },
+                         { label: '', cell: ConsoleCell, editable: false },
                          { label: '', cell: TableUtils.TemplateCell, editable: false, template: '<a href="/property/s/<%=devicestring%>"><i class="fa fa-search"></i></a>' },
                          { label: '', cell: ResetCell, editable: false },
                         ]
