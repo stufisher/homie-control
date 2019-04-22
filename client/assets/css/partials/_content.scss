@@ -668,3 +668,131 @@ div.forecasts {
         text-align: center;
     }
 }
+
+
+.dashboard {
+    font-family: 'Roboto';
+    font-weight: 100;
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    width: calc(100vw);
+    height: calc(100vh);
+
+    background: #000;
+    color: #fff;
+
+    .direction .name, .daily .day, .energy h1, .times {
+        font-family: 'Roboto';
+        font-weight: 300;
+        font-size: 1.6vh;
+    }
+
+    .energy {
+        font-size: 1.4vh;
+    }
+
+    /*padding: 4%;*/
+
+    .grid-container {
+        display: flex;
+        flex-flow: row wrap;
+        height: 100vh;
+    }
+
+
+
+    .calendar {
+        .time {
+            font-size: 7vh;
+        }
+
+        .date {
+            font-size: 1.8vh;
+            padding-left: 15px;
+        }
+    }
+
+    .temperatures {
+        text-align: right;
+
+        .indoors {
+            font-size: 3.8vh;
+        }
+
+        .outdoors {
+            font-size: 2.2vh;
+        }
+
+        .today {
+            font-size: 1.8vh;
+         }
+    }
+
+    .weather {
+        font-weight: 300;
+
+        .daily, .daily div {
+            color: #fff;
+        }
+
+        .daily {
+            .bar {
+                background: #fff;
+            }
+
+            div {
+                /*font-size: 1vh;*/
+                font-size: 0.9vh;
+            }
+
+            .day {
+                /*font-size: 1.7vh;*/
+                font-size: 1.6vh;
+            }
+
+            .temps div {
+                /*font-size: 1.2vh;*/
+                font-size: 1.1vh;
+            }
+
+            .icon {
+                /*font-size: 2.6vh;*/
+                font-size: 2.4vh;
+            }
+        }
+    }
+
+    .transport {
+        padding: 10px 0;
+
+        .direction .times {
+            font-size: 1.3vh
+        }
+
+        > div {
+            width: 60%;
+        }
+    }
+
+    .camera {
+        .frame {
+            display: none;
+        }
+    }
+
+
+    .top {
+        flex: 1 50%;
+    }
+
+    .middle {
+        flex: 2 50%;
+        height: 67vh;
+    }
+
+    .bottom {
+        flex: 3 50%;
+    }
+}
