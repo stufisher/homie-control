@@ -1,26 +1,39 @@
 define(['backbone.marionette',
 
+	'models/property',
 	'collections/properties',
 	'collections/propertysubgroups',
 
 	'tpl!templates/pages/input.html'], 
 
 	function(Marionette,
-	Properties, PropertySubGroups,
+	Property, Properties, PropertySubGroups,
 	template) {
 
 	var IView = Marionette.View.extend({
 		tagName: 'a',
-		className: function() {
-			return 'button'
-		},
+		className: 'button',
 
 		modelEvents: {
 			'change:value': 'updateState',
 		},
 
+		ui: {
+			meter: 'meter',
+		},
+
+
+		initialize: function(options) {
+			this.rms = new Property({ address: this.model.get('address').replace('/selected', '/rms') })
+			this.listenTo(this.rms, 'change:value', this.updateMeter)
+		},
+
+		updateMeter: function() {
+			this.ui.meter.val(this.rms.get('value'))
+		},
+
 		getTemplate: function() {
-			return _.template('<i class="fa '+(this.model.get('icon') ? this.model.get('icon') : 'fa-volume-off')+' fa-2x fa-fw"></i> <%=propertysubgroup%>')
+			return _.template('<i class="fa '+(this.model.get('icon') ? this.model.get('icon') : 'fa-volume-off')+' fa-2x fa-fw"></i> <%=propertysubgroup%> <meter min="-80" max="0" high="-20"></meter>')
 		},
 
 		onRender: function() {
@@ -80,7 +93,7 @@ define(['backbone.marionette',
 		// childView: IView,
 		childView: function(p) {
 			console.log('col view', p.get('propertysubgroup'), p)
-			if (p.get('propertysubgroup').startsWith('Input')) return IView
+			if (p.get('nodestring').startsWith('input')) return IView
 			else if (p.get('propertysubgroup').startsWith('Remote')) return RView
 			else return CView
 		}
