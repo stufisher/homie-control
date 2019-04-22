@@ -17,6 +17,8 @@
         "input",
         "ac",
         "airplay",
-        "weather"
+        "weather",
+        "transport",
+        "dashboard"
     ]
 }
