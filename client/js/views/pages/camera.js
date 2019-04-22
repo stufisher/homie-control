@@ -51,12 +51,20 @@ define(['backbone.marionette',
 			frame: 'img'
 		},
 
+		initialize: function() {
+			this.refresh = true
+		},
+
+		setRefresh: function(value) {
+			this.refresh = value
+		},
+
 		onRender: function() {
 			this.listenTo(this.model, 'change:value', this.drawFrame)
 		},
 
 		drawFrame: function() {
-			this.ui.frame.attr('src', 'data:image/jpeg;base64,'+this.model.get('value'))
+			if (this.refresh) this.ui.frame.attr('src', 'data:image/jpeg;base64,'+this.model.get('value'))
 		},
 	})
 
@@ -67,7 +75,7 @@ define(['backbone.marionette',
 	})
 
 
-	return Marionette.View.extend({
+	var CameraView = Marionette.View.extend({
 		className: 'camera',
 		template: template,
 
@@ -154,5 +162,10 @@ define(['backbone.marionette',
 		},
 
 	})
+
+
+	CameraView.frameView = FrameView
+
+	return CameraView
 
 })
