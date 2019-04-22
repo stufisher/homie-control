@@ -71,7 +71,7 @@ define(['backbone.marionette',
 
 
         drawBar: function(options) {
-            var padperdeg = 15
+            var padperdeg = this.getOption('padPerDeg') || 15
             var maxpad = (options.max - options.model.temphigh) * padperdeg
             var minpad = (options.model.templow - options.min) * padperdeg
             var range = (options.model.temphigh - options.model.templow) * padperdeg
@@ -97,7 +97,7 @@ define(['backbone.marionette',
     })
 
 
-	return Marionette.View.extend({
+	var WeatherView = Marionette.View.extend({
 		template: template,
 
         regions: {
@@ -284,6 +284,10 @@ define(['backbone.marionette',
 
 	})
 
+
+    WeatherView.dailyView = DailyView
+
+    return WeatherView
 
 
 })
