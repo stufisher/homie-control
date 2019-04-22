@@ -182,6 +182,10 @@ define(['backbone.marionette', 'views/modal', 'jquery','jquery-color'], function
     },
 
 
+    round: function(value, decimals) {
+        return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+    },   
+
     easeText: function(options) {
         // console.log(options)
         try {
@@ -195,16 +199,25 @@ define(['backbone.marionette', 'views/modal', 'jquery','jquery-color'], function
         } catch(err) {
             var oldValue = 0
         }
-        // if (typeof(newValue) != typeof(1.0)) newValue = 0
 
-        var numParts = newValue.toString().split('.');
+        if (options.round !== undefined) {
+            if (options.round > 0) {
+                newValue = this.round(newValue, options.round)
+                oldValue = this.round(oldValue, options.round)
+            } else {
+                newValue = Math.round(newValue)
+                oldValue = Math.round(oldValue)
+            }
+        }
+
+        var numParts = newValue.toFixed(options.round).split('.');
         var endingPrecision = 0;
 
         if (numParts.length > 1) {
             endingPrecision = numParts[1].length;
         }
 
-        numParts = oldValue.toString().split('.');
+        numParts = oldValue.toFixed(options.round).split('.');
         var startingPrecision = 0;
 
         if (numParts.length > 1) {
@@ -217,7 +230,7 @@ define(['backbone.marionette', 'views/modal', 'jquery','jquery-color'], function
                 options.el.text(this.transitionValue.toFixed(this.precisionValue));
             },
             done: function () {
-                options.el.text(newValue);
+                options.el.text(newValue.toFixed(this.precisionValue));
             }
         });
     },
