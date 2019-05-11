@@ -151,6 +151,7 @@ define(['backbone.marionette',
 
         onDestroy: function() {
         	clearTimeout(this.timethread)
+        	this.$el.closest('.wrapper').siblings('.sidebar').show()
         },
 
 	})
