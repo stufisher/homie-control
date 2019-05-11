@@ -676,7 +676,7 @@ div.forecasts {
     position: absolute;
     top: 0;
     left: 0;
-    
+
     width: calc(100vw);
     height: calc(100vh);
 
@@ -698,7 +698,7 @@ div.forecasts {
     .grid-container {
         display: flex;
         flex-flow: row wrap;
-        height: 100vh;
+        /*height: 100vh;*/
     }
 
 
@@ -794,5 +794,77 @@ div.forecasts {
 
     .bottom {
         flex: 3 50%;
+    }
+
+
+    &.rotate {
+        transform: rotate(90deg);
+        transform-origin: bottom left;
+        width: 100vh;
+        height: 100vw;
+        margin-top: -100vw;
+        overflow: hidden;
+
+        .middle {
+            height: 66vw;
+        }
+
+        .direction .name, .daily .day, .energy h1, .times {
+            font-size: 1.6vw;
+        }
+
+        .calendar {
+            .time {
+                font-size: 7vw;
+            }
+
+            .date {
+                font-size: 1.8vw;
+            }
+        }
+
+        .temperatures {
+            .indoors {
+                font-size: 3.8vw;
+            }
+
+            .outdoors {
+                font-size: 2.2vw;
+            }
+
+            .today {
+                font-size: 1.8vw;
+             }
+        }
+
+        .energy {
+            font-size: 1.4vw;
+        }
+
+        .weather {
+            .daily {
+                div {
+                    font-size: 0.9vw;
+                }
+
+                .day {
+                    font-size: 1.6vw;
+                }
+
+                .temps div {
+                    font-size: 1.1vw;
+                }
+
+                .icon {
+                    font-size: 2.4vw;
+                }
+            }
+        }
+
+        .transport {
+            .direction .times {
+                font-size: 1.3vw;
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@ define(['backbone.marionette',
 		moment, template) {
 
 	return Marionette.View.extend({
-        className: 'dashboard',
+        className: 'dashboard rotate',
 		template: template,
 
 		regions: {
@@ -78,6 +78,10 @@ define(['backbone.marionette',
 
 		doOnRender: function() {
 			this.addListeners()
+		},
+
+		onDomRefresh: function() {
+			this.$el.closest('.wrapper').siblings('.sidebar').hide()
 		},
 
 
