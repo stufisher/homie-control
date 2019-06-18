@@ -152,48 +152,55 @@ class Weather(HomieDevice):
                         lang=self._config['weather_lang'],
                         lat=self._config['latitude'],
                         long=self._config['longitude']))
+
+                    if r.status_code != 200:
+                        logger.warning('Request returned: {code}'.format(code=r.status_code))
+                        continue
+
+                    self._timezone = r.json()['timezone']
+                    for nl in pm['nodes']:
+                        n = getattr(self, nl['name'])
+
+                        for p,t in nl['properties'].iteritems():
+                            ln = None
+                            if 'length' in nl:
+                                ln = nl['length']
+
+                            val = self.get(r.json(), t, p, ln)
+                            pid = '{nd}/{p}'.format(nd=n.nodeId, p=p)
+
+                            if not (pid in self._cache):
+                                self._cache[pid] = ""
+
+                            if self._cache[pid] != val:
+                                n.setProperty(p).send(str(val))
+                                self._cache[pid] = val
+
                 except requests.ConnectionError as e:
                     logger.warning('Connection Error: {message}'.format(message=e))
-
-                if r.status_code != 200:
-                    logger.warning('Request returned: {code}'.format(code=r.status_code))
                     continue
 
-                self._timezone = r.json()['timezone']
 
-                for nl in pm['nodes']:
-                    n = getattr(self, nl['name'])
+            try:
+                r = requests.get('http://api.ipify.org/?format=json')
 
-                    for p,t in nl['properties'].iteritems():
-                        ln = None
-                        if 'length' in nl:
-                            ln = nl['length']
+                if r.status_code == 200:
+                    ipj = r.json()
+                    if 'ip' in ipj:
+                        if not ('ip' in self._cache):
+                            self._cache['ip'] = ""
 
-                        val = self.get(r.json(), t, p, ln)
-                        pid = '{nd}/{p}'.format(nd=n.nodeId, p=p)
+                        if ipj['ip'] != self._cache['ip']:
+                            self._external.setProperty('external').send(ipj['ip'])
+                            self._cache['ip'] = ipj['ip']
 
-                        if not (pid in self._cache):
-                            self._cache[pid] = ""
-
-                        if self._cache[pid] != val:
-                            n.setProperty(p).send(str(val))
-                            self._cache[pid] = val
+                else:
+                    logger.warning('Request returned: {code}'.format(code=r.status_code))
 
 
-            r = requests.get('https://api.ipify.org/?format=json')
-            if r.status_code == 200:
-                ipj = r.json()
-                if 'ip' in ipj:
-                    if not ('ip' in self._cache):
-                        self._cache['ip'] = ""
-
-                    if ipj['ip'] != self._cache['ip']:
-                        self._external.setProperty('external').send(ipj['ip'])
-                        self._cache['ip'] = ipj['ip']
-
-            else:
-                logger.warning('Request returned: {code}'.format(code=r.status_code))
-
+            except requests.ConnectionError as e:
+                logger.warning('Connection Error: {message}'.format(message=e))
+                return
 
             self._last_update = now
 
