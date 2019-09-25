@@ -782,14 +782,17 @@ div.forecasts {
         }
     }
 
-    .rradar {
+    .middle {
         display: flex;
+    }
+
+    .vb {
+        flex: 1;
+        align-self: flex-end;
     }
 
     .radar {
         filter: contrast(111%);
-        flex: 1;
-        align-self: flex-end;
         padding: 10px;
 
         .label {
