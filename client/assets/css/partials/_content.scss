@@ -683,7 +683,7 @@ div.forecasts {
     background: #000;
     color: #fff;
 
-    .direction .name, .daily .day, .energy h1, .times {
+    .direction .name, .daily .day, .energy h1, .times, .radar .label {
         font-family: 'Roboto';
         font-weight: 300;
         font-size: 1.6vh;
@@ -782,18 +782,36 @@ div.forecasts {
         }
     }
 
+    .radar {
+        filter: contrast(111%);
+        margin-top: 41vh;
+        padding: 10px;
 
+        .label {
+            color: #fff;
+            padding: 20px;
+        }
+
+        .leaflet-container {
+            z-index: -1
+        }
+    }
+
+
+    .cell {
+        flex: 1 50%;
+    }
     .top {
         flex: 1 50%;
     }
 
     .middle {
-        flex: 2 50%;
+        flex: 1 50%;
         height: 67vh;
     }
 
     .bottom {
-        flex: 3 50%;
+        flex: 1 50%;
     }
 
 
@@ -866,5 +884,32 @@ div.forecasts {
                 font-size: 1.3vw;
             }
         }
+    }
+}
+
+.grid {
+    display: flex;
+
+    div {
+        flex: 1;
+    }
+
+    @media (max-width: $breakpoint-small) {
+        display: block;
+    }
+}
+
+
+.radar {
+    position: relative;
+    filter: brightness(98%);
+
+    .label {
+        font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Ultra Light", "Helvetica Neue", sans-serif;
+        z-index: 999;
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 5px;
     }
 }
