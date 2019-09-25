@@ -83,7 +83,7 @@ define(['backbone.marionette',
         },
 
         onRender: function() {
-            this.ui.map.height(450)
+            this.ui.map.height(400)
         },
 
         doZoomIteration: function() {
@@ -91,7 +91,7 @@ define(['backbone.marionette',
             this.zoomIteration++
             if (this.zoomIteration > 2) this.zoomIteration = 0
 
-            this.map.setZoom(this.getOption('zoom')-this.zoomIteration)
+            this.map.setZoom(this.getOption('zoom')-this.zoomIteration, { animate: false })
             this.iterateZoomTimeout = setTimeout(this.doZoomIteration.bind(this), 1000 * 20)
         },
 
