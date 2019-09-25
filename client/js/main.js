@@ -49,7 +49,8 @@ require.config({
     "backbone.radio": "vendor/backbone.radio/build/backbone.radio",
     "flot.tooltip.pib": "vendor/flot.tooltip.pib/js/jquery.flot.tooltip",
     "backbone.syphon": "vendor/backbone.syphon/lib/backbone.syphon",
-    "moment": "vendor/moment/moment",
+    moment: "vendor/moment/moment",
+    leaflet: "vendor/leaflet/dist/leaflet",
   },
   packages: [
 

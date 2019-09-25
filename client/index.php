@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="<?php echo $config->appurl ?>/assets/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="<?php echo $config->appurl ?>/assets/weather-icons/css/weather-icons.min.css">
         <link rel="stylesheet" href="<?php echo $config->appurl ?>/assets/weather-icons/css/weather-icons-wind.css">
+        <link rel="stylesheet" href="<?php echo $config->appurl ?>/assets/leaflet/leaflet.css">
 
         <script type="text/javascript" data-main="<?php echo $config->appurl ?>/js/main" src="<?php echo $config->appurl ?>/js/vendor/requirejs/require.js"></script>
 
