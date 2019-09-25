@@ -37,7 +37,7 @@ class Archiver(HomieDevice):
             INNER JOIN options o ON o.name='archiver_source_property' AND o.value = p.propertyid""")
         if len(device):
             d = device[0]
-            self._homie.subscribeTopic(str('{b}/{d}/{n}/{p}'.format(
+            self._mqtt_subscribe(str('{b}/{d}/{n}/{p}'.format(
                 b=self._homie.baseTopic, d=d['devicestring'], n=d['nodestring'], p=d['propertystring'])), 
                 self._save_frame)
 

@@ -32,6 +32,19 @@ class HomieDevice:
         pass
 
 
+    def _mqtt_subscribe(self, topic, callback):
+        self._homie._checkBeforeSetup()
+
+        if not self._homie.subscribe_all:
+            self._homie.subscriptions.append((topic, int(self._homie.qos)))
+
+        if self._homie.mqtt_connected:
+            self._homie._subscribe()
+
+        self._homie.mqtt.message_callback_add(topic, callback)
+
+
+
     def set(self, property, payload, retain=True):
         self._homie.mqtt.publish(self._homie.baseTopic+'/{device}/{node}/{property}/set'.format(
             device=property['devicestring'],

@@ -15,7 +15,7 @@ from modules.mysql import db
 
 class Manager:
 
-    module_list = ['schedule', 'heating', 'profile', 'device', 'rf433', 'repeater', 'logger']
+    module_list = ['schedule', 'heating', 'profile', 'device', 'rf433', 'repeater', 'logger', 'archiver', 'weather']
 
     _modules = []
 
@@ -45,7 +45,9 @@ class Manager:
 
 def main():
     path = os.path.dirname(os.path.realpath(__file__))
-    Homie = homie.Homie("{path}/configs/manage.json".format(path=path))
+    
+    config = homie.loadConfigFile("{path}/configs/manage.json".format(path=path))
+    Homie = homie.Homie(config)
 
     m = Manager(None, Homie)
     m.run()

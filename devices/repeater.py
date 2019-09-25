@@ -31,7 +31,7 @@ class Repeater(HomieDevice):
             if not (t['propertyaddress'] in self.topic_map):
                 self.topic_map[t['propertyaddress']] = []
 
-            self._homie.subscribeTopic(str(self._homie.baseTopic+"/"+t['propertyaddress']), self.mqtt_handler)
+            self._mqtt_subscribe(str(self._homie.baseTopic+"/"+t['propertyaddress']), self.mqtt_handler)
             self.topic_map[t['propertyaddress']].append(t)
 
         self.repeaterid = t['devicestring']
@@ -40,7 +40,7 @@ class Repeater(HomieDevice):
 
     def setup(self):
         self._subscribe()
-        self._homie.subscribeTopic(str('{b}/{d}/$online'.format(b=self._homie.baseTopic, d=self.repeaterid)), self._repeater_online)
+        self._mqtt_subscribe(str('{b}/{d}/$online'.format(b=self._homie.baseTopic, d=self.repeaterid)), self._repeater_online)
 
     def init(self):
         self.send_statics()

@@ -27,7 +27,7 @@ class Logger(HomieDevice):
     }
 
     def setup(self):
-        self._homie.subscribeTopic(str(self._homie.baseTopic+"/#"), self.mqttHandler)
+        self._mqtt_subscribe(str(self._homie.baseTopic+"/#"), self.mqttHandler)
 
     def test(self, x, y, comp):
         return self._comparators[comp](x, y)
