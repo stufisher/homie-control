@@ -4,6 +4,7 @@ define(['backbone.marionette',
 	'views/pages/weather',
 	'views/pages/transport',
 	'views/pages/camera',
+	'views/radar',
 
 	'utils',
 
@@ -11,9 +12,14 @@ define(['backbone.marionette',
     'tpl!templates/pages/dashboard.html'
 	], function(Marionette, 
 		Properties,
-		WeatherView, TransportView, CameraView,
+		WeatherView, TransportView, CameraView, RadarView,
 		utils,
 		moment, template) {
+
+	var DashRadarView = RadarView.extend({
+		theme: 'dark', 
+		zoomControls: false,
+	})
 
 	return Marionette.View.extend({
         className: 'dashboard rotate',
@@ -23,6 +29,7 @@ define(['backbone.marionette',
 			transport: '.transport',
 			weather: '.weather',
 			camera: '.camera',
+			radar: '.rradar',
 		},
 
         ui: {
@@ -74,6 +81,10 @@ define(['backbone.marionette',
 					directions: this.config.get('directions')
 				})
 			}))
+
+
+
+			this.getRegion('radar').show(new DashRadarView())
 		},
 
 		doOnRender: function() {

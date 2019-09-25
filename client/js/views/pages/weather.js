@@ -1,13 +1,14 @@
 define(['backbone.marionette',
     'collections/properties',
     'views/gauge',
+    'views/radar',
     'utils',
 
     'tpl!templates/pages/weather.html',
     'moment',
     'Flot', 'Flot-stack'
 	], function(Marionette, 
-        Properties, GaugeView, utils,
+        Properties, GaugeView, RadarView, utils,
         template, moment) {
 
 
@@ -103,6 +104,7 @@ define(['backbone.marionette',
         regions: {
             rforecasts: '.forecasts',
             rdaily: '.rdaily',
+            rradar: '.rradar',
         },
 
         ui: {
@@ -280,6 +282,7 @@ define(['backbone.marionette',
         onRender: function() {
             $.when.apply($, this.ready).done(this.addListeners.bind(this))
             this.getRegion('rdaily').show(new DailyView({ translate: this.translate, properties: new Properties(null, { queryParams: { propertysubgroupid: this.config.get('daily') }}) }))
+            this.getRegion('rradar').show(new RadarView())
         },
 
 	})
