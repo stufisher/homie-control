@@ -19,6 +19,7 @@ define(['backbone.marionette',
 	var DashRadarView = RadarView.extend({
 		theme: 'dark', 
 		zoomControls: false,
+		iterateZoom: true,
 	})
 
 	return Marionette.View.extend({
