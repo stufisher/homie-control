@@ -42,6 +42,7 @@ define(['backbone.marionette',
         zoom: 8,
         theme: 'light',
         zoomControl: true,
+        iterateZoom: false,
 
         ui: {
             map: '.map',
@@ -66,6 +67,8 @@ define(['backbone.marionette',
             this.currentFrame = 0
 
             this.frameTimeout = null
+            this.iterateZoomTimeout = null
+            this.zoomIteration = 0
 
             this.options = new Options()
             this.ready = this.options.fetch()
@@ -76,14 +79,23 @@ define(['backbone.marionette',
         onDestroy: function() {
             clearTimeout(this.frameTimeout)
             clearTimeout(this.timestampTimeout)
+            clearTimeout(this.iterateZoomTimeout)
         },
 
         onRender: function() {
             this.ui.map.height(450)
         },
 
+        doZoomIteration: function() {
+            clearTimeout(this.iterateZoomTimeout)
+            this.zoomIteration++
+            if (this.zoomIteration > 2) this.zoomIteration = 0
+
+            this.map.setZoom(this.getOption('zoom')-this.zoomIteration)
+            this.iterateZoomTimeout = setTimeout(this.doZoomIteration.bind(this), 1000 * 20)
+        },
+
         getTimestamps: function() {
-            console.log('refreshing timestamps')
             clearTimeout(this.timestampTimeout)
 
             this.timestamps.fetch()
@@ -154,6 +166,7 @@ define(['backbone.marionette',
             }).addTo(this.map)
 
             this.getTimestamps()
+            if (this.getOption('iterateZoom')) this.doZoomIteration()
         },
 
     })
