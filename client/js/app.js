@@ -110,6 +110,8 @@ function(Backbone, Marionette,
         if (url) {
             options = options || {};
             options.url = app.apiurl+url
+
+            if (model.originalSync) options.url = url
         }
         
         return oldSync.call(this, method, model, options);
