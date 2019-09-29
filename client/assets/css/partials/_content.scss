@@ -804,6 +804,10 @@ div.forecasts {
             z-index: -1;
             background: #000;
         }
+
+        .leaflet-control-zoom {
+            display: none;
+        }
     }
 
 
