@@ -37,7 +37,8 @@ define(['backbone.marionette',
         template: _.template('<div class="label"></div><div class="map"></div>'),
         className: 'radar',
 
-        opacity: 0.8,
+        height: 500,
+        opacity: 0.9,
         interval: 500,
         zoom: 8,
         theme: 'light',
@@ -53,9 +54,11 @@ define(['backbone.marionette',
             console.log('radar options', options)
             this.types = {
                 osm: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                light: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
-                dark: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
-                radar: 'https://tilecache.rainviewer.com/v2/radar/{ts}/{size}/{z}/{x}/{y}/{color}/{options}.png'
+                light: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
+                dark: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png',
+                radar: 'https://tilecache.rainviewer.com/v2/radar/{ts}/{size}/{z}/{x}/{y}/{color}/{options}.png',
+                'ref-dark': 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_only_labels/{z}/{x}/{y}.png',
+                'ref-light': 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png',
             }
 
             this.timestamps = new MapTimestamps()
@@ -83,7 +86,7 @@ define(['backbone.marionette',
         },
 
         onRender: function() {
-            this.ui.map.height(400)
+            this.ui.map.height(this.getOption('height'))
         },
 
         doZoomIteration: function() {
@@ -148,6 +151,7 @@ define(['backbone.marionette',
                 if (!ts) this.map.removeLayer(layer)
             }, this)
 
+            this.ref.bringToFront()
             this.nextFrame()
         },
 
@@ -162,14 +166,13 @@ define(['backbone.marionette',
             }).setView([this.options.get('latitude'), this.options.get('longitude')], this.getOption('zoom'));
 
             console.log('types', this.types, this.getOption('theme'))
-            this.base = L.tileLayer(this.types[this.getOption('theme')], {
-            }).addTo(this.map)
+            this.base = L.tileLayer(this.types[this.getOption('theme')]).addTo(this.map)
+            this.ref = L.tileLayer(this.types['ref-'+this.getOption('theme')]).addTo(this.map)
 
             this.getTimestamps()
             if (this.getOption('iterateZoom')) this.doZoomIteration()
         },
 
     })
-
 
 })
