@@ -12,10 +12,11 @@ define(['backbone.marionette',
 
         parse: function(r, options) {
             var list = _.map(r, function(i) { return { timestamp: i }})
-            return list
+            return list.slice(this.start)
         },
 
-        initialize: function() {
+        initialize: function(options) {
+            this.start = options.start || 0
             this.on('change:isSelected', this.onSelectedChanged, this);
         },
                 
@@ -44,6 +45,7 @@ define(['backbone.marionette',
         theme: 'light',
         zoomControl: true,
         iterateZoom: false,
+        start: 0,
 
         ui: {
             map: '.map',
@@ -61,7 +63,7 @@ define(['backbone.marionette',
                 'ref-light': 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png',
             }
 
-            this.timestamps = new MapTimestamps()
+            this.timestamps = new MapTimestamps({ start: this.start })
             this.timestampTimeout = null
             this.listenTo(this.timestamps, 'sync', this.renderLayers)
             this.listenTo(this.timestamps, 'selected:change', this.setOpacity)
@@ -138,7 +140,7 @@ define(['backbone.marionette',
                     this.radarLayers[t] = L.tileLayer(this.types.radar, {
                         ts: t,
                         size: 512,
-                        color: 2,
+                        color: 4,
                         options: '1_1',
                         opactiy: 0,
                     })
