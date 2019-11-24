@@ -53,6 +53,15 @@ define(['backbone'], function(Backbone) {
             archiver_root: {
                 required: false,
             },
+
+            daapd_url: {
+                required: false,
+            },
+
+            daapd_port: {
+                required: false,
+                pattern: 'number',
+            },
         }
 
     })

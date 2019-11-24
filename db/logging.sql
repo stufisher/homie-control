@@ -94,7 +94,9 @@ INSERT INTO `options` (`optionid`, `name`, `value`) VALUES
 (11, 'archiver_source_property', '12'),
 (12, 'archiver_root', '/path/to/frames'),
 (13, 'weather_lang', 'en'),
-(14, 'weather_key', 'myapikey');
+(14, 'weather_key', 'myapikey'),
+(15, 'daapd_url', 'localhost'),
+(16, 'daapd_port', '1234');
 
 -- --------------------------------------------------------
 
