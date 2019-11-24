@@ -19,6 +19,7 @@
         "airplay",
         "weather",
         "transport",
-        "dashboard"
+        "dashboard",
+        "daapd"
     ]
 }
