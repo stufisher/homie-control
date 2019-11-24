@@ -114,6 +114,8 @@ define(['backbone.marionette',
             edit.create('scan_interface', 'text');
             edit.create('archiver_source_property', 'select', { data: this.getProperties.bind(this) });
             edit.create('archiver_root', 'text');
+            edit.create('daapd_url', 'text');
+            edit.create('daapd_port', 'text');
         },
         
     })
