@@ -908,7 +908,9 @@ div.forecasts {
     }
 
     @media (max-width: $breakpoint-small) {
-        display: block;
+        &:not(.grid-mobile) {
+            display: block;
+        }
     }
 }
 
@@ -925,4 +927,125 @@ div.forecasts {
         top: 0;
         padding: 5px;
     }
+}
+
+
+
+.daapd {
+    .cover {
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 14px;
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 5px;
+    }
+
+    .progress {
+        text-align: center;
+
+        span {
+            display: inline-block;
+            width: 45px;
+            text-align: center;
+        }
+
+        progress {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 12px;
+            width: calc(100% - 10px - 90px);
+            margin: 0 5px;
+
+            &::-webkit-progress-bar {
+                background: none;
+                background-color: whiteSmoke;
+                box-shadow: 0 5px 5px -5px #333 inset;
+            }
+
+            &::-webkit-progress-value {
+                -webkit-transition: width 1.5s;
+                box-shadow: 0 5px 5px -5px #999 inset;
+                background-color: $header-background;
+            }
+        }
+    }
+
+    .controls {
+        div:nth-child(1) {
+            flex: 0.2;
+            white-space: nowrap;
+        }
+        div:nth-child(2) {
+            text-align: right;
+        }
+    }
+    .volume {
+        padding-top: 5px;
+        i {
+            padding: 3px;
+            padding-bottom: 10px;
+        }
+
+        input[type=range] {
+            width: calc(95% - 20px);
+        }
+    }
+
+    .outputs {
+        font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Ultra Light", "Helvetica Neue", sans-serif;
+
+        .grid {
+            div:nth-child(1) {
+                flex: 0.3;
+            }
+            div:nth-child(3) {
+                flex: 0.05;
+                text-align: right;
+            }
+
+            div:nth-child(2) {
+                padding-top: 4px;
+                i {
+                    padding: 3px;
+                    padding-bottom: 10px;
+                }
+            }
+        }
+
+        .on {
+            color: $content-active;
+        }
+
+        .off {
+            opacity: 0.5;
+        }
+        input[type=range] {
+            width: calc(95% - 20px);
+        }
+    }
+
+    .library {
+        ul.playlists {
+            margin-left: 0;
+
+            li {
+                padding: 1.5%;
+                cursor: pointer;
+                margin: 5px 0;
+                border: none;
+                background: #fff;
+                border-radius: 3px;
+                box-shadow: 0px 2px 2px #bbb;
+                transition: 0.1s ease-in-out;
+                color: #666;
+
+                &:hover {
+                    color: #000;
+                }
+            }
+        }
+    }
+
 }
