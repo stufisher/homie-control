@@ -16,7 +16,7 @@ define(['backbone.marionette',
 
     var MetaItemView = Marionette.View.extend({
         tagName: 'li',
-        template: _.template('<span class="title"><%=friendlyname%></span><span class="value"></span>'),
+        template: _.template('<span class="title"><%=friendlyname.replace(\'Daapd \', \'\')%></span><span class="value"></span>'),
         modelEvents: {
             'change:value': 'updateState',
         },
@@ -127,7 +127,7 @@ define(['backbone.marionette',
     })
 
     var QueueView = Marionette.CollectionView.extend({
-        tagName: 'ul',
+        tagName: 'ol',
         childView: QueueItemView,
         childViewOptions: function() {
             return {
@@ -221,7 +221,7 @@ define(['backbone.marionette',
     })
 
     var OutputView = Marionette.View.extend({
-        template: _.template('<div><%-name%></div><div><i class="fa fa-volume-down"></i> <input type="range" min="0" max="100" value="<%-volume%>" /></div><div><a href="#" class="button enabled <%-(selected ? \'on\': \'off\')%>"><i class="fa fa-power-off"></i></div>'),
+        template: _.template('<div><%-name%></div><div><i class="fa fa-volume-down"></i> <input type="range" min="0" max="100" value="<%-volume%>" /></div><div><a href="#" class="button enabled <%-(selected ? \'on\': \'off\')%>"><i class="fa fa-fw fa-power-off"></i></div>'),
         className: 'grid grid-mobile',
 
         events: {
@@ -279,7 +279,7 @@ define(['backbone.marionette',
     })
 
     var PlayerView = Marionette.View.extend({
-        template: _.template('<a href="#" class="button prev"><i class="fa fa-step-backward"></i></a> <a href="#" class="button playing"><i class="fa"></i></a> <a href="#" class="button next"><i class="fa fa-step-forward"></i></a>'),
+        template: _.template('<a href="#" class="button prev"><i class="fa fa-fw fa-step-backward"></i></a> <a href="#" class="button playing"><i class="fa fa-fw "></i></a> <a href="#" class="button next"><i class="fa fa-fw fa-step-forward"></i></a>'),
 
         events: {
             'click a.playing': 'changeState',
@@ -338,7 +338,12 @@ define(['backbone.marionette',
         className: 'daapd',
 
         ui: {
-            cover: '.cover img'
+            cover: '.cover img',
+            queue: ".queue",
+        },
+
+        events: {
+            'click .queue-toggle': 'toggleQueue'
         },
 
         regions: {
@@ -358,6 +363,11 @@ define(['backbone.marionette',
             }
         },
 
+        toggleQueue: function(e) {
+            e.preventDefault()
+            this.ui.queue.slideToggle()
+        },
+
         initialize: function(options) {
             this.config = options.config
             this.properties = new Properties(null, { queryParams: { propertygroupid: this.config.get('propertygroupid') } })
@@ -370,6 +380,8 @@ define(['backbone.marionette',
 
         onRender: function() {
             $.when.apply($, this.ready).done(this.doOnRender.bind(this))
+
+            if (app.mobile()) this.ui.queue.addClass('hide')
         },
 
         doOnRender: function() {
