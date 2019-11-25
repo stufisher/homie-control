@@ -771,8 +771,17 @@ div.forecasts {
             font-size: 1.3vh
         }
 
-        > div {
-            width: 60%;
+        .dirs > div {
+            display: flex;
+            white-space: nowrap;
+        }
+
+        .dirs > div > div {
+            flex: 1;
+
+            &:nth-child(2) {
+                margin-left: 15px;
+            }
         }
     }
 
@@ -827,6 +836,19 @@ div.forecasts {
         flex: 1 50%;
     }
 
+    .daapd {
+        overflow: hidden;
+        position: relative;
+        height: 4.5vh;
+        margin: 0 0 0 10px;
+        font-size: 1.4vw;
+        text-align: right;
+    }
+    .daapd-scroll {
+        position: absolute;
+        white-space: nowrap;
+        animation: scrollText 10s infinite ease-in-out;
+    }
 
     &.rotate {
         transform: rotate(90deg);
@@ -870,6 +892,7 @@ div.forecasts {
 
         .energy {
             font-size: 1.4vw;
+            text-align: right;
         }
 
         .weather {
@@ -897,6 +920,16 @@ div.forecasts {
                 font-size: 1.3vw;
             }
         }
+    }
+}
+
+@-webkit-keyframes scrollText {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
     }
 }
 

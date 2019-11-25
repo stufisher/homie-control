@@ -50,6 +50,11 @@ define(['backbone.marionette',
             power: '.power',
 
             camera: '.camera',
+
+            daapd: '.daapd',
+            track: '.track',
+            artist: '.artist',
+            album: '.album',
         },
 
         events: {
@@ -97,21 +102,30 @@ define(['backbone.marionette',
         },
 
 
-        updateValue: function(elment, round, model) {
-            console.log('updateValue', elment, model.get('value'))
+        updateValue: function(element, round, model) {
+            console.log('updateValue', element, model.get('value'))
 
-            if (model.get('propertystring') == 'icon') {
-                this.ui[elment].addClass('wi-forecast-io-'+model.get('value'))
+            if (model.get('propertystring') == 'playing') {
+                model.get('value') == 1 ? this.ui.daapd.show()
+                                        : this.ui.daapd.hide()
+
+            } else if (model.get('propertystring') == 'icon') {
+                this.ui[element].addClass('wi-forecast-io-'+model.get('value'))
 
             } else if (model.get('propertystring') == 'winddir') {
-                this.ui[elment].addClass('from-'+model.get('value')+'-deg')
+                this.ui[element].addClass('from-'+model.get('value')+'-deg')
 
             } else {
-                utils.easeText({
-                    round: round,
-                    model: model,
-                    el: this.ui[elment]
-                })
+                if (round !== undefined) {
+                    utils.easeText({
+                        round: round,
+                        model: model,
+                        el: this.ui[element]
+                    })
+                } else {
+                    console.log('element', element, this.ui[element])
+                    this.ui[element].text(model.get('value'))
+                }
             }
         },
 
@@ -126,6 +140,10 @@ define(['backbone.marionette',
                 'Weather Current Wind Speed': { element: 'windspeed', round: 0 },
                 'Weather Current Gust Speed': { element: 'gustspeed', round: 0 },
                 'Power': { element: 'power', round: 0 },
+                'Daapd Track': { element: 'track' },
+                'Daapd Album': { element: 'album' },
+                'Daapd Artist': { element: 'artist' },
+                'Daapd Playing': {},
             }
 
             this.properties.each(function(p) {
