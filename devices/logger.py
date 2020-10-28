@@ -26,6 +26,8 @@ class Logger(HomieDevice):
         '!=': o.ne,
     }
 
+    _lastupdate = {}
+
     def setup(self):
         self._mqtt_subscribe(str(self._homie.baseTopic+"/#"), self.mqttHandler)
 
@@ -37,68 +39,71 @@ class Logger(HomieDevice):
         if parts[0] != self._homie.baseTopic:
             return
 
+        if msg.payload == 'true' or msg.payload == 'false':
+            val = 1 if msg.payload == 'true' else 0
+        else:
+            try:
+                val = float(msg.payload)
+            except:
+                logger.debug('Value none numeric, not logging [{topic}, {payload}]'.format(topic=msg.topic, payload=msg.payload))
+                return
 
-        properties = self._db.pq("""SELECT count(pt.propertytriggerid) as triggers, p.propertyid, p.devicestring, p.nodestring, p.propertystring,
+        ptop = msg.topic.replace(self._homie.baseTopic+'/', '')
+        if not ptop in self._lastupdate:
+            self._lastupdate[ptop] = time.time()
+
+        if (time.time() - self._lastupdate[ptop]) < 30:
+            return
+
+        self._lastupdate[ptop] = time.time()
+
+        p = self._db.pq("""SELECT count(pt.propertytriggerid) as triggers, p.propertyid, p.devicestring, p.nodestring, p.propertystring,
             CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as address, p.friendlyname
             FROM property p
             INNER JOIN propertytype ty ON ty.propertytypeid = p.propertytypeid
             LEFT OUTER JOIN propertytrigger pt ON pt.propertyid = p.propertyid AND pt.active = 1
-            WHERE p.propertytypeid IS NOT NULL AND ty.name != 'binary'
-            GROUP BY p.propertyid""")
+            WHERE p.propertytypeid IS NOT NULL AND ty.name != 'binary' AND 
+                (CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) LIKE %s OR CONCAT(p.devicestring, '/', p.nodestring) LIKE %s)
+            GROUP BY p.propertyid""", [ptop, ptop])
 
-        for p in properties:
-            if p['propertystring']:
-                ptop = self._homie.baseTopic+'/{d}/{n}/{p}'.format(d=p['devicestring'], n=p['nodestring'], p=p['propertystring'])
-            else:
-                ptop = self._homie.baseTopic+'/{d}/{n}'.format(d=p['devicestring'], n=p['nodestring'])
+        if not len(p):
+            return
 
-            # logger.info('Topic: {topic}'.format(topic=ptop))
+        p = p[0]
 
-            if ptop == msg.topic:
-                if msg.payload == 'true' or msg.payload == 'false':
-                    val = 1 if msg.payload == 'true' else 0
-                else:
-                    try:
-                        val = float(msg.payload)
-                    except:
-                        logger.debug('Value none numeric, not logging [{topic}, {payload}]'.format(topic=msg.topic, payload=msg.payload))
-                        continue
+        if p:
+            self._db.pq("""INSERT INTO history (propertyid, value) VALUES (%s, %s)""", 
+                [p['propertyid'], val])
+            self._db.pq("""UPDATE property set value=%s WHERE propertyid=%s""",
+                [val, p['propertyid']])
 
-                # logger.info('Topic: {topic} Value: {val}'.format(topic=ptop, val=val))
+            if p['triggers'] > 0:
+                logger.info('Topic: {topic} has triggers'.format(topic=ptop))
+                triggers = self._db.pq("""SELECT value, comparator, propertyprofileid, scheduleid, schedulestatus, email, delay
+                    FROM propertytrigger 
+                    WHERE propertyid = %s AND active=1""", p['propertyid'])
+                for t in triggers:
+                    logger.info('Testing val: {val} tval: {tval} comp: {comp}'.format(val=val, tval=t['value'], comp=t['comparator']))
+                    if self.test(val, float(t['value']), t['comparator']):
+                        if t['propertyprofileid'] is not None:
+                            if t['delay'] > 0:
+                                self._waiting[t['propertyprofileid']] = t['delay']+time.time()
+                            else:
+                                logger.info('Running profile {pid}'.format(pid=t['propertyprofileid']))
+                                self.run_profile(t['propertyprofileid'])
 
-                self._db.pq("""INSERT INTO history (propertyid, value) VALUES (%s, %s)""", 
-                    [p['propertyid'], val])
-                self._db.pq("""UPDATE property set value=%s WHERE propertyid=%s""",
-                    [val, p['propertyid']])
+                        if t['scheduleid'] is not None:
+                            logger.info('Changing schedule {sid} to {state}'.format(sid=t['scheduleid'], state=t['schedulestatus']))
+                            self._db.pq("""UPDATE schedule SET active=%s WHERE scheduleid=%s""", [t['schedulestatus'], t['scheduleid']])
 
+                        if t['email']:
+                            em = self._db.pq("""SELECT value FROM options WHERE name='trigger_email_to'""")
+                            if len(em):
+                                logger.info('Emailing {em} with update'.format(em=em[0]['value']))
 
-                if p['triggers'] > 0:
-                    logger.info('Topic: {topic} has triggers'.format(topic=ptop))
-                    triggers = self._db.pq("""SELECT value, comparator, propertyprofileid, scheduleid, schedulestatus, email, delay
-                        FROM propertytrigger 
-                        WHERE propertyid = %s AND active=1""", p['propertyid'])
-                    for t in triggers:
-                        logger.info('Testing val: {val} tval: {tval} comp: {comp}'.format(val=val, tval=t['value'], comp=t['comparator']))
-                        if self.test(val, float(t['value']), t['comparator']):
-                            if t['propertyprofileid'] is not None:
-                                if t['delay'] > 0:
-                                    self._waiting[t['propertyprofileid']] = t['delay']+time.time()
-                                else:
-                                    logger.info('Running profile {pid}'.format(pid=t['propertyprofileid']))
-                                    self.run_profile(t['propertyprofileid'])
-
-                            if t['scheduleid'] is not None:
-                                logger.info('Changing schedule {sid} to {state}'.format(sid=t['scheduleid'], state=t['schedulestatus']))
-                                self._db.pq("""UPDATE schedule SET active=%s WHERE scheduleid=%s""", [t['schedulestatus'], t['scheduleid']])
-
-                            if t['email']:
-                                em = self._db.pq("""SELECT value FROM options WHERE name='trigger_email_to'""")
-                                if len(em):
-                                    logger.info('Emailing {em} with update'.format(em=em[0]['value']))
-
-                                    m = Email(em[0]['value'])
-                                    m.set_message('PropertyTrigger', [p['friendlyname'], p['address'], val])
-                                    m.send()
+                                m = Email(em[0]['value'])
+                                m.set_message('PropertyTrigger', [p['friendlyname'], p['address'], val])
+                                m.send()
 
     def loopHandler(self):
         toremove = []
