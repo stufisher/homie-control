@@ -37,7 +37,7 @@ class Router extends BaseRouter {
             'offset' => v::intVal(),
 
             'minimal' => v::intVal(),
-            'value' => v::alnum(',:')->noWhitespace(),
+            'value' => v::alnum(',:.')->noWhitespace(),
         ];
     }
 
