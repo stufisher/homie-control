@@ -224,7 +224,7 @@ class ZoneNode(homie.HomieNode, SetMixin):
         self.setProperty("scheduled").send(1 if state else 0)
 
 
-class Heating(HomieDevice, SetMixin):
+class Zonedheating(HomieDevice, SetMixin):
     _id = "root"
     _enabled = True
     _boost = None
