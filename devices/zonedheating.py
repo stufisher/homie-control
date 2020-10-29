@@ -354,7 +354,7 @@ def main():
     Homie = homie.Homie(config)
     # Homie = homie.Homie("configs/zoned_heating.json")
 
-    heating = Heating(d, Homie)
+    heating = Zonedheating(d, Homie)
 
     Homie.setFirmware("zheating-controller", "1.0.0")
     Homie.setup()
