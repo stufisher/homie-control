@@ -1,0 +1,31 @@
+<div class="g"></div>
+<h1><%=id%></h1>
+<h2 class="name"><%-name%></h2>
+<div class="inner">
+    <ul>
+        <li>
+            <span class="status temp"></span>&deg;
+        </li>
+        <li>
+            <a href="#" class="zenable"><i class="fa fa-2x fa-power-off fa-spinner"></i></a>
+        	<a href="#" class="zboost"><i class="fa fa-2x fa-rocket fa-spinner"></i></a>
+            <a href="#" class="zheat"><i class="fa fa-2x fa-fire"></i></a>
+
+            <!-- <a href="#" class="zaway"><i class="fa fa-2x fa-road"></i></a> -->
+            <a href="#" class="zscheduled"><i class="fa fa-2x fa-clock-o"></i></a>
+        </li>
+        <li>
+            <form>
+                <input class="with-fa" type="radio" name="sp" value="temperature" id="<%=id%>-sp-temp" checked="checked" />
+                <label for="<%=id%>-sp-temp"></label>
+                <input class="with-fa" type="radio" name="sp" value="boost" id="<%=id%>-sp-boost" />
+                <label for="<%=id%>-sp-boost"></label>
+                <input class="with-fa" type="radio" name="sp" value="away" id="<%=id%>-sp-away" />
+                <label for="<%=id%>-sp-away"></label>
+            </form>
+        </li>
+        <li>
+            <input name="zboosttime" type="number" min="1" />
+        </li>
+    </ul>
+</div>

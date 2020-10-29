@@ -110,6 +110,14 @@
                 color: $header-background;
             }
 
+            .heat.active .fa {
+                color: #ee1111;
+            }
+
+            .zboost.active .fa {
+                color: #0d80b9;
+            }
+
             .active .fa {
                 color: $content-active;
             }
@@ -125,6 +133,115 @@
     }
 }
 
+.zoned {
+    .zones {
+        padding-top: 3%;
+    }
+
+    .temps {
+        @media (min-width: $breakpoint-medium) {
+            width: 34%;
+        }
+    }
+    .zone ul{
+        top: 30%;
+    }
+
+    .zone.single {
+        @media (min-width: $breakpoint-medium) {
+            margin: 4% 4%;
+        }
+    }
+
+    input[type="number"] {
+        text-align: center;
+        width: 40px;
+        padding: 4px;
+        margin-top: 2px;
+        border-radius: 3px;
+        border: none;
+        border: 1px solid #eee;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        -moz-appearance: textfield;
+    }
+}
+
+.overview {
+    text-align: center;
+
+    li {
+        background: #ccc;
+    }
+
+    a {
+        box-shadow: 0px 3px 3px #bbb;
+        display: inline-block;
+        padding: 10px;
+        margin: 5px;
+        background: #fff;
+        border-radius: 5px;
+        width: 30px;
+
+        &.active {
+            background: #fff;
+        }
+    }
+
+    .heat.active .fa {
+        color: #ee1111;
+    }
+
+    .boost.active .fa {
+        color: #0d80b9;
+    }
+
+    .active .fa {
+        color: $content-active;
+    }
+}
+
+
+.with-fa {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px; 
+
+    &[value=temperature] + label:before {
+        content: '\f140'
+    }
+
+    &[value=boost] + label:before {
+        content: '\f135'
+    }
+
+    &[value=away] + label:before {
+        content: '\f018'
+    }
+
+    & + label:before {
+        cursor: pointer;
+        color: #ccc;
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f1db";
+        font-size: 1.6em;
+    }
+
+    &:checked + label:before {
+        /*content: '\f05d';*/
+        color: #0d80b9;
+    }
+}   
 
 .status ul li {
     padding: 5px 10px;
