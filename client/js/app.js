@@ -19,8 +19,11 @@ function(Backbone, Marionette,
 
 
             this.pages = new Pages()
-            this.pages.fetch()
+            this.pages.fetch().done(this.doOnStart.bind(this))
 
+        },
+
+        doOnStart: function() {
             require(['router'], this.starthistory.bind(this))
             
             this.main = new MainView()
