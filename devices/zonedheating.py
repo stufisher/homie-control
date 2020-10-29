@@ -62,8 +62,7 @@ class ZoneNode(homie.HomieNode, SetMixin):
     _away = False
     _awayset = 15
 
-    def __init__(self, homie_instance, _db, zid, read_property, control_property):
-        self._db = _db
+    def __init__(self, homie_instance, zid, read_property, control_property):
         self._read_property = read_property
         self._control_property = control_property
         self._id = zid
@@ -82,6 +81,10 @@ class ZoneNode(homie.HomieNode, SetMixin):
 
         self.advertise("away").settable(self.away_handler)
         self.advertise("awayset").settable(self.away_sp_handler)
+
+    @property
+    def _db(self):
+        return db()
 
     def enable_handler(self, mqttc, obj, msg):
         self._set("enabled", "bool", msg)
@@ -265,7 +268,7 @@ class Zonedheating(HomieDevice, SetMixin):
                 if p["type"] == "switch":
                     control = p
 
-            node = ZoneNode(self._homie, self._db, z["id"], read, control)
+            node = ZoneNode(self._homie, z["id"], read, control)
             self._homie.nodes.append(node)
             self._zones.append(node)
 
