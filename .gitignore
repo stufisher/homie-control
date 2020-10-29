@@ -5,3 +5,7 @@
 node_modules
 .DS_Store
 /client/js/vendor/
+
+devices/configs/*.json
+api/src/settings.php
+client/js/config.json
