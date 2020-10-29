@@ -25,11 +25,13 @@ class Schedule(HomieDevice):
         else:
             heating_device = int(heating_device[0]['value'])
 
-        schedules = self._db.pq("""SELECT propertyid, devicestring, nodestring, propertystring, max(enabled) as enabled, max(active) as active, invert, requiredevice FROM (
+        schedules = self._db.pq("""SELECT propertyid, devicestring, nodestring, propertystring, max(enabled) as enabled, max(active) as active, invert FROM (
             SELECT p.propertyid, p.devicestring, p.nodestring, p.propertystring, s.enabled, 
                 IF(sc.schedulecomponentid IS NOT NULL
                     AND DAYOFYEAR(CURRENT_TIMESTAMP) >= DAYOFYEAR(s.start)
                     AND DAYOFYEAR(CURRENT_TIMESTAMP) <= DAYOFYEAR(s.end)
+                    AND s.enabled = 1
+                    AND IF(s.requiredevice, %s, 1)
                     , 1, 0) as active, s.invert, s.requiredevice
             FROM schedule s 
             LEFT OUTER JOIN schedulecomponent sc ON s.scheduleid = sc.scheduleid
@@ -37,15 +39,11 @@ class Schedule(HomieDevice):
                 AND TIME(CURRENT_TIMESTAMP) >= sc.start AND TIME(CURRENT_TIMESTAMP) < sc.end
             INNER JOIN property p ON s.propertyid = p.propertyid
             GROUP BY s.scheduleid
-            ) inr GROUP BY propertyid""")
+            ) inr GROUP BY propertyid""", [devs > 0])
 
         for s in schedules:
             if s['propertyid'] == heating_device:
                 continue
-
-            if s['requiredevice'] == 1 and devs == 0:
-                continue
-
 
             if s['active'] == 1 and s['enabled'] == 1:
                 newstate = 0 if s['invert'] == 1 else 1
