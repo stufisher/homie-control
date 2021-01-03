@@ -110,7 +110,7 @@
                 color: $header-background;
             }
 
-            .heat.active .fa {
+            .zheat.active .fa {
                 color: #ee1111;
             }
 
@@ -1252,4 +1252,128 @@ div.forecasts {
         }
     }
 
+}
+
+
+.sonos {
+    .volume, .join {
+        float: right;
+    }
+
+    .clear {
+        clear: both;
+    }
+
+    .button-small {
+        margin-left: 3px;
+        border-radius: 2px;
+        padding: 1px 3px;
+    }
+
+    .join {
+        background: #ccc;
+        border-radius: 3px;
+        margin: 2px;
+        padding: 3px;
+    }
+}
+
+.sonos-members {
+    li {
+        display: inline-block;
+        background: #0d80b9;
+        border-radius: 3px;
+        margin: 2px;
+        padding: 3px;
+        color: #fff;
+    }
+}
+
+.sonos-player {
+    padding-top: 3px;
+}
+
+.sonos-volumes {
+    margin: 2% 2% 0 2%;
+    padding: 5px;
+    input[type="range"] {
+        width: 80%;
+    }
+
+    li {
+        display: inline-block;
+        width: 50%;
+        padding: 5px 0;
+    }
+
+    @media(max-width: $breakpoint-vsmall) {
+        input[type="range"] {
+            width: 70%;
+        }
+
+        li {
+            width: 100%;
+
+        }
+    }
+}
+
+.sonos-zone {
+    font-size: 12px;
+    display: inline-block;
+    background: #fff;
+    border-radius: 5px;
+
+    @include cols(2, 5px, 2%);
+
+    h2 {
+        font-size: 16px;
+    }
+
+    .cover {
+        padding: 10px;
+        margin: 0 10%;
+        img {
+            box-shadow: 0px 3px 3px #bbb;
+            width: 100%;
+        }
+    }
+
+    .meta {
+        text-align: center;
+    }
+
+    .progress {
+        text-align: center;
+
+        span {
+            display: inline-block;
+            width: 45px;
+            text-align: center;
+        }
+
+        progress {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 12px;
+            width: calc(100% - 10px - 90px);
+            margin: 0 5px;
+
+            &::-webkit-progress-bar {
+                background: none;
+                background-color: whiteSmoke;
+                box-shadow: 0 5px 5px -5px #333 inset;
+            }
+
+            &::-webkit-progress-value {
+                -webkit-transition: width 1.5s;
+                box-shadow: 0 5px 5px -5px #999 inset;
+                background-color: $header-background;
+            }
+        }
+    }
+
+    @media(max-width: $breakpoint-vsmall) {
+        @include cols(1, 0px, 3%);
+    }
 }
