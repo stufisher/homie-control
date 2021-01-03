@@ -199,6 +199,7 @@ define(['backbone.marionette',
         ui: {
             add: 'select[name=add]',
             vol: '.volume input',
+            join: '.join',
         },
 
         events: {
@@ -256,6 +257,7 @@ define(['backbone.marionette',
                 }
             }, this)
 
+            opts ? this.ui.join.show() : this.ui.join.hide()
             this.ui.add.html(opts)
         },
 

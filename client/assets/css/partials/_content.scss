@@ -1291,6 +1291,10 @@ div.forecasts {
 
 .sonos-player {
     padding-top: 3px;
+
+    select {
+        max-width: 50%
+    }
 }
 
 .sonos-volumes {
