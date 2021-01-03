@@ -11,7 +11,7 @@ define(['backbone.marionette',
 
     var TimeView = Marionette.View.extend({
         tagName: 'li',
-        template: _.template('<span clas="time"><%-time%></span> <span class="due"><%-duein%><% if (delay) { %><span class="delay">+<%-delay%></span><% } %>min</span>')
+        template: _.template('<span clas="time"><%-time%></span> <span class="due"><%-duein%><% if (delay) { %><span class="delay">+<%-delay.toFixed(1)%></span><% } %>min</span>')
     })
 
 
