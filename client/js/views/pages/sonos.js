@@ -223,21 +223,29 @@ define(['backbone.marionette',
 
             this.zone = this.getOption('subGroups').findWhere({ name: this.model.get('coordinator') })
             this.zoneView = new ZoneView({ model: this.zone, favourites: this.getOption('favourites') })
+
+            this.listenTo(this.model, 'change:members', this.updateMembers)
+            this.members = new Backbone.Collection()
+
+            this.listenTo(this.model.collection, 'add remove', this.updateZones)
+        },
+
+        updateMembers: function() {
+            this.members.reset(this.model.get('members').map(function(m) { 
+                return { name: m }
+            }))
         },
 
         onRender: function() {
-            var members = new Backbone.Collection(this.model.get('members').map(function(m) { 
-                return { name: m }
-            }))
-            this.getRegion('rmembers').show(new MembersView({ collection: members, remove: this.getOption('remove') }))
-            this.updateZones()
+            this.getRegion('rmembers').show(new MembersView({ collection: this.members, remove: this.getOption('remove') }))
 
-            
             if (this.zone) {
                 this.getRegion('rplayer').show(this.zoneView)
             }
             
             this.updateVolume()
+            this.updateMembers()
+            this.updateZones()
         },
 
         updateZones: function() {
@@ -303,7 +311,6 @@ define(['backbone.marionette',
         },
 
         updateVolume: function() {
-            console.log('updateVolume', this.model.get('value'))
             this.ui.vol.val(this.model.get('value'))
         }
     })
@@ -321,6 +328,7 @@ define(['backbone.marionette',
         events: {
             'click a.resume': 'resume',
             'click a.pause': 'pause',
+            'click a.volumes': 'toggleVolumes',
         },
 
         regions: {
@@ -352,6 +360,10 @@ define(['backbone.marionette',
         pause: function(e) {
             e.preventDefault()
             this.pause.save({ value: 1, retained: 0 }, { patch: true })
+        },
+
+        toggleVolumes: function() {
+            this.getRegion('rvolumes').$el.slideToggle()
         },
 
         onRender: function() {
@@ -393,12 +405,24 @@ define(['backbone.marionette',
                 volume: this.volume,
             })
             this.getRegion('rgroups').show(this.gview)
-            console.log('\vols', this.volumes)
             this.getRegion('rvolumes').show(new VolumesView({ collection: this.volumes }))
+            this.getRegion('rvolumes').$el.hide()
         },
 
         updateGroups: function() {
-            this.groups.reset(JSON.parse(this.groupsp.get('value')))
+            var js = JSON.parse(this.groupsp.get('value'))
+            _.each(js, function(m) {
+                this.groups.add(js, { merge: true })
+            }, this)
+
+            var coords = this.groups.pluck('coordinator')
+            var curr = _.pluck(js, 'coordinator')
+            _.each(coords, function(c) {
+                if (curr.indexOf(c) == -1) {
+                    var m = this.groups.findWhere({ coordinator: c })
+                    this.groups.remove(m)  
+                }
+            }, this)
         }
 
     })
