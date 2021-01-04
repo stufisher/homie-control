@@ -124,7 +124,7 @@ class SonosDeviceNode(homie.HomieNode):
 
             if track_info.get("absoluteAlbumArtUri"):
                 aa_url = track_info["absoluteAlbumArtUri"]
-                if not aa_url.startswith("http://"):
+                if not (aa_url.startswith("http://") or aa_url.startswith("https://")):
                     aa_url = self._options["sonos_aa"] + aa_url
 
                 album_art = requests.get(aa_url)
@@ -210,6 +210,7 @@ class SonosDeviceNode(homie.HomieNode):
 
 class Sonos(HomieDevice):
     _fav_cache = []
+    _zones_cache = {}
     _first = True
     _last_update = 0
     _update_zones = False
@@ -254,7 +255,7 @@ class Sonos(HomieDevice):
         logger.info("Starting main update thread")
         while self._update_running:
             now = time.time()
-            if now - self._last_update > 30:
+            if now - self._last_update > 2:
                 self.get_zones()
                 self.get_favs()
                 self._last_update = now
@@ -288,7 +289,9 @@ class Sonos(HomieDevice):
         except:
             logger.warning("Message does not have zone and volume")
         else:
-            resp = self.client("/{zone}/groupVolume/{volume}".format(zone=zone, volume=volume))
+            resp = self.client(
+                "/{zone}/groupVolume/{volume}".format(zone=zone, volume=volume)
+            )
             if resp.status_code == 200:
                 self._update_zones = True
 
@@ -304,7 +307,9 @@ class Sonos(HomieDevice):
                 }
                 zones_out.append(zone)
 
-            self._zones.setProperty("current").send(json.dumps(zones_out))
+            if self._zones_cache != zones_out:
+                self._zones.setProperty("current").send(json.dumps(zones_out))
+                self._zones_cache = zones_out
 
     def pause_handler(self, *args):
         self.client("/pauseall")
