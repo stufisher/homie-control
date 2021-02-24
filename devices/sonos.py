@@ -94,8 +94,17 @@ class SonosDeviceNode(homie.HomieNode):
         return self._client("/{name}{url}".format(name=self.name, url=url))
 
     def update(self):
-        req = self.client("/state")
-        if req.status_code != 200:
+        if not self._homie.mqtt_connected:
+            logger.info("Waiting for mqtt connection")
+            return
+
+        try:
+            req = self.client("/state")
+            if req.status_code != 200:
+                logger.warning("Could not connect to sonos REST API")
+                return
+        except ConnectionError:
+            logger.warning("Could not connect to sonos REST API")
             return
 
         state = req.json()
@@ -130,18 +139,21 @@ class SonosDeviceNode(homie.HomieNode):
                 album_art = requests.get(aa_url)
 
                 if album_art.status_code == 200:
-                    self.setProperty("cover").send(
-                        self._generate_thumb(
-                            album_art.content,
-                            size=[500, 500],
-                            quality=60,
-                            max_size=250000,
+                    try:
+                        self.setProperty("cover").send(
+                            self._generate_thumb(
+                                album_art.content,
+                                size=[500, 500],
+                                quality=60,
+                                max_size=250000,
+                            )
                         )
-                    )
 
-                    self.setProperty("thumb").send(
-                        self._generate_thumb(album_art.content)
-                    )
+                        self.setProperty("thumb").send(
+                            self._generate_thumb(album_art.content)
+                        )
+                    except IOError as e:
+                        logger.error("Could not create thumbnails: %s", str(e))
 
         if self._state["currentTrack"].get("duration") != track_info["duration"]:
             self.setProperty("length").send(track_info["duration"])
@@ -296,20 +308,24 @@ class Sonos(HomieDevice):
                 self._update_zones = True
 
     def get_zones(self):
-        resp = self.client("/zones")
-        if resp.status_code == 200:
-            zones_out = []
-            for z in resp.json():
-                zone = {
-                    "coordinator": z["coordinator"]["roomName"],
-                    "volume": z["coordinator"]["groupState"]["volume"],
-                    "members": [m["roomName"] for m in z["members"]],
-                }
-                zones_out.append(zone)
+        try:
+            resp = self.client("/zones")
+            if resp.status_code == 200:
+                zones_out = []
+                for z in resp.json():
+                    zone = {
+                        "coordinator": z["coordinator"]["roomName"],
+                        "volume": z["coordinator"]["groupState"]["volume"],
+                        "members": [m["roomName"] for m in z["members"]],
+                    }
+                    zones_out.append(zone)
 
-            if self._zones_cache != zones_out:
-                self._zones.setProperty("current").send(json.dumps(zones_out))
-                self._zones_cache = zones_out
+                if self._zones_cache != zones_out:
+                    self._zones.setProperty("current").send(json.dumps(zones_out))
+                    self._zones_cache = zones_out
+        except ConnectionError:
+            logger.warning("Could not connect to sonos REST API")
+            return
 
     def pause_handler(self, *args):
         self.client("/pauseall")
@@ -318,12 +334,16 @@ class Sonos(HomieDevice):
         self.client("/resumeall")
 
     def get_favs(self):
-        resp = self.client("/favourites")
-        if resp.status_code == 200:
-            favs = resp.json()
-            if favs != self._fav_cache:
-                self._sonos.setProperty("favourites").send(json.dumps(favs))
-                self._fav_cache = favs
+        try:
+            resp = self.client("/favourites")
+            if resp.status_code == 200:
+                favs = resp.json()
+                if favs != self._fav_cache:
+                    self._sonos.setProperty("favourites").send(json.dumps(favs))
+                    self._fav_cache = favs
+        except ConnectionError:
+            logger.warning("Could not connect to sonos REST API")
+            return
 
     def client(self, path, method="get", **kwargs):
         url = (
