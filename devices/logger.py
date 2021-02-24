@@ -62,8 +62,9 @@ class Logger(HomieDevice):
             FROM property p
             INNER JOIN propertytype ty ON ty.propertytypeid = p.propertytypeid
             LEFT OUTER JOIN propertytrigger pt ON pt.propertyid = p.propertyid AND pt.active = 1
-            WHERE p.propertytypeid IS NOT NULL AND ty.name != 'binary' AND 
-                (CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) LIKE %s OR CONCAT(p.devicestring, '/', p.nodestring) LIKE %s)
+            WHERE p.propertytypeid IS NOT NULL 
+                AND ty.name != 'binary' AND ty.name != 'string' AND p.log = 1
+                AND (CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) LIKE %s OR CONCAT(p.devicestring, '/', p.nodestring) LIKE %s)
             GROUP BY p.propertyid""", [ptop, ptop])
 
         if not len(p):

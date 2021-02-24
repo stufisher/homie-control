@@ -128,6 +128,7 @@ CREATE TABLE `property` (
   `friendlyname` varchar(30) DEFAULT NULL,
   `value` double DEFAULT NULL,
   `icon` varchar(15) DEFAULT NULL
+  `log` tinyint(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
