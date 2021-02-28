@@ -103,7 +103,7 @@ class SonosDeviceNode(homie.HomieNode):
             if req.status_code != 200:
                 logger.warning("Could not connect to sonos REST API")
                 return
-        except ConnectionError:
+        except requests.ConnectionError:
             logger.warning("Could not connect to sonos REST API")
             return
 
@@ -323,7 +323,7 @@ class Sonos(HomieDevice):
                 if self._zones_cache != zones_out:
                     self._zones.setProperty("current").send(json.dumps(zones_out))
                     self._zones_cache = zones_out
-        except ConnectionError:
+        except requests.ConnectionError:
             logger.warning("Could not connect to sonos REST API")
             return
 
@@ -341,7 +341,7 @@ class Sonos(HomieDevice):
                 if favs != self._fav_cache:
                     self._sonos.setProperty("favourites").send(json.dumps(favs))
                     self._fav_cache = favs
-        except ConnectionError:
+        except requests.ConnectionError:
             logger.warning("Could not connect to sonos REST API")
             return
 
