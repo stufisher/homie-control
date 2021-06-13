@@ -3,7 +3,10 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-from mysql import db
+try:
+    from mysql import db
+except ImportError:
+    from .mysql import db
 
 
 class HomieDevice:
