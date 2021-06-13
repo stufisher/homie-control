@@ -910,6 +910,13 @@ div.forecasts {
 
     .middle {
         display: flex;
+
+        &.cols {
+            flex-direction: column;
+        }
+        .fill {
+            flex: 1 1;
+        }
     }
 
     .vb {
@@ -1379,5 +1386,57 @@ div.forecasts {
 
     @media(max-width: $breakpoint-vsmall) {
         @include cols(1, 0px, 3%);
+    }
+}
+
+
+.dcalendar {
+    font-size: 1.2em;
+
+    .day {
+        font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Ultra Light", "Helvetica Neue", sans-serif;
+        font-size: 1.5em;
+        color: #000;
+    }
+
+    .events {
+        font-size: 0.8em;
+        text-align: left;
+        font-family: "Raleway";
+        font-weight: 100;
+        color: #bbb
+    }
+
+    .event {
+        display: flex;
+
+        div {
+            flex: 3;
+
+            &.title {
+                flex: 1;
+            }
+        }
+    }
+
+    .dashboard & {
+        padding-left: 15px;
+
+        .date {
+            display: none;
+        }
+
+        .day {
+            &:first-child h1 {
+                display: none;
+            }
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .event {
+            .title {
+                flex: 1.5;
+            }
+        }
     }
 }
