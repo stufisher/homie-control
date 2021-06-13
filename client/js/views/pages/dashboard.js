@@ -4,6 +4,7 @@ define(['backbone.marionette',
     'views/pages/weather',
     'views/pages/transport',
     'views/pages/camera',
+    'views/pages/calendar',
     'views/radar',
 
     'utils',
@@ -12,7 +13,7 @@ define(['backbone.marionette',
     'tpl!templates/pages/dashboard.html'
     ], function(Marionette, 
         Properties,
-        WeatherView, TransportView, CameraView, RadarView,
+        WeatherView, TransportView, CameraView, CalendarView, RadarView,
         utils,
         moment, template) {
 
@@ -31,6 +32,7 @@ define(['backbone.marionette',
             weather: '.weather',
             camera: '.camera',
             radar: '.rradar',
+            calendar: '.rcalendar'
         },
 
         ui: {
@@ -88,9 +90,13 @@ define(['backbone.marionette',
                 })
             }))
 
-
-
             this.getRegion('radar').show(new DashRadarView())
+
+            this.getRegion('calendar').show(new CalendarView({
+                config: new Backbone.Model({ 
+                    calendar: this.config.get('calendar')
+                })
+            }))
         },
 
         doOnRender: function() {
@@ -100,7 +106,6 @@ define(['backbone.marionette',
         onDomRefresh: function() {
             this.$el.closest('.wrapper').siblings('.sidebar').hide()
         },
-
 
         updateValue: function(element, round, model) {
             console.log('updateValue', element, model.get('value'))
@@ -140,10 +145,10 @@ define(['backbone.marionette',
                 'Weather Current Wind Speed': { element: 'windspeed', round: 0 },
                 'Weather Current Gust Speed': { element: 'gustspeed', round: 0 },
                 'Power': { element: 'power', round: 0 },
-                'Daapd Track': { element: 'track' },
-                'Daapd Album': { element: 'album' },
-                'Daapd Artist': { element: 'artist' },
-                'Daapd Playing': {},
+                'LR Track': { element: 'track' },
+                'LR Album': { element: 'album' },
+                'LR Artist': { element: 'artist' },
+                'LR Playing': {},
             }
 
             this.properties.each(function(p) {

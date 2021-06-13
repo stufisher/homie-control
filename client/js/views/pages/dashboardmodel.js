@@ -56,7 +56,13 @@ define(['backbone', 'models/config'], function(Backbone, Config) {
                 description: 'Collection of properties grouped into a direction',
                 type: 'collection',
                 collection: DirectionModels,
-            }
+            },
+
+            calendar: {
+                title: 'Calendar Group',
+                description: 'Group containing calendar binary property',
+                type: 'propertygroup',
+            },
         },
 
         validation: {
@@ -73,7 +79,12 @@ define(['backbone', 'models/config'], function(Backbone, Config) {
             directions: {
                 required: true,
                 validCollection: true,
-            }
+            },
+
+            calendar: {
+                require: true,
+                pattern: 'number'
+            },
         }
     })
 
