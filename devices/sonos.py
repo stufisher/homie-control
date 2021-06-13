@@ -136,24 +136,28 @@ class SonosDeviceNode(homie.HomieNode):
                 if not (aa_url.startswith("http://") or aa_url.startswith("https://")):
                     aa_url = self._options["sonos_aa"] + aa_url
 
-                album_art = requests.get(aa_url)
+                try:
+                    album_art = requests.get(aa_url)
 
-                if album_art.status_code == 200:
-                    try:
-                        self.setProperty("cover").send(
-                            self._generate_thumb(
-                                album_art.content,
-                                size=[500, 500],
-                                quality=60,
-                                max_size=250000,
+                    if album_art.status_code == 200:
+                        try:
+                            self.setProperty("cover").send(
+                                self._generate_thumb(
+                                    album_art.content,
+                                    size=[500, 500],
+                                    quality=60,
+                                    max_size=250000,
+                                )
                             )
-                        )
 
-                        self.setProperty("thumb").send(
-                            self._generate_thumb(album_art.content)
-                        )
-                    except IOError as e:
-                        logger.error("Could not create thumbnails: %s", str(e))
+                            self.setProperty("thumb").send(
+                                self._generate_thumb(album_art.content)
+                            )
+                        except IOError as e:
+                            logger.error("Could not create thumbnails: %s", str(e))
+
+                except requests.ConnectionError as e:
+                    logger.error("Could not get album art: %s", str(e))
 
         if self._state["currentTrack"].get("duration") != track_info["duration"]:
             self.setProperty("length").send(track_info["duration"])
