@@ -1427,11 +1427,16 @@ div.forecasts {
         }
 
         .day {
+            h1 {
+                font-family: 'Roboto';
+                font-weight: 100;
+            }
+
             &:first-child h1 {
                 display: none;
             }
             color: #fff;
-            font-size: 1.1rem;
+            font-size: 2.5vh;
         }
         .event {
             .title {
