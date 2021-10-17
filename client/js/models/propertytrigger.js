@@ -40,6 +40,11 @@ define(['backbone'], function(Backbone) {
                 pattern: 'number'
             },
 
+            push: {
+                required: false,
+                pattern: 'number'
+            },
+
             delay: {
                 required: false,
                 pattern: 'number'

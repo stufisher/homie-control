@@ -220,8 +220,19 @@ CREATE TABLE `propertytrigger` (
   `scheduleid` int(11) DEFAULT NULL,
   `schedulestatus` int(11) DEFAULT NULL,
   `email` tinyint(1) DEFAULT NULL,
+  `push` tinyint(1) DEFAULT NULL,
   `delay` int(11) NOT NULL DEFAULT '0',
   `active` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `propertytriggernotify`
+--
+
+CREATE TABLE `propertytriggernotify` (
+  `propertytriggernotifyid` int(11) NOT NULL,
+  `propertytriggerid` int(11) NOT NULL,
+  `propertyid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -427,6 +438,14 @@ ALTER TABLE `propertytrigger`
   ADD KEY `scheduleid` (`scheduleid`);
 
 --
+-- Indexes for table `propertytriggernotify`
+--
+ALTER TABLE `propertytriggernotify`
+  ADD PRIMARY KEY (`propertytriggernotifyid`),
+  ADD KEY `propertytriggerid` (`propertytriggerid`),
+  ADD KEY `propertyid` (`propertyid`)
+
+--
 -- Indexes for table `propertytype`
 --
 ALTER TABLE `propertytype`
@@ -532,6 +551,13 @@ ALTER TABLE `propertysubgroupcomponent`
 --
 ALTER TABLE `propertytrigger`
   MODIFY `propertytriggerid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `propertytriggernotify`
+--
+ALTER TABLE `propertytriggernotify`
+  MODIFY `propertytriggernotifyid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
 --
 -- AUTO_INCREMENT for table `propertytype`
 --
@@ -621,6 +647,13 @@ ALTER TABLE `propertytrigger`
   ADD CONSTRAINT `propertytrigger_ibfk_1` FOREIGN KEY (`propertyid`) REFERENCES `property` (`propertyid`),
   ADD CONSTRAINT `propertytrigger_ibfk_2` FOREIGN KEY (`propertyprofileid`) REFERENCES `propertyprofile` (`propertyprofileid`),
   ADD CONSTRAINT `propertytrigger_ibfk_3` FOREIGN KEY (`scheduleid`) REFERENCES `schedule` (`scheduleid`);
+
+--
+-- Constraints for table `propertytriggernotify`
+--
+ALTER TABLE `propertytriggernotify`
+  ADD CONSTRAINT `propertytriggernotify_ibfk_1` FOREIGN KEY (`propertytriggerid`) REFERENCES `propertytrigger` (`propertytriggerid`),
+  ADD CONSTRAINT `propertytriggernotify_ibfk_2` FOREIGN KEY (`propertyid`) REFERENCES `property` (`propertyid`)
 
 --
 -- Constraints for table `schedulecomponent`

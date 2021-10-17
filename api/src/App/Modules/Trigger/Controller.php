@@ -7,7 +7,7 @@ class Controller extends BaseController {
 
     // Property Triggers
     protected function _get_ptriggers() {
-        $rows = $this->db->pq("SELECT pt.propertytriggerid, pt.propertyid, pt.value, pt.comparator, pt.propertyprofileid, pt.scheduleid, pt.schedulestatus, pt.active, p.friendlyname as propertyname, pp.name as propertyprofile, s.name as schedule, email, delay
+        $rows = $this->db->pq("SELECT pt.propertytriggerid, pt.propertyid, pt.value, pt.comparator, pt.propertyprofileid, pt.scheduleid, pt.schedulestatus, pt.active, p.friendlyname as propertyname, pp.name as propertyprofile, s.name as schedule, email, push, delay
             FROM propertytrigger pt
             INNER JOIN property p ON pt.propertyid = p.propertyid
             LEFT OUTER JOIN propertyprofile pp ON pp.propertyprofileid = pt.propertyprofileid
@@ -20,9 +20,9 @@ class Controller extends BaseController {
         $this->required('value');
         $this->required('comparator');
 
-        $this->db->pq("INSERT INTO propertytrigger (propertyid, value, comparator, propertyprofileid, scheduleid, schedulestatus, email, delay) 
-            VALUES (:1, :2, :3, :4, :5, :6, :7, :8)",
-            [$this->args->value('propertyid'), $this->args->value('value'), $this->args->value('comparator'), $this->args->value('propertyprofileid', null), $this->args->value('scheduleid', null), $this->args->value('schedulestatus', null), $this->args->value('email', 0), $this->args->value('delay', 0)]);
+        $this->db->pq("INSERT INTO propertytrigger (propertyid, value, comparator, propertyprofileid, scheduleid, schedulestatus, email, push, delay) 
+            VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9)",
+            [$this->args->value('propertyid'), $this->args->value('value'), $this->args->value('comparator'), $this->args->value('propertyprofileid', null), $this->args->value('scheduleid', null), $this->args->value('schedulestatus', null), $this->args->value('email', 0), $this->args->value('push', 0), $this->args->value('delay', 0)]);
 
         $this->output(['propertytriggerid' => $this->db->id()]);
     }
@@ -30,7 +30,7 @@ class Controller extends BaseController {
     protected function _patch_ptrigger() {
         $this->required('propertytriggerid');
 
-        foreach (['propertyid' => false, 'value' => false, 'comparator' => false, 'propertyprofileid' => true, 'scheduleid' => true, 'schedulestatus' => true, 'active' => false, 'email' => false, 'delay' => true] as $k => $empty) {
+        foreach (['propertyid' => false, 'value' => false, 'comparator' => false, 'propertyprofileid' => true, 'scheduleid' => true, 'schedulestatus' => true, 'active' => false, 'email' => false, 'push' => false, 'delay' => true] as $k => $empty) {
             if ($this->args->has($k, $empty)) {
                 $v = $this->args->value($k);
                 $fl = ':1';

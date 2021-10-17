@@ -40,6 +40,7 @@ class Router extends BaseRouter {
 			'requiresunset' => v::intVal(),
 
 			'email' => v::intVal(),
+			'push' => v::intVal(),
 			'delay' => v::intVal(),
 		];
 	}
