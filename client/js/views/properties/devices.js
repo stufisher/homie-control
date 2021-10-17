@@ -105,7 +105,7 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
 
         getDevices: function() {
             if (app.mqtt.isConnected()) {
-                _.each(['name','online','fw/name','fw/version','stats/signal','stats/uptime','localip'], function(v) {
+                _.each(['name','online','state','fw/name','fw/version','stats/signal','stats/uptime','localip'], function(v) {
                     app.mqtt.subscribe('+/+/$'+v)
                 }, this)
             } else {
@@ -128,13 +128,20 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
                 'fw\/version': 'version', 
                 'stats\/signal': 'signal', 
                 online: 'online', 
+                state: 'state',
                 'stats\/uptime': 'uptime',
                 localip: 'ipaddress' }
             _.each(params, function(v, k) {
                 var re = new RegExp('^\\w+\\/\\w+\\/\\$'+k+'$')
                 if (topic.match(re)) {
-                    var d = this.devices.each(function(u) {
-                        if (u.get('devicestring').match(parts[1])) u.set(v, payload)
+                    this.devices.each(function(u) {
+                        var value = payload
+                        if (k == 'state') {
+                            console.log('state', u, k, v, payload)
+                            var online = payload == 'ready' ? 'true' : 'false'
+                            if (u.get('devicestring').match(parts[1])) u.set('online', online)
+                        }
+                        if (u.get('devicestring').match(parts[1])) u.set(v, value)
                     })
                 }
             }, this)
