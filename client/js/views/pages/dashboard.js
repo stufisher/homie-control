@@ -168,6 +168,11 @@ define(['backbone.marionette',
                     this.listenTo(p, 'change:value', this.toggleMotion, this)
                     this.toggleMotion(p)
                 }
+
+                if (p.get('propertystring') == 'online') {
+                    this.listenTo(p, 'change:value', this.toggleDevices, this)
+                    this.toggleDevices(p)
+                }
             }, this)
         },
 
@@ -177,6 +182,11 @@ define(['backbone.marionette',
             model.get('value') == 1 ? this.ui.camera.find('.frame').fadeIn() : this.ui.camera.find('.frame').fadeOut()
         },
 
+        toggleDevices: function(model) {
+            model.get('value') == 1
+                ? this.getRegion('calendar').$el.find('.dcalendar').fadeIn() 
+                : this.getRegion('calendar').$el.find('.dcalendar').fadeOut()
+        },
 
         timeTick: function() {
             this.ui.time.text(moment().format('HH:mm'))
