@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 from modules.homiedevice import HomieDevice
 from modules.mysql import db
 from modules.sendmail import Email
+from modules.pushover import Pushover
 
 
 class Logger(HomieDevice):
@@ -31,6 +32,19 @@ class Logger(HomieDevice):
     def setup(self):
         self._mqtt_subscribe(str(self._homie.baseTopic+"/#"), self.mqttHandler)
 
+        additional = self._db.pq("""SELECT p.propertyid, ty.name as propertytype, p.friendlyname,
+                GROUP_CONCAT(ptn.propertytriggerid) as propertytriggerid,
+                CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as address
+            FROM property p
+            INNER JOIN propertytype ty ON ty.propertytypeid = p.propertytypeid
+            INNER JOIN propertytriggernotify ptn ON ptn.propertyid = p.propertyid
+            GROUP BY propertyid""")
+        self._trigger_additional = {}
+        for a in additional:
+            a["propertytriggerids"] = map(int, a["propertytriggerid"].split(","))
+            self._trigger_additional[a["address"]] = a
+        self._additional_cache = {}
+
     def test(self, x, y, comp):
         return self._comparators[comp](x, y)
 
@@ -38,6 +52,10 @@ class Logger(HomieDevice):
         parts = msg.topic.split('/')
         if parts[0] != self._homie.baseTopic:
             return
+
+        ptop = msg.topic.replace(self._homie.baseTopic+'/', '')
+        if ptop in self._trigger_additional:
+            self._additional_cache[ptop] = msg.payload
 
         if msg.payload == 'true' or msg.payload == 'false':
             val = 1 if msg.payload == 'true' else 0
@@ -48,7 +66,6 @@ class Logger(HomieDevice):
                 logger.debug('Value none numeric, not logging [{topic}, {payload}]'.format(topic=msg.topic, payload=msg.payload))
                 return
 
-        ptop = msg.topic.replace(self._homie.baseTopic+'/', '')
         if not ptop in self._lastupdate:
             self._lastupdate[ptop] = time.time()
 
@@ -80,7 +97,7 @@ class Logger(HomieDevice):
 
             if p['triggers'] > 0:
                 logger.info('Topic: {topic} has triggers'.format(topic=ptop))
-                triggers = self._db.pq("""SELECT value, comparator, propertyprofileid, scheduleid, schedulestatus, email, delay
+                triggers = self._db.pq("""SELECT propertytriggerid, value, comparator, propertyprofileid, scheduleid, schedulestatus, email, push, delay
                     FROM propertytrigger 
                     WHERE propertyid = %s AND active=1""", p['propertyid'])
                 for t in triggers:
@@ -105,6 +122,22 @@ class Logger(HomieDevice):
                                 m = Email(em[0]['value'])
                                 m.set_message('PropertyTrigger', [p['friendlyname'], p['address'], val])
                                 m.send()
+
+                        if t['push']:
+                            logger.info('Trying to send push notification')
+                            push_opts = self._db.pq("""SELECT name,value FROM options WHERE name IN ('pushover_token', 'pushover_group')""")
+                            po = Pushover(push_opts)
+
+                            additional = []
+                            for add in self._trigger_additional.values():
+                                if t["propertytriggerid"] in add["propertytriggerids"]:
+                                    additional.append({
+                                        "friendlyname": add["friendlyname"],
+                                        "address": add["address"],
+                                        "type": add["propertytype"],
+                                        "value": self._additional_cache.get(add["address"])
+                                    })
+                            po.send([p['friendlyname'], p['address'], val], additional)
 
     def loopHandler(self):
         toremove = []
