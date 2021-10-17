@@ -24,8 +24,8 @@ class ArpScan:
     _start = None
     _offset = 15
 
-    _arp_normal = ['/usr/bin/arp-scan', '-l', '-r', '5', '-t', '5000']
-    _arp_fast   = ['/usr/bin/arp-scan', '-l']
+    _arp_normal = ['/usr/bin/arp-scan', '--interface', 'eth1', '-l', '-r', '5', '-t', '5000']
+    _arp_fast   = ['/usr/bin/arp-scan', '--interface', 'eth1', '-l']
 
     def __init__(self, id, fast=False):
         self._id = id
@@ -53,10 +53,14 @@ class Device(HomieDevice):
     _processes = []
     # _process = None
     _sun_has_set = False
+    _last_dev_count = None
 
     def setup(self):
         self._processes.append(ArpScan(0))
         self._processes.append(ArpScan(1, True))
+
+        self._devices = self._homie.Node("devices", "devices")
+        self._devices.advertise("online")
 
     def get_suntimes(self):
         opt = self._db.pq("SELECT name,value FROM options where name in ('timezone', 'latitude', 'longitude')")
@@ -93,6 +97,16 @@ class Device(HomieDevice):
             else:
                 self.run_profile(t['propertyprofileid'])
 
+        dev_count = self._db.pq("""SELECT count(deviceid) as count FROM device WHERE active=1 AND connected=1""")
+        dev_count = dev_count[0]["count"]
+
+        if self._last_dev_count is None:
+            self._devices.setProperty("online").send(1 if dev_count > 0 else 0)
+            self._last_dev_count = dev_count
+
+        if dev_count != self._last_dev_count:
+            self._devices.setProperty("online").send(1 if dev_count > 0 else 0)
+            self._last_dev_count = dev_count
 
     def run_sun_triggers(self, sunset):
         logger.info('Running triggers for:')
