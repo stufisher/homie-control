@@ -137,7 +137,6 @@ define(['backbone.marionette', 'views/table', 'utils/table', 'utils',
                     this.devices.each(function(u) {
                         var value = payload
                         if (k == 'state') {
-                            console.log('state', u, k, v, payload)
                             var online = payload == 'ready' ? 'true' : 'false'
                             if (u.get('devicestring').match(parts[1])) u.set('online', online)
                         }
