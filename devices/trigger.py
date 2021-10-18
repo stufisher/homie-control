@@ -32,13 +32,12 @@ class Trigger(HomieDevice):
         self._additional_cache = {}
 
         triggers = self._db.pq(
-            """SELECT CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring) as address,
+            """SELECT IF(p.propertystring IS NOT NULL, CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring), 
+                CONCAT(p.devicestring, '/', p.nodestring)) as address,
                 p.friendlyname, pt.propertytriggerid, pt.value, pt.comparator, pt.propertyprofileid, 
                 pt.scheduleid, pt.schedulestatus, pt.email, pt.push, pt.delay
             FROM property p
-            INNER JOIN propertytype ty ON ty.propertytypeid = p.propertytypeid
-            INNER JOIN propertytrigger pt ON pt.propertyid = p.propertyid AND pt.active = 1
-            WHERE pt.active = 1"""
+            INNER JOIN propertytrigger pt ON pt.propertyid = p.propertyid"""
         )
 
         self._triggers = {}
@@ -95,6 +94,13 @@ class Trigger(HomieDevice):
 
             logger.info("Topic: {topic} has triggers".format(topic=ptop))
             for t in self._triggers[ptop]:
+                active = self._db.pq(
+                    "SELECT active FROM propertytrigger WHERE propertytriggerid = %s",
+                    [t["propertytriggerid"]],
+                )
+                if not active[0]["active"]:
+                    continue
+
                 logger.info(
                     "Testing val: {val} tval: {tval} comp: {comp}".format(
                         val=val, tval=t["value"], comp=t["comparator"]
