@@ -1,18 +1,11 @@
 define(['backbone.marionette',
-
 	'collections/properties',
 	'collections/propertysubgroups',
-	'collections/propertyprofiles',
-
-	'utils',
-
 	'tpl!templates/pages/camera.html'], 
 
 	function(Marionette,
-	Properties, PropertySubGroups, PropertyProfiles,
-	utils,
+	Properties, PropertySubGroups,
 	template) {
-
 
 	var MetaItemView = Marionette.View.extend({
 		tagName: 'li',
@@ -42,7 +35,6 @@ define(['backbone.marionette',
 	})
 
 
-
 	var FrameView = Marionette.View.extend({
 		className: 'frame',
 		template: _.template('<img alt="<%-friendlyname%>" />'),
@@ -68,7 +60,6 @@ define(['backbone.marionette',
 		},
 	})
 
-
 	var FrameCollectionView = Marionette.CollectionView.extend({
 		className: 'frames',
 		childView: FrameView
@@ -85,18 +76,11 @@ define(['backbone.marionette',
 				el: '.live',
 			},
 			notifications: '.notifications',
-			archive: '.archive',
+			archive: {
+				replaceElement: true,
+				el: '.archive',
+			}
 		},
-
-		ui: {
-			frames: '.frames',
-			current: 'input[name=current]'
-		},
-
-		events: {
-			'change @ui.current': 'setCurrent',
-		},
-
 
 		initialize: function(options) {
 			this.config = options.config
@@ -125,47 +109,15 @@ define(['backbone.marionette',
         	}))
 
         	var arch = this.propertysubgroups.findWhere({ name: 'Archiver' })
-            _.each(this.properties.where({ propertysubgroupid: arch.get('propertysubgroupid')}), function(m) {
-                if (m.get('propertytype') == 'binary') {
-                    this.getRegion('archive').show(new FrameView({ model: m }))
-                }
-
-                if (m.get('propertystring') == 'frames') {
-                	this._frames_property = m
-                    this.listenTo(this._frames_property, 'sync change', this.updateFrames, this)
-                    this.updateFrames()
-                }
-
-                if (m.get('propertystring') == 'frameno') {
-                	this._frame_property = m
-                    this.listenTo(this._frame_property, 'sync change', this.updateCurrent, this)
-                    this.updateCurrent()
-                }
-            }, this)
+            this.getRegion('archive').show(new FrameCollectionView({
+        		collection: new Properties(this.properties.where({ propertysubgroupid: arch.get('propertysubgroupid')}))
+        	}))
         },
-
-
-        setCurrent: function(e) {
-        	if (this._frame_property) {
-        		this._frame_property.set({ value: this.ui.current.val() }, { silent: true })
-				this._frame_property.save(this._frame_property.changedAttributes(), { patch: true })
-        	}
-        },
-
-		updateCurrent: function() {
-			this.ui.current.val(this._frame_property.get('value'))
-		},
-
-		updateFrames: function() {
-			this.ui.frames.text(this._frames_property.get('value'))
-			this.ui.current.prop('max', this._frames_property.get('value')-1)
-		},
 
 	})
 
 
 	CameraView.frameView = FrameView
-
 	return CameraView
 
 })
