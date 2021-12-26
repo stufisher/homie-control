@@ -712,21 +712,23 @@ div.forecasts {
 }
 
 
-.direction {
+.service {
     font-size: 1.5em;
-    font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Ultra Light", "Helvetica Neue", sans-serif;
 
-    .name {
-        font-size: 1.5em;
+    .direction {
         font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Ultra Light", "Helvetica Neue", sans-serif;
-    }
-
-    .due {
-        float: right;
-    }
-
-    .delay {
-        color: $content-inactive;
+        .name {
+            font-size: 1.3em;
+            
+        }
+    
+        .due {
+            float: right;
+        }
+    
+        .delay {
+            color: $content-inactive;
+        }
     }
 }
 

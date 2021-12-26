@@ -86,7 +86,7 @@ define(['backbone.marionette',
 
             this.getRegion('transport').show(new TransportView({ 
                 config: new Backbone.Model({ 
-                    directions: this.config.get('directions')
+                    propertygroupid: this.config.get('transport')
                 })
             }))
 
@@ -137,8 +137,8 @@ define(['backbone.marionette',
         addListeners: function() {
             var propertymap = {
                 'Living Room Temp': { element: 'current', round: 1 },
-                'Front Temp Sun':   { element: 'sun', round: 1 },
-                'Front Temp Shade': { element: 'shade', round: 1 },
+                'Sun Temp':   { element: 'sun', round: 1 },
+                'Shade Temp': { element: 'shade', round: 1 },
                 'Weather Current Icon': { element: 'icon', round: 1 },
                 'Weather Current POP': { element: 'pop', round: 0 },
                 'Weather Current Wind Dir': { element: 'winddir' },
