@@ -223,6 +223,8 @@ CREATE TABLE `propertytrigger` (
   `push` tinyint(1) DEFAULT NULL,
   `delay` int(11) NOT NULL DEFAULT '0',
   `active` tinyint(1) NOT NULL DEFAULT '1'
+  `requiredevice` tinyint(1) NOT NULL DEFAULT '0',
+  `requirenodevice` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

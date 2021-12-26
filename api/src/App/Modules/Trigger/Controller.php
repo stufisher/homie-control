@@ -7,7 +7,7 @@ class Controller extends BaseController {
 
     // Property Triggers
     protected function _get_ptriggers() {
-        $rows = $this->db->pq("SELECT pt.propertytriggerid, pt.propertyid, pt.value, pt.comparator, pt.propertyprofileid, pt.scheduleid, pt.schedulestatus, pt.active, p.friendlyname as propertyname, pp.name as propertyprofile, s.name as schedule, email, push, delay
+        $rows = $this->db->pq("SELECT pt.propertytriggerid, pt.propertyid, pt.value, pt.comparator, pt.propertyprofileid, pt.scheduleid, pt.schedulestatus, pt.active, p.friendlyname as propertyname, pp.name as propertyprofile, s.name as schedule, email, push, delay, pt.requiredevice, pt.requirenodevice
             FROM propertytrigger pt
             INNER JOIN property p ON pt.propertyid = p.propertyid
             LEFT OUTER JOIN propertyprofile pp ON pp.propertyprofileid = pt.propertyprofileid
@@ -30,7 +30,7 @@ class Controller extends BaseController {
     protected function _patch_ptrigger() {
         $this->required('propertytriggerid');
 
-        foreach (['propertyid' => false, 'value' => false, 'comparator' => false, 'propertyprofileid' => true, 'scheduleid' => true, 'schedulestatus' => true, 'active' => false, 'email' => false, 'push' => false, 'delay' => true] as $k => $empty) {
+        foreach (['propertyid' => false, 'value' => false, 'comparator' => false, 'propertyprofileid' => true, 'scheduleid' => true, 'schedulestatus' => true, 'active' => false, 'email' => false, 'push' => false, 'delay' => true, 'requiredevice' => false, 'requirenodevice' => false] as $k => $empty) {
             if ($this->args->has($k, $empty)) {
                 $v = $this->args->value($k);
                 $fl = ':1';

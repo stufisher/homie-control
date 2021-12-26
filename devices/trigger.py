@@ -35,7 +35,7 @@ class Trigger(HomieDevice):
             """SELECT IF(p.propertystring IS NOT NULL, CONCAT(p.devicestring, '/', p.nodestring, '/', p.propertystring), 
                 CONCAT(p.devicestring, '/', p.nodestring)) as address,
                 p.friendlyname, pt.propertytriggerid, pt.value, pt.comparator, pt.propertyprofileid, 
-                pt.scheduleid, pt.schedulestatus, pt.email, pt.push, pt.delay
+                pt.scheduleid, pt.schedulestatus, pt.email, pt.push, pt.delay, pt.requiredevice, pt.requirenodevice
             FROM property p
             INNER JOIN propertytrigger pt ON pt.propertyid = p.propertyid"""
         )
@@ -100,6 +100,24 @@ class Trigger(HomieDevice):
                 )
                 if not active[0]["active"]:
                     continue
+
+                if t["requiredevice"] or t["requirenodevice"]:
+                    devs = self._db.pq(
+                        """SELECT count(deviceid) as count FROM device WHERE active=1 AND connected=1"""
+                    )
+                    devs = int(devs[0]["count"])
+
+                    if t["requiredevice"] and devs == 0:
+                        logger.info("Trigger requires device, none connected, skipping")
+                        continue
+
+                    if t["requirenodevice"] and devs > 0:
+                        logger.info(
+                            "Trigger requires no devices, {devs} connected, skipping".format(
+                                devs=devs
+                            )
+                        )
+                        continue
 
                 logger.info(
                     "Testing val: {val} tval: {tval} comp: {comp}".format(
